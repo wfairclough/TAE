@@ -38,6 +38,9 @@ Gantt for major Epic milestone:
 
 ## Contributing
 
+Team Members
+Ben Fairclough, Will Fairclough and Sean Malcolmson
+
 A little tutorial on using Git that I found very helpful [Git Tutorial](http://try.github.io/levels/1/challenges/2).
 
 ## Code Status

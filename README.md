@@ -32,6 +32,8 @@ This will then give us the ability to task all the tasks that we need to get don
 
 ### Gantt
 
+Gantt for major Epic milestone:
+
 [![TAEval Gantt](http://res.cloudinary.com/dmtms9gh8/image/upload/v1378921635/al0vwlijjgtpfmjjgpzi.png)](http://redmine.wfairclough.com/projects/taeval)
 
 ## Contributing

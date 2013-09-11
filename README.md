@@ -22,6 +22,14 @@ View full [System Description](http://people.scs.carleton.ca/~claurend/Courses/C
 
 5. More instructions to come later
 
+## Project Managment
+
+We will be using a Redmine server to do our Project Managment. You must register a new user on the server and then wait to be given access. 
+
+The Redmine server is at [http://162.243.2.38/](http://162.243.2.38/)
+
+This will then give us the ability to task all the tasks that we need to get done and whether we are on time or late for certain features. This will also be perfect for creating reports to put in our documentation.
+
 ## Contributing
 
 A little tutorial on using Git that I found very helpful [Git Tutorial](http://try.github.io/levels/1/challenges/2).

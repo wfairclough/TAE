@@ -30,6 +30,10 @@ The Redmine server is at [http://redmine.wfairclough.com/](http://redmine.wfairc
 
 This will then give us the ability to task all the tasks that we need to get done and whether we are on time or late for certain features. This will also be perfect for creating reports to put in our documentation.
 
+### Gantt
+
+[![TAEval Gantt](http://res.cloudinary.com/dmtms9gh8/image/upload/v1378921635/al0vwlijjgtpfmjjgpzi.png)](http://redmine.wfairclough.com/projects/taeval)
+
 ## Contributing
 
 A little tutorial on using Git that I found very helpful [Git Tutorial](http://try.github.io/levels/1/challenges/2).

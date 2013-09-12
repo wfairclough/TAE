@@ -30,9 +30,6 @@ The Redmine server is at [http://redmine.wfairclough.com/](http://redmine.wfairc
 
 This will then give us the ability to task all the tasks that we need to get done and whether we are on time or late for certain features. This will also be perfect for creating reports to put in our documentation.
 
-Useful git commit message keywords:
-To resolve an issue type any of the following keywords - fixes, fixed, closes, resolve, resolves or resolved followed # and then the issue number. (ex. fixes #5)
-
 ### Gantt
 
 Gantt for major Epic milestone:
@@ -49,5 +46,3 @@ A little tutorial on using Git that I found very helpful [Git Tutorial](http://t
 ## Code Status
 
 * Building Successfully
-
-

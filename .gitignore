@@ -1,14 +1,19 @@
 # C++ objects and libs
 
+# Compiled Object files
 *.slo
 *.lo
 *.o
-*.a
-*.la
-*.lai
+
+# Compiled Dynamic libraries
 *.so
-*.dll
 *.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
 
 # Qt-es
 

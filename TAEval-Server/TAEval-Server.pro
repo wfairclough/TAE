@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core network sql
 
 QT       -= gui
 
@@ -15,4 +15,16 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    server.cpp \
+    clientsocket.cpp \
+    databasemanager.cpp \
+    connectionthread.cpp \
+    authenticationmanager.cpp
+
+HEADERS += \
+    server.h \
+    clientsocket.h \
+    databasemanager.h \
+    connectionthread.h \
+    authenticationmanager.h

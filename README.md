@@ -19,7 +19,7 @@ View full [System Description](http://people.scs.carleton.ca/~claurend/Courses/C
 
         $ ./TAEval-Client/TAEval-Client.pro
         $ ./TAEval-Server/TAEval-Server.pro
-				$ ./TAEvalCommons/TAEvalCommons.pro
+	$ ./TAEvalCommons/TAEvalCommons.pro
 
 5. More instructions to come later
 

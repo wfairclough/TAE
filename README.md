@@ -15,10 +15,11 @@ View full [System Description](http://people.scs.carleton.ca/~claurend/Courses/C
 
   [Instructions on configuring ssh for GitHub](https://help.github.com/articles/generating-ssh-keys)
 
-4. Open the Client and Server Qt Project in QtCreator
+4. Open the Client, Server and Commons Qt Project in QtCreator
 
         $ ./TAEval-Client/TAEval-Client.pro
         $ ./TAEval-Server/TAEval-Server.pro
+				$ ./TAEvalCommons/TAEvalCommons.pro
 
 5. More instructions to come later
 

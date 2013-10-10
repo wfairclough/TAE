@@ -16,3 +16,11 @@ SOURCES += main.cpp\
 HEADERS  += loginwindow.h
 
 FORMS    += loginwindow.ui
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons
+else:symbian: LIBS += -lTAEvalCommons
+else:unix: LIBS += -L$$PWD/../TAEvalCommons/ -lTAEvalCommons
+
+INCLUDEPATH += $$PWD/../TAEvalCommons
+DEPENDPATH += $$PWD/../TAEvalCommons

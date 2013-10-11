@@ -1,4 +1,6 @@
 #include <QtCore/QCoreApplication>
+#include "connectionserver.h"
+
 
 /**
  * Description: Main Entry point to the TAEval-Server Application
@@ -8,6 +10,13 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+    ConnectionServer server(&a);
+
+    if (!server.listen(QHostAddress::Any, 7290)) {
+        qDebug() << "Error: Could not bind to port.";
+        return 1;
+    }
 
     return a.exec();
 }

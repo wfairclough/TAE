@@ -25,4 +25,9 @@ public slots:
     
 };
 
+//// Operator Override
+//QDataStream &operator <<(QDataStream &stream, const TeachingAssistant &user);
+//QDataStream &operator >>(QDataStream &stream, TeachingAssistant &user);
+
+
 #endif // TEACHINGASSISTANT_H

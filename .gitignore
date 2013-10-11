@@ -2,6 +2,9 @@
 TAEval-Server/TAEval-Server
 TAEval-Client/TAEval-Client
 
+# TAEval Qt Compiles UI Headers
+TAEval-Client/ui_*.h
+
 # C++ objects and libs
 
 # Compiled Object files

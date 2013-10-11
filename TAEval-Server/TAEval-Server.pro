@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core network sql
 
 QT       -= gui
 
@@ -15,7 +15,9 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    connectionserver.cpp \
+    connectionthread.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons
@@ -24,3 +26,7 @@ else:unix: LIBS += -L$$PWD/../TAEvalCommons/ -lTAEvalCommons
 
 INCLUDEPATH += $$PWD/../TAEvalCommons
 DEPENDPATH += $$PWD/../TAEvalCommons
+
+HEADERS += \
+    connectionserver.h \
+    connectionthread.h

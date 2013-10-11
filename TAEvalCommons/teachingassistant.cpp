@@ -12,3 +12,22 @@ TeachingAssistant::TeachingAssistant(unsigned long idArg, QString fName, QString
     setLastName(lName);
     setUsername(uName);
 }
+
+
+
+//QDataStream &operator <<(QDataStream &stream, const TeachingAssistant &user)
+//{
+
+//    stream << user;
+
+//    return stream;
+//}
+
+//QDataStream &operator >>(QDataStream &stream, TeachingAssistant &user)
+//{
+
+//    stream >> super;
+
+
+//    return stream;
+//}

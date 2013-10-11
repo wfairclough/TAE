@@ -19,10 +19,10 @@ public:
     void setUsername(QString uName) { username = uName; }
 
     // Getters
-    unsigned long getId() { return id; }
-    QString getFirstName() { return firstName; }
-    QString getLastName() { return lastName; }
-    QString getUsername() { return username; }
+    unsigned long getId() const { return id; }
+    QString getFirstName() const { return firstName; }
+    QString getLastName() const { return lastName; }
+    QString getUsername() const { return username; }
     
 protected:
     unsigned long id;
@@ -32,5 +32,10 @@ protected:
 
 
 };
+
+// Operator Override
+QDataStream &operator <<(QDataStream &stream, const User &user);
+QDataStream &operator >>(QDataStream &stream, User &user);
+
 
 #endif // USER_H

@@ -21,7 +21,9 @@ View full [System Description](http://people.scs.carleton.ca/~claurend/Courses/C
         $ ./TAEval-Server/TAEval-Server.pro
         $ ./TAEvalCommons/TAEvalCommons.pro
 
-5. More instructions to come later
+5. Be sure to build the TAEvalCommons library project first as it is a dependancy for the client and server projects.
+
+6. Another thing to note is that the TAEvalCommosn build directory should point to ./TAEvalCommons not build-TAEvalCommons-*
 
 ## Project Managment
 

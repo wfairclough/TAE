@@ -15,15 +15,37 @@ View full [System Description](http://people.scs.carleton.ca/~claurend/Courses/C
 
   [Instructions on configuring ssh for GitHub](https://help.github.com/articles/generating-ssh-keys)
 
-4. Open the Client, Server and Commons Qt Project in QtCreator
+4. Open the TAEval Qt Project in QtCreator
 
-        $ ./TAEval-Client/TAEval-Client.pro
-        $ ./TAEval-Server/TAEval-Server.pro
-        $ ./TAEvalCommons/TAEvalCommons.pro
+        $ ./TAEval.pro
 
-5. Be sure to build the TAEvalCommons library project first as it is a dependancy for the client and server projects.
+  This project contains all the projects that belong to the TAEval application.
 
-6. Another thing to note is that the TAEvalCommosn build directory should point to ./TAEvalCommons not build-TAEvalCommons-*
+5. Go to Build -> Build All
+
+6. That it! You can now run the TAEval-Server and TAEval-Client applications.
+
+
+## Building from Command Line
+
+1. Run qmake on the root Qt Project file.
+
+        $ qmake TAEval.pro
+
+  This creates a Makefile in the root of the project that will recursivily make all sub projects.
+
+2. Compile the entire application
+
+        $ make all
+
+3. Run the applicaitons
+
+        $ ./start-server &
+        $ ./start-client
+
+4. Cleaning the entire project
+
+        $ make clean
 
 ## Project Managment
 

@@ -14,12 +14,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&clientSocket, SIGNAL(connected()), this, SLOT(connectedToHost()));
-    connect(&clientSocket, SIGNAL(disconnected()), this, SLOT(connectionClosedByServer()));
-    connect(&clientSocket, SIGNAL(readyRead()), this, SLOT(bytesReady()));
-    connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(sendLoginRequest()));
-
-    connectToServer();
+    connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
 
     QRegExp emailRegExp(".*@.*\\..*");
 
@@ -65,98 +60,6 @@ void LoginWindow::on_usernameLineEdit_lostFocus()
  * Paramters: None
  * Returns: void
  */
-void LoginWindow::connectToServer()
-{
-    qDebug() << "Connect to server";
-    clientSocket.connectToHost("localhost", 7290);
-
-    nextBlockSize = 0;
-}
-
-
-
-/**
- * Description:
- * Paramters: None
- * Returns: void
- */
-void LoginWindow::connectedToHost()
-{
-    qDebug() << "Connected to host.";
-}
-
-/**
- * Description:
- * Paramters: None
- * Returns: void
- */
-void LoginWindow::connectionClosedByServer()
-{
-    qDebug() << "connection is closed.";
-    if (nextBlockSize == 0xFFFF)
-    {
-
-    }
-
-    closeConnection();
-}
-
-void LoginWindow::closeConnection()
-{
-    clientSocket.close();
-}
-
-
-/**
- * Description:
- * Paramters: None
- * Returns: void
- */
-void LoginWindow::bytesReady()
-{
-    qDebug() << "Bytes avaible for reading from server.";
-    QDataStream in(&clientSocket);
-    in.setVersion(QDataStream::Qt_4_8);
-
-    if (nextBlockSize == 0) {
-        if (clientSocket.bytesAvailable() < sizeof(quint16)) {
-            qDebug() << "Message does not have proper header size";
-            return;
-        }
-        in >> nextBlockSize;
-    }
-
-    if (clientSocket.bytesAvailable() < nextBlockSize) {
-        qDebug() << "Next Block Size is of improper size.";
-        return;
-    }
-
-    QString msgType;
-    bool validLogin = false;
-
-    in >> msgType;
-
-    if (msgType.compare(new QString("Login")) == 0) {
-        QString userType;
-
-        in >> validLogin;
-        in >> userType;
-
-        if (validLogin) {
-            qDebug() << "The username and password were correct.";
-        }
-    }
-
-    nextBlockSize = 0;
-}
-
-
-
-/**
- * Description:
- * Paramters: None
- * Returns: void
- */
 void LoginWindow::sendLoginRequest()
 {
     QByteArray block;
@@ -172,10 +75,18 @@ void LoginWindow::sendLoginRequest()
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
 
-    clientSocket.write(block);
+//    clientSocket.write(block);
 
 }
 
+void LoginWindow::saveSettings()
+{
+    QSettings s(QString("taeval.cfg"), QSettings::NativeFormat);
+
+    s.setValue("connection/host", ui->usernameLineEdit->text());
+    s.setValue("connection/port", 7290);
+
+}
 
 
 

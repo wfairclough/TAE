@@ -18,22 +18,13 @@ public:
     ~LoginWindow();
 
 private slots:
-    void connectToServer();
-    void on_usernameLineEdit_lostFocus();
-    void connectedToHost();
-    void connectionClosedByServer();
-    void bytesReady();
     void sendLoginRequest();
+    void saveSettings();
+    void on_usernameLineEdit_lostFocus();
 
 private:
     Ui::LoginWindow *ui;
 
-    QTcpSocket clientSocket;
-    quint16 nextBlockSize;
-
-
-    void closeConnection();
-    ;
 
 };
 

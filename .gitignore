@@ -1,6 +1,7 @@
 # TAEval Binaries
 TAEval-Server/TAEval-Server
 TAEval-Client/TAEval-Client
+TAEval-Client/TAEval-Client.app/
 
 # TAEval Qt Compiles UI Headers
 TAEval-Client/ui_*.h
@@ -25,6 +26,7 @@ TAEval-Client/ui_*.h
 
 # Qt-es
 
+*.pbproj/
 *.pro.user
 *.pro.user.*
 moc_*.cpp

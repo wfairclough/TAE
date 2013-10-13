@@ -97,9 +97,9 @@ void LoginWindow::saveSettings()
 {
     QString settingFileName;
 
-#ifdef Q_OS_DARWIN
+#if defined(Q_OS_DARWIN)
     settingFileName.append("taeval.plist");
-#elif Q_OS_UNIX
+#elif defined(Q_OS_UNIX)
     settingFileName.append("taeval.cfg");
 #else
 #error "We don't support that version yet..."

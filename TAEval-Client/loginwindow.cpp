@@ -81,7 +81,17 @@ void LoginWindow::sendLoginRequest()
 
 void LoginWindow::saveSettings()
 {
-    QSettings s(QString("taeval.cfg"), QSettings::NativeFormat);
+    QString settingFileName;
+
+#ifdef Q_OS_DARWIN
+    settingFileName.append("taeval.plist");
+#elif Q_OS_UNIX
+    settingFileName.append("taeval.cfg");
+#else
+#error "We don't support that version yet..."
+#endif
+
+    QSettings s(settingFileName, QSettings::NativeFormat);
 
     s.setValue("connection/host", ui->usernameLineEdit->text());
     s.setValue("connection/port", 7290);

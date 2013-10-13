@@ -35,3 +35,7 @@ Makefile
 *-build-*
 build-*
 
+# MAC OS X
+
+.DS_Store
+

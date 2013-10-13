@@ -68,6 +68,8 @@ void LoginWindow::sendLoginRequest()
 }
 
 void LoginWindow::didRecieveLoginResponse(User* user) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedLoginResponse(User*)), this, SLOT(didRecieveLoginResponse(User*)));
+
     qDebug() << "didRecieveLoginResponse";
 
     switch (user->type()) {

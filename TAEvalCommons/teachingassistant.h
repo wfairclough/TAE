@@ -7,6 +7,7 @@
 class TeachingAssistant : public QObject, public User
 {
     Q_OBJECT
+    Q_ENUMS(user_t)
 public:
     explicit TeachingAssistant(QObject *parent = 0);
 

@@ -5,6 +5,11 @@
 #include <QTcpSocket>
 #include <QtGui>
 
+#include "user.h"
+#include "instructor.h"
+#include "teachingassistant.h"
+#include "administrator.h"
+
 namespace Ui {
 class LoginWindow;
 }
@@ -18,6 +23,7 @@ public:
     ~LoginWindow();
 
 private slots:
+    void didRecieveLoginResponse(User* user);
     void sendLoginRequest();
     void saveSettings();
     void on_usernameLineEdit_lostFocus();

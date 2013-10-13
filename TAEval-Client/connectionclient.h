@@ -3,6 +3,11 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include "teachingassistant.h"
+#include "instructor.h"
+#include "teachingassistant.h"
+#include "administrator.h"
+
 
 class ConnectionClient : public QObject
 {
@@ -14,8 +19,15 @@ public:
         return instance;
     }
 
-private slots:
     void connectToServer();
+
+    void sendLoginMessage(QString username);
+
+signals:
+    void recievedErrorResponse(QString errMsg);
+    void recievedLoginResponse(User* user);
+
+private slots:
     void connectedToHost();
     void connectionClosedByServer();
     void bytesReady();
@@ -31,6 +43,8 @@ private:
     void closeConnection();
     
 };
+
+QDataStream& operator >>(QDataStream& in, User::user_t& e);
 
 #endif // CONNECTIONCLIENT_H
 

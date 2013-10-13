@@ -1,6 +1,7 @@
 #include "connectionthread.h"
 #include "instructor.h"
 #include "teachingassistant.h"
+#include "administrator.h"
 
 #include <QDataStream>
 
@@ -59,12 +60,30 @@ void ConnectionThread::readClient()
 
     QString msgType;
 
-
-
     in >> msgType;
 
-    if (msgType.compare(new QString("Login")) == 0) {
+    if (msgType.compare(new QString("LoginReq")) == 0) {
+        QString username;
 
+        in >> username;
+
+        qDebug() << "Trying to login with username: " << username;
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType("LoginRsp");
+        bool validLogin = true;
+
+        Administrator admin(100, "Will", "Fairclough", username);
+
+        out << quint16(0) << msgRspType << validLogin << User::ADMINISTRATOR << admin;
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
 
     } else if (msgType.compare(new QString("test")) == 0) {
         TeachingAssistant i;
@@ -83,6 +102,9 @@ void ConnectionThread::clientDisconnected()
     threadAlive = false;
     qDebug() << "Client has disconnected.";
 }
+
+
+
 
 
 

@@ -1,7 +1,6 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
-#include "instructor.h"
-#include "teachingassistant.h"
+#include "connectionclient.h"
 
 /**
  * Description: Constructor for the LoginWindow UI
@@ -14,12 +13,13 @@ LoginWindow::LoginWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
+    connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(sendLoginRequest()));
 
     QRegExp emailRegExp(".*@.*\\..*");
 
     ui->usernameLineEdit->setValidator(new QRegExpValidator(emailRegExp, this));
 
+    ConnectionClient::getInstance().connectToServer();
 }
 
 /**
@@ -62,20 +62,34 @@ void LoginWindow::on_usernameLineEdit_lostFocus()
  */
 void LoginWindow::sendLoginRequest()
 {
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_4_8);
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedLoginResponse(User*)), this, SLOT(didRecieveLoginResponse(User*)));
 
-    QString msgType("test");
+    ConnectionClient::getInstance().sendLoginMessage(ui->usernameLineEdit->text());
+}
 
-    TeachingAssistant ta(10, "Will", "Fairclough", ui->usernameLineEdit->text());
+void LoginWindow::didRecieveLoginResponse(User* user) {
+    qDebug() << "didRecieveLoginResponse";
 
-    out << quint16(0) << msgType << ta;
-
-    out.device()->seek(0);
-    out << quint16(block.size() - sizeof(quint16));
-
-//    clientSocket.write(block);
+    switch (user->type()) {
+    case User::ADMINISTRATOR:
+    {
+        qDebug() << "Did recieve a ADMINISTRATOR";
+        break;
+    }
+    case User::INSTRUCTOR:
+    {
+        qDebug() << "Did recieve a Instructor";
+        break;
+    }
+    case User::TA:
+    {
+        qDebug() << "Did recieve a TA";
+        break;
+    }
+    default:
+        qDebug() << "Did recieve a NONE";
+        break;
+    }
 
 }
 

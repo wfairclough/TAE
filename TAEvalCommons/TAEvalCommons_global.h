@@ -9,10 +9,5 @@
 #  define TAEVALCOMMONSSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-enum user_t {
-    ADMINISTRATOR = 0,
-    INSTRUCTOR,
-    TA
-};
 
 #endif // TAEVALCOMMONS_GLOBAL_H

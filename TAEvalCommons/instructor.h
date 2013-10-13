@@ -7,6 +7,7 @@
 class Instructor : public QObject, public User
 {
     Q_OBJECT
+    Q_ENUMS(user_t)
 public:
     explicit Instructor(QObject *parent = 0);
     

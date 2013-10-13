@@ -11,7 +11,7 @@ ConnectionClient::ConnectionClient()
     connect(&clientSocket, SIGNAL(disconnected()), this, SLOT(connectionClosedByServer()));
     connect(&clientSocket, SIGNAL(readyRead()), this, SLOT(bytesReady()));
 
-    connectToServer();
+//    connectToServer();
 }
 
 /**
@@ -44,7 +44,7 @@ void ConnectionClient::connectedToHost()
  */
 void ConnectionClient::bytesReady()
 {
-    qDebug() << "Bytes avaible for reading from server.";
+    qDebug() << "Bytes available for reading from server.";
     QDataStream in(&clientSocket);
     in.setVersion(QDataStream::Qt_4_8);
 
@@ -65,19 +65,75 @@ void ConnectionClient::bytesReady()
     QString msgType;
     in >> msgType;
 
-    if (msgType.compare(new QString("Login")) == 0) {
+    qDebug() << "Got Message Type: " + msgType;
+
+    if (msgType.compare(new QString("LoginRsp")) == 0) {
+        qDebug() << "Got LoginRsp Message";
         bool validLogin = false;
-        QString userType;
+        User::user_t userType;
 
         in >> validLogin;
         in >> userType;
 
+
         if (validLogin) {
-            qDebug() << "The username and password were correct.";
+            qDebug() << "Log in was valid with type: " << userType;
+            switch (userType) {
+            case User::ADMINISTRATOR:
+            {
+                Administrator admin;
+                in >> admin;
+                emit recievedLoginResponse(&admin);
+                break;
+            }
+            case User::INSTRUCTOR:
+            {
+                Instructor instructor;
+                in >> instructor;
+                emit recievedLoginResponse(&instructor);
+                break;
+            }
+            case User::TA:
+            {
+                qDebug() << "emit recievedLoginResponse";
+                TeachingAssistant ta;
+                in >> ta;
+                emit recievedLoginResponse(&ta);
+                break;
+            }
+            default:
+                break;
+            }
+        } else {
+            emit recievedErrorResponse(QString("Not a valid username in the system."));
         }
+
     }
 
     nextBlockSize = 0;
+}
+
+/**
+ * Description: Send a login message to the server with the username
+ * Paramters:
+ * Returns: Void
+ */
+void ConnectionClient::sendLoginMessage(QString username)
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType("LoginReq");
+
+    out << quint16(0) << msgType << username;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
 }
 
 /**
@@ -104,4 +160,15 @@ void ConnectionClient::connectionClosedByServer()
 void ConnectionClient::closeConnection()
 {
     clientSocket.close();
+}
+
+
+QDataStream& operator >>(QDataStream& in, User::user_t& e)
+{
+    //This also works, but I would love to one-line it
+    quint32 buffer;
+    in >> buffer;
+    e = User::user_t(buffer);
+
+    return in;
 }

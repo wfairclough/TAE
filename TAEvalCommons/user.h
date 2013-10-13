@@ -4,11 +4,16 @@
 #include <QString>
 #include <TAEvalCommons_global.h>
 
-
-class User
-{
+class User {
 
 public:
+
+    enum user_t {
+        NONE = 0,
+        ADMINISTRATOR,
+        INSTRUCTOR,
+        TA
+    };
 
     virtual user_t type() = 0;
 

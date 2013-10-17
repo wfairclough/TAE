@@ -18,7 +18,8 @@ SOURCES += taevalcommons.cpp \
     evaluation.cpp \
     administrator.cpp \
     user.cpp \
-    course.cpp
+    course.cpp \
+    persistable.cpp
 
 HEADERS += taevalcommons.h\
         TAEvalCommons_global.h \
@@ -28,7 +29,8 @@ HEADERS += taevalcommons.h\
     evaluation.h \
     administrator.h \
     user.h \
-    course.h
+    course.h \
+    persistable.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

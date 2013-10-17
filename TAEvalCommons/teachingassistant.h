@@ -2,9 +2,14 @@
 #define TEACHINGASSISTANT_H
 
 #include <QObject>
-#include <user.h>
+#include <QMap>
 
-class TeachingAssistant : public QObject, public User
+#include <user.h>
+#include <persistable.h>
+
+#define TEACHING_ASSISTANT_TABLE_NAME "TEACHING_ASSISTANT"
+
+class TeachingAssistant : public QObject, public User, public Persistable
 {
     Q_OBJECT
     Q_ENUMS(user_t)
@@ -20,15 +25,21 @@ public:
     
     user_t type() { return TA; }
 
+
+    // Persistable
+    QString getTableName() { return TEACHING_ASSISTANT_TABLE_NAME; }
+
+    QMap<QString, QString> getTuple() { return QMap<QString, QString>(); }
+
+
 signals:
     
 public slots:
     
 };
 
-//// Operator Override
+// Operator Override
 //QDataStream &operator <<(QDataStream &stream, const TeachingAssistant &user);
 //QDataStream &operator >>(QDataStream &stream, TeachingAssistant &user);
-
 
 #endif // TEACHINGASSISTANT_H

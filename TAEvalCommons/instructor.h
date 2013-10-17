@@ -2,9 +2,14 @@
 #define INSTRUCTOR_H
 
 #include <QObject>
-#include <user.h>
+#include <QMap>
 
-class Instructor : public QObject, public User
+#include <user.h>
+#include <persistable.h>
+
+#define INSTRUCTOR_TABLE_NAME "INSTRUCTOR"
+
+class Instructor : public QObject, public User, public Persistable
 {
     Q_OBJECT
     Q_ENUMS(user_t)
@@ -20,6 +25,12 @@ public:
 
 
     user_t type() { return INSTRUCTOR; }
+
+
+    // Persistable
+    QString getTableName() { return INSTRUCTOR_TABLE_NAME; }
+
+    QMap<QString, QString> getTuple() { return QMap<QString, QString>(); }
 
 
 signals:

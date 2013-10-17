@@ -2,9 +2,14 @@
 #define ADMINISTRATOR_H
 
 #include <QObject>
-#include <user.h>
+#include <QMap>
 
-class Administrator : public QObject, public User
+#include <user.h>
+#include <persistable.h>
+
+#define ADMINISTRATOR_TABLE_NAME "ADMINISTRATOR"
+
+class Administrator : public QObject, public User, public Persistable
 {
     Q_OBJECT
     Q_ENUMS(user_t)
@@ -19,6 +24,13 @@ public:
     Administrator(QString fName, QString lName, QString uName);
 
     user_t type() { return ADMINISTRATOR; }
+
+
+    // Persistable
+    QString getTableName() { return ADMINISTRATOR_TABLE_NAME; }
+
+    QMap<QString, QString> getTuple() { return QMap<QString, QString>(); }
+
 
 signals:
     

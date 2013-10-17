@@ -76,7 +76,7 @@ void ConnectionThread::readClient()
         QString msgRspType("LoginRsp");
         bool validLogin = true;
 
-        Administrator admin(100, "Will", "Fairclough", username);
+        Administrator admin("Will", "Fairclough", username);
 
         out << quint16(0) << msgRspType << validLogin << User::ADMINISTRATOR << admin;
 
@@ -88,7 +88,7 @@ void ConnectionThread::readClient()
     } else if (msgType.compare(new QString("test")) == 0) {
         TeachingAssistant i;
         in >> i;
-        qDebug() << "TA: " << i.getId() << " " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();
+        qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();
     }
 
     qDebug() << "Message: " << msgType;

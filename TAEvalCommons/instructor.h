@@ -13,10 +13,10 @@ public:
     
     /**
      * Description: Constructor for building a basic TeachingAssistant isntance
-     * Paramters: id, firstName, lastName, and username
+     * Paramters: firstName, lastName, and username
      * Returns: instance of TeachingAssistant
      */
-    Instructor(unsigned long idArg, QString fName, QString lName, QString uName);
+    Instructor(QString fName, QString lName, QString uName);
 
 
     user_t type() { return INSTRUCTOR; }

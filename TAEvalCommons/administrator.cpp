@@ -6,9 +6,8 @@ Administrator::Administrator(QObject *parent) :
 }
 
 
-Administrator::Administrator(unsigned long idArg, QString fName, QString lName, QString uName)
+Administrator::Administrator(QString fName, QString lName, QString uName)
 {
-    setId(idArg);
     setFirstName(fName);
     setLastName(lName);
     setUsername(uName);

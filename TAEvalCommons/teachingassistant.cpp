@@ -5,9 +5,8 @@ TeachingAssistant::TeachingAssistant(QObject *parent) :
 {
 }
 
-TeachingAssistant::TeachingAssistant(unsigned long idArg, QString fName, QString lName, QString uName)
+TeachingAssistant::TeachingAssistant(QString fName, QString lName, QString uName)
 {
-    setId(idArg);
     setFirstName(fName);
     setLastName(lName);
     setUsername(uName);

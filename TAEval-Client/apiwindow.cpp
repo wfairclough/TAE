@@ -6,11 +6,11 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui(new Ui::ApiWindow)
 {
     ui->setupUi(this);
-    connect(ui->callComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateStackIndex(int)));
+    //connect(ui->callComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateStackIndex(int)));
 }
 
 void ApiWindow::updateStackIndex(int index) {
-    ui->stackedWidget->setCurrentIndex(index);
+    //ui->stackedWidget->setCurrentIndex(index);
 }
 
 ApiWindow::~ApiWindow()

@@ -1,5 +1,5 @@
 #include <QtGui/QApplication>
-#include "loginwindow.h"
+#include "apiwindow.h"
 
 /**
  * Description: Main Entry point to the TAEval-Client Application
@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    LoginWindow w;
+    ApiWindow w;
     w.show();
     
     return a.exec();

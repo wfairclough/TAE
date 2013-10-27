@@ -12,12 +12,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         loginwindow.cpp \
-    connectionclient.cpp
+    connectionclient.cpp \
+    apiwindow.cpp
 
 HEADERS  += loginwindow.h \
-    connectionclient.h
+    connectionclient.h \
+    apiwindow.h
 
-FORMS    += loginwindow.ui
+FORMS    += loginwindow.ui \
+    apiwindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons

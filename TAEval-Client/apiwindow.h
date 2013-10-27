@@ -16,7 +16,14 @@ public:
     ~ApiWindow();
 
 private slots:
-    void updateStackIndex(int);
+    void handleNewTask();
+    void handleEditTask();
+    void handleDeleteTask();
+    void handleAssignTask();
+    void handleEvaluateTask();
+    void handleViewTa();
+    void handleViewCourse();
+    void handleViewTask();
 
 private:
     Ui::ApiWindow *ui;

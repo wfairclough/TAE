@@ -4,7 +4,7 @@
 
 /**
  * Description: Constructor for the LoginWindow UI
- * Paramters: Partent Widget
+ * Paramters: Parent Widget
  * Returns:
  */
 LoginWindow::LoginWindow(QWidget *parent) :

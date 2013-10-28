@@ -6,6 +6,16 @@
 
 
 /**
+ * Description: Constructor for the LoginWindow UI
+ * Paramters: Partent Widget
+ * Returns:
+ */
+DbCoordinator::DbCoordinator()
+{
+
+}
+
+/**
  * @brief DbCoordinator::openDatabase Open a database or create a new
  * one if non existent.
  * @param dbName the name of the database to open. Relative or Absolute path.

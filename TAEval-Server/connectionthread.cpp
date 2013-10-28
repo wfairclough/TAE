@@ -41,8 +41,7 @@ void ConnectionThread::connectedToClient()
 {
     qDebug() << "Server connected to client";
 
-//    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
-
+    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
 }
 
 void ConnectionThread::readClient()

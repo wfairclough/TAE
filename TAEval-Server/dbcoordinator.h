@@ -10,7 +10,7 @@ class DbCoordinator : public QObject
 {
     Q_OBJECT
 public:
-    DbCoordinator();
+
     static DbCoordinator& getInstance()
     {
         static DbCoordinator instance;
@@ -19,12 +19,8 @@ public:
 
     void openDatabase(QString dbName);
 
-signals:
-
-public slots:
-
 private:
-
+    DbCoordinator();
     DbCoordinator(DbCoordinator const&);
     void operator=(DbCoordinator const&);
 

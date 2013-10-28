@@ -1,5 +1,6 @@
 #include "apiwindow.h"
 #include "ui_apiwindow.h"
+#include "connectionclient.h"
 
 ApiWindow::ApiWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +15,10 @@ ApiWindow::ApiWindow(QWidget *parent) :
     connect(ui->viewTaButton, SIGNAL(released()), this, SLOT(handleViewTa()));
     connect(ui->viewCourseButton, SIGNAL(released()), this, SLOT(handleViewCourse()));
     connect(ui->viewTaskButton, SIGNAL(released()), this, SLOT(handleViewTask()));
+
+    ConnectionClient::getInstance().connectToServer();
+
+    ui->stackedWidget->setStyleSheet("color: white;");
 }
 
 /**

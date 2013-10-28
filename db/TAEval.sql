@@ -78,10 +78,22 @@ INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "supe
 INSERT OR REPLACE INTO ADMINISTRATOR (id) SELECT id from USER where username="admin";
 
 
-INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Dr. Christine", "Laurendeau", "claurendeau", 1 );
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Dr. Christine", "Laurendeau", "claurendeau", 2 );
 INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="claurendeau";
 
 
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Stephanie", "Hurtado", "shurtado", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="shurtado";
+
+
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Joshua", "Beltramin", "jbeltramin", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jbeltramin";
+
+
+--Insert a test Course
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3004", 1, 2013, (SELECT id from USER where username='claurendeau') );
 
 

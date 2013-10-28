@@ -103,6 +103,11 @@ INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jbeltramin";
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3004", 1, 2013, (SELECT id from USER where username='claurendeau') );
 
 
+-- Add a TA to a Couse
+INSERT OR REPLACE INTO TA_COURSES (courseId, taId) VALUES ((SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=1 and year=2013));
+
+
+-- Add a Task to a TA
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=1 and year=2013) );
 
 

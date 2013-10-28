@@ -24,6 +24,8 @@ ConnectionThread::ConnectionThread(int sd, QObject *parent) :
     nextBlockSize = 0;
     qDebug() << "Setup connection to client";
 
+
+    connectedToClient();
 }
 
 
@@ -38,6 +40,9 @@ void ConnectionThread::run()
 void ConnectionThread::connectedToClient()
 {
     qDebug() << "Server connected to client";
+
+//    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
+
 }
 
 void ConnectionThread::readClient()

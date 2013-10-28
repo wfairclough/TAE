@@ -3,12 +3,19 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QFile>
+
 
 class DbCoordinator : public QObject
 {
     Q_OBJECT
 public:
-    explicit DbCoordinator(QObject *parent = 0);
+    DbCoordinator();
+    static DbCoordinator& getInstance()
+    {
+        static DbCoordinator instance;
+        return instance;
+    }
 
     void openDatabase(QString dbName);
 
@@ -18,7 +25,11 @@ public slots:
 
 private:
 
+    DbCoordinator(DbCoordinator const&);
+    void operator=(DbCoordinator const&);
+
     void createDatabase(QString dbName);
+    void runSqlScript(QSqlDatabase db, QFile* file);
 
 };
 

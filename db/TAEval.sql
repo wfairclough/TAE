@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS Administrator (
   FOREIGN KEY(id) REFERENCES User(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS Course (
   id INTEGER PRIMARY KEY NOT NULL,
   name varchar(8) NOT NULL,
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS Course (
   instructorid INTEGER NOT NULL,
   FOREIGN KEY(instructorId) REFERENCES Instructor(id)
 );
+
 
 -- Join Table for many-to-many relationship between TAs and Courses
 CREATE TABLE IF NOT EXISTS TA_Courses (
@@ -36,10 +38,12 @@ CREATE TABLE IF NOT EXISTS Evaluation (
   FOREIGN KEY(taskId) REFERENCES Task(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS Instructor (
   id INTEGER PRIMARY KEY NOT NULL,
   FOREIGN KEY(id) REFERENCES User(id)
 );
+
 
 CREATE TABLE IF NOT EXISTS Task (
   id INTEGER PRIMARY KEY NOT NULL,
@@ -51,10 +55,12 @@ CREATE TABLE IF NOT EXISTS Task (
   FOREIGN KEY(courseId) REFERENCES Course(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS TA (
   id INTEGER PRIMARY KEY NOT NULL,
   FOREIGN KEY(id) REFERENCES User(id)
 );
+
 
 -- Abstract User table for TA, Instructor, and Administrator
 CREATE TABLE IF NOT EXISTS User (
@@ -95,6 +101,9 @@ INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jbeltramin";
 
 --Insert a test Course
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3004", 1, 2013, (SELECT id from USER where username='claurendeau') );
+
+
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=1 and year=2013) );
 
 
 end transaction;

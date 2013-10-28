@@ -67,7 +67,7 @@ void ConnectionClient::bytesReady()
 
     qDebug() << "Got Message Type: " + msgType;
 
-    if (msgType.compare(new QString("LoginRsp")) == 0) {
+    if (msgType.compare(QString("LoginRsp")) == 0) {
         qDebug() << "Got LoginRsp Message";
         bool validLogin = false;
         User::user_t userType;

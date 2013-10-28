@@ -68,7 +68,7 @@ void ConnectionThread::readClient()
 
     in >> msgType;
 
-    if (msgType.compare(new QString("LoginReq")) == 0) {
+    if (msgType.compare(QString("LoginReq")) == 0) {
         QString username;
 
         in >> username;
@@ -91,7 +91,11 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(new QString("test")) == 0) {
+    } else if (msgType.compare(QString("test")) == 0) {
+        TeachingAssistant i;
+        in >> i;
+        qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();
+    } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;
         in >> i;
         qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();

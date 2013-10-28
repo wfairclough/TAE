@@ -1,7 +1,7 @@
 #include "connectionclient.h"
 
 /**
- * Description: Constructor for the LoginWindow UI
+ * Description: Constructor for the ConnectionClient
  * Paramters: Partent Widget
  * Returns:
  */

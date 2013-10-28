@@ -6,7 +6,7 @@
 
 
 /**
- * Description: Constructor for the LoginWindow UI
+ * Description: Constructor for the DbCoordinator
  * Paramters: Partent Widget
  * Returns:
  */

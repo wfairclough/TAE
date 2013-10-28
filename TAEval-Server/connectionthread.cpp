@@ -2,6 +2,8 @@
 #include "instructor.h"
 #include "teachingassistant.h"
 #include "administrator.h"
+#include "dbcoordinator.h"
+
 
 #include <QDataStream>
 
@@ -35,7 +37,7 @@ void ConnectionThread::run()
 
 void ConnectionThread::connectedToClient()
 {
-
+    qDebug() << "Server connected to client";
 }
 
 void ConnectionThread::readClient()

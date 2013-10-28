@@ -17,7 +17,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     connectionserver.cpp \
-    connectionthread.cpp
+    connectionthread.cpp \
+    dbcoordinator.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons
@@ -29,4 +30,5 @@ DEPENDPATH += $$PWD/../TAEvalCommons
 
 HEADERS += \
     connectionserver.h \
-    connectionthread.h
+    connectionthread.h \
+    dbcoordinator.h

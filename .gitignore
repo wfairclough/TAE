@@ -7,7 +7,7 @@ TAEval-Client/TAEval-Client.app/
 TAEval-Client/ui_*.h
 
 # TAEval Database
-db/*.db
+**/db/*.db
 
 # C++ objects and libs
 

@@ -19,13 +19,27 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ConnectionClient::getInstance().connectToServer();
 
     //set styles
-    ui->stackedWidget->setStyleSheet("color: white;");
-    //taTable Style
+    ui->stackedWidget->setStyleSheet("color: #eee;");
+    //View Teaching Assistant Style
     ui->taTable->resizeColumnsToContents();
     ui->taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
     ui->taTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
     ui->taTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-    ui->taTable->setStyleSheet("color: black;");
+    ui->taTable->setStyleSheet("color: #222;"
+                               "font: Helvetica Neue;"
+                               "background-color: #fafafa");
+    ui->taTable->horizontalHeader()->setStyleSheet("font-size: 12pt");
+    ui->taTable->verticalHeader()->setStyleSheet("font-size: 12pt");
+    //Delete Task Style
+    ui->dt_taTable->resizeColumnsToContents();
+    ui->dt_taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->dt_taTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->dt_taTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->dt_taskTable->resizeColumnsToContents();
+    ui->dt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->dt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->dt_taTable->setStyleSheet("color:#222");
+    ui->dt_taskTable->setStyleSheet("color:#222");
 }
 
 //PUBLIC SLOTS//

@@ -410,8 +410,13 @@
        </property>
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
+         <property name="font">
+          <font>
+           <underline>false</underline>
+          </font>
+         </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="defaultPage">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -469,12 +474,101 @@
          <widget class="QWidget" name="deleteTaskPage">
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QLabel" name="label_4">
+            <widget class="QLabel" name="dt_taTableText">
              <property name="text">
-              <string>3</string>
+              <string>Teaching Assistants</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="dt_taTable">
+             <column>
+              <property name="text">
+               <string>First Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Last Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Username</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="dt_taskText">
+             <property name="text">
+              <string>Tasks</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="dt_taskTable">
+             <column>
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Description</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="dt_horizontalLayout1">
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="dt_execute">
+               <property name="text">
+                <string>Execute</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="dt_resultsTitleText">
+             <property name="text">
+              <string>RESULTS</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="dt_resultsText">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>This is where I will say what the expected results were and if the API call passed or failed</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -511,7 +605,7 @@
          <widget class="QWidget" name="viewTaPage">
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="taTableText">
              <property name="text">
               <string>List of All Teaching Assistants for an Instructor</string>
              </property>

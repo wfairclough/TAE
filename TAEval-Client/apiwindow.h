@@ -2,6 +2,7 @@
 #define APIWINDOW_H
 
 #include <QMainWindow>
+#include "instructorcontrol.h"
 
 namespace Ui {
 class ApiWindow;

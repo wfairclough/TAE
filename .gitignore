@@ -37,6 +37,7 @@ qrc_*.cpp
 Makefile
 *-build-*
 build-*
+*.autosave
 
 # MAC OS X
 

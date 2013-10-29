@@ -18,6 +18,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
 
     ConnectionClient::getInstance().connectToServer();
 
+    //set styles
     ui->stackedWidget->setStyleSheet("color: white;");
 }
 
@@ -79,6 +80,8 @@ void ApiWindow::handleEvaluateTask() {
 void ApiWindow::handleViewTa() {
     qDebug("view TA");
     ui->stackedWidget->setCurrentIndex(6);
+    InstructorControl ic(this);
+    ic.getTaForInstructor(QString("claurendeau"));
 }
 
 /**

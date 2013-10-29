@@ -9,7 +9,7 @@
  * @return the opened database
  */
 QSqlDatabase DbCoordinator::getDatabase() {
-    if (!isOpened())
+    if (isOpened() == false)
         qDebug() << "Database has not been opened yet. Please Open.";
 
     return m_db;

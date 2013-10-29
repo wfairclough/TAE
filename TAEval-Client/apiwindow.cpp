@@ -24,7 +24,9 @@ ApiWindow::ApiWindow(QWidget *parent) :
 
 //PUBLIC SLOTS//
 void ApiWindow::recievedTaListForInstructor(QList<TeachingAssistant *> list) {
-    qDebug() << list;
+    foreach (TeachingAssistant* ta, list) {
+        qDebug() << "TA Username: " << ta->getUsername();
+    }
 }
 
 

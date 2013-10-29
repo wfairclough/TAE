@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS Course (
 
 -- Join Table for many-to-many relationship between TAs and Courses
 CREATE TABLE IF NOT EXISTS TA_Courses (
-  courseid INTEGER NOT NULL,
-  taid INTEGER NOT NULL,
+  courseId INTEGER NOT NULL,
+  taId INTEGER NOT NULL,
   PRIMARY KEY (courseId, taId),
   FOREIGN KEY(courseId) REFERENCES Course(id),
   FOREIGN KEY(taId) REFERENCES TA(id)
@@ -100,15 +100,15 @@ INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jbeltramin";
 
 
 --Insert a test Course
-INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3004", 1, 2013, (SELECT id from USER where username='claurendeau') );
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3004", 0, 2013, (SELECT id from USER where username='claurendeau') );
 
 
 -- Add a TA to a Couse
-INSERT OR REPLACE INTO TA_COURSES (courseId, taId) VALUES ((SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=1 and year=2013));
-
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013));
 
 -- Add a Task to a TA
-INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=1 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
 
 
 end transaction;

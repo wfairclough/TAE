@@ -102,7 +102,25 @@ void ConnectionThread::readClient()
         InstructorManager im;
         Instructor* i = new Instructor(this);
         i->setUsername(instructorUsername);
-        im.fetchAllTeachingAssistanceForInstructor(i);
+        QList<TeachingAssistant*> list = im.fetchAllTeachingAssistanceForInstructor(i);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(TA_LIST_FOR_INSTRUCTOR_RSP);
+
+        out << quint16(0) << msgRspType << quint16(list.size());
+
+        foreach (TeachingAssistant* ta, list) {
+            out << *ta;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
 
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;

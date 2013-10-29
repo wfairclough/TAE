@@ -16,7 +16,9 @@ class InstructorManager : public QObject
 public:
     explicit InstructorManager(QObject *parent = 0);
 
+    QList<Instructor *> fetchAllInstructors();
     QList<TeachingAssistant *> fetchAllTeachingAssistanceForInstructor(Instructor* instructor);
+
 
 signals:
 

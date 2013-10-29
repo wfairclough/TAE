@@ -1,4 +1,5 @@
 #include "connectionclient.h"
+#include "MessageTypes.h"
 
 /**
  * Description: Constructor for the ConnectionClient
@@ -67,7 +68,7 @@ void ConnectionClient::bytesReady()
 
     qDebug() << "Got Message Type: " + msgType;
 
-    if (msgType.compare(QString("LoginRsp")) == 0) {
+    if (msgType.compare(QString(LOGIN_RSP)) == 0) {
         qDebug() << "Got LoginRsp Message";
         bool validLogin = false;
         User::user_t userType;
@@ -108,7 +109,7 @@ void ConnectionClient::bytesReady()
             emit recievedErrorResponse(QString("Not a valid username in the system."));
         }
 
-    } else if (msgType.compare(QString("TaListForInstructorRsp")) == 0) {
+    } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_RSP)) == 0) {
         QList<TeachingAssistant*> list;
         quint16 listSize = 0;
         in >> listSize;
@@ -135,7 +136,7 @@ void ConnectionClient::sendLoginMessage(QString username)
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
-    QString msgType("LoginReq");
+    QString msgType(LOGIN_REQ);
 
     out << quint16(0) << msgType << username;
 
@@ -157,7 +158,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString username){
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
-    QString msgType("TaListForInstructorReq");
+    QString msgType(TA_LIST_FOR_INSTRUCTOR_REQ);
 
     out << quint16(0) << msgType << username;
 

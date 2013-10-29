@@ -5,6 +5,7 @@
 #include "dbcoordinator.h"
 #include "tamanager.h"
 #include "instructormanager.h"
+#include "MessageTypes.h"
 
 
 #include <QDataStream>
@@ -70,7 +71,7 @@ void ConnectionThread::readClient()
 
     in >> msgType;
 
-    if (msgType.compare(QString("LoginReq")) == 0) {
+    if (msgType.compare(QString(LOGIN_REQ)) == 0) {
         QString username;
 
         in >> username;
@@ -81,7 +82,7 @@ void ConnectionThread::readClient()
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_8);
 
-        QString msgRspType("LoginRsp");
+        QString msgRspType(LOGIN_RSP);
         bool validLogin = true;
 
         Administrator admin("Will", "Fairclough", username);
@@ -93,7 +94,7 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(QString("TaListForInstructorReq")) == 0) {
+    } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_REQ)) == 0) {
         QString instructorUsername;
         in >> instructorUsername;
         qDebug() << "[TaListForInstructorReq] - Instructor: " << instructorUsername;

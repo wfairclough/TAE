@@ -19,6 +19,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ConnectionClient::getInstance().connectToServer();
 
     //set styles
+    ui->stackedWidget->setCurrentIndex(0);
     ui->stackedWidget->setStyleSheet("color: #eee;");
     //View Teaching Assistant Style
     ui->taTable->resizeColumnsToContents();
@@ -40,6 +41,10 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui->dt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
     ui->dt_taTable->setStyleSheet("color:#222");
     ui->dt_taskTable->setStyleSheet("color:#222");
+    ui->dt_execute->setStyleSheet("color: #222;"
+                                  "font: Hevetica Neue;"
+                                  "font-size: 14pt;"
+                                  "font-style: bold;");
 }
 
 //PUBLIC SLOTS//

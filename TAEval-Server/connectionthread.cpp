@@ -3,6 +3,8 @@
 #include "teachingassistant.h"
 #include "administrator.h"
 #include "dbcoordinator.h"
+#include "tamanager.h"
+#include "instructormanager.h"
 
 
 #include <QDataStream>
@@ -41,7 +43,7 @@ void ConnectionThread::connectedToClient()
 {
     qDebug() << "Server connected to client";
 
-    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
+
 }
 
 void ConnectionThread::readClient()
@@ -91,10 +93,16 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(QString("test")) == 0) {
-        TeachingAssistant i;
-        in >> i;
-        qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();
+    } else if (msgType.compare(QString("TaListForInstructorReq")) == 0) {
+        QString instructorUsername;
+        in >> instructorUsername;
+        qDebug() << "[TaListForInstructorReq] - Instructor: " << instructorUsername;
+
+        InstructorManager im;
+        Instructor* i = new Instructor(this);
+        i->setUsername(instructorUsername);
+        im.fetchAllTeachingAssistanceForInstructor(i);
+
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;
         in >> i;

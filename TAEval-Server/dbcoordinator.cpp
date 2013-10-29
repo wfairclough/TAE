@@ -4,15 +4,15 @@
 #include <QTextStream>
 #include <QStringList>
 
-
 /**
- * Description: Constructor for the DbCoordinator
- * Paramters: Partent Widget
- * Returns:
+ * @brief DbCoordinator::getDatabase
+ * @return the opened database
  */
-DbCoordinator::DbCoordinator()
-{
+QSqlDatabase DbCoordinator::getDatabase() {
+    if (!isOpened())
+        qDebug() << "Database has not been opened yet. Please Open.";
 
+    return m_db;
 }
 
 /**
@@ -22,6 +22,9 @@ DbCoordinator::DbCoordinator()
  */
 void DbCoordinator::openDatabase(QString dbName)
 {
+    if (isOpened())
+        return;
+
     QFile dbFile(dbName);
     bool needsGenerateSchema = false;
 
@@ -29,9 +32,9 @@ void DbCoordinator::openDatabase(QString dbName)
         needsGenerateSchema = true;
     }
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(dbName);
-    bool opened = db.open();
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(dbName);
+    bool opened = m_db.open();
 
     if (opened) {
         qDebug() << "Opened Database for access.";
@@ -40,10 +43,11 @@ void DbCoordinator::openDatabase(QString dbName)
             qDebug() << "Generating Schema...";
 
             QFile* file = new QFile(QString("db/TAEval.sql"));
-            runSqlScript(db, file);
+            runSqlScript(m_db, file);
 
             qDebug() << "Generated DB " << dbName;
         }
+        opened = true;
     }
 }
 
@@ -67,4 +71,6 @@ void DbCoordinator::runSqlScript(QSqlDatabase db, QFile* file) {
         }
     }
 }
+
+
 

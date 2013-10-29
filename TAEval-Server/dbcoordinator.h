@@ -18,15 +18,18 @@ public:
     }
 
     void openDatabase(QString dbName);
+    bool isOpened() { return opened; }
+    QSqlDatabase getDatabase();
 
 private:
-    DbCoordinator();
+    DbCoordinator() : opened(false) { }
     DbCoordinator(DbCoordinator const&);
     void operator=(DbCoordinator const&);
 
-    void createDatabase(QString dbName);
+    bool opened;
     void runSqlScript(QSqlDatabase db, QFile* file);
 
+    QSqlDatabase m_db;
 };
 
 #endif // DBCOORDINATOR_H

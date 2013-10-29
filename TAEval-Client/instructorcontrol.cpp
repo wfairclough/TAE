@@ -14,6 +14,6 @@ InstructorControl::InstructorControl(QObject *parent) :
  */
 void InstructorControl::getTaForInstructor(QString uname) {
     //ConnectionClient request
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse()), this->parent(), SLOT(recievedTaListForInstructor));
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse(QList<TeachingAssistant*>)), this->parent(), SLOT(recievedTaListForInstructor(QList<TeachingAssistant*>)));
     ConnectionClient::getInstance().sendTaForInstructorMessage(uname);
 }

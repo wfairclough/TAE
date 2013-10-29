@@ -13,11 +13,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         loginwindow.cpp \
     connectionclient.cpp \
-    apiwindow.cpp
+    apiwindow.cpp \
+    instructorcontrol.cpp
 
 HEADERS  += loginwindow.h \
     connectionclient.h \
-    apiwindow.h
+    apiwindow.h \
+    instructorcontrol.h
 
 FORMS    += loginwindow.ui \
     apiwindow.ui

@@ -1,7 +1,8 @@
 #include "connectionclient.h"
+#include "MessageTypes.h"
 
 /**
- * Description: Constructor for the LoginWindow UI
+ * Description: Constructor for the ConnectionClient
  * Paramters: Partent Widget
  * Returns:
  */
@@ -67,7 +68,7 @@ void ConnectionClient::bytesReady()
 
     qDebug() << "Got Message Type: " + msgType;
 
-    if (msgType.compare(new QString("LoginRsp")) == 0) {
+    if (msgType.compare(QString(LOGIN_RSP)) == 0) {
         qDebug() << "Got LoginRsp Message";
         bool validLogin = false;
         User::user_t userType;
@@ -108,6 +109,17 @@ void ConnectionClient::bytesReady()
             emit recievedErrorResponse(QString("Not a valid username in the system."));
         }
 
+    } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_RSP)) == 0) {
+        QList<TeachingAssistant*> list;
+        quint16 listSize = 0;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            TeachingAssistant *ta = new TeachingAssistant();
+            in >> *ta;
+            list << ta;
+        }
+        emit recievedTaListForInstructorResponse(list);
     }
 
     nextBlockSize = 0;
@@ -124,7 +136,29 @@ void ConnectionClient::sendLoginMessage(QString username)
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
-    QString msgType("LoginReq");
+    QString msgType(LOGIN_REQ);
+
+    out << quint16(0) << msgType << username;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a login message to the server with the username
+ * Paramters:
+ * Returns: Void
+ */
+void ConnectionClient::sendTaForInstructorMessage(QString username){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TA_LIST_FOR_INSTRUCTOR_REQ);
 
     out << quint16(0) << msgType << username;
 

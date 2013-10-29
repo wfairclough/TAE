@@ -5,6 +5,8 @@
 #include <QMap>
 #include <QDate>
 
+#include <instructor.h>
+#include <teachingassistant.h>
 #include <persistable.h>
 
 #define COURSE_TABLE_NAME "COURSE"
@@ -25,10 +27,16 @@ public:
     
     // Getter
     semester_t getSemesterType() { return semester; }
+    Instructor* getInstructor() { return instructor; }
+    QList<TeachingAssistant*> getTeachingAssistants() { return taList; }
 
+    // Setter
+    void setInstructor(Instructor* i) { instructor = i; }
+    void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
 
     // Persistable
     QString getTableName() { return COURSE_TABLE_NAME; }
+
 
     QMap<QString, QString> getTuple() { return QMap<QString, QString>(); }
 signals:
@@ -39,6 +47,8 @@ private:
     QString name;
     semester_t semester;
     QDate year;
+    Instructor* instructor;
+    QList<TeachingAssistant*> taList;
 
 };
 

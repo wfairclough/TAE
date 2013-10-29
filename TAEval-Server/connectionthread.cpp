@@ -2,6 +2,11 @@
 #include "instructor.h"
 #include "teachingassistant.h"
 #include "administrator.h"
+#include "dbcoordinator.h"
+#include "tamanager.h"
+#include "instructormanager.h"
+#include "MessageTypes.h"
+
 
 #include <QDataStream>
 
@@ -22,6 +27,8 @@ ConnectionThread::ConnectionThread(int sd, QObject *parent) :
     nextBlockSize = 0;
     qDebug() << "Setup connection to client";
 
+
+    connectedToClient();
 }
 
 
@@ -35,6 +42,8 @@ void ConnectionThread::run()
 
 void ConnectionThread::connectedToClient()
 {
+    qDebug() << "Server connected to client";
+
 
 }
 
@@ -62,7 +71,7 @@ void ConnectionThread::readClient()
 
     in >> msgType;
 
-    if (msgType.compare(new QString("LoginReq")) == 0) {
+    if (msgType.compare(QString(LOGIN_REQ)) == 0) {
         QString username;
 
         in >> username;
@@ -73,7 +82,7 @@ void ConnectionThread::readClient()
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_8);
 
-        QString msgRspType("LoginRsp");
+        QString msgRspType(LOGIN_RSP);
         bool validLogin = true;
 
         Administrator admin("Will", "Fairclough", username);
@@ -85,7 +94,35 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(new QString("test")) == 0) {
+    } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_REQ)) == 0) {
+        QString instructorUsername;
+        in >> instructorUsername;
+        qDebug() << "[TaListForInstructorReq] - Instructor: " << instructorUsername;
+
+        InstructorManager im;
+        Instructor* i = new Instructor(this);
+        i->setUsername(instructorUsername);
+        QList<TeachingAssistant*> list = im.fetchAllTeachingAssistanceForInstructor(i);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(TA_LIST_FOR_INSTRUCTOR_RSP);
+
+        out << quint16(0) << msgRspType << quint16(list.size());
+
+        foreach (TeachingAssistant* ta, list) {
+            out << *ta;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
+    } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;
         in >> i;
         qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();

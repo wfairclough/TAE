@@ -30,7 +30,8 @@ HEADERS += taevalcommons.h\
     administrator.h \
     user.h \
     course.h \
-    persistable.h
+    persistable.h \
+    MessageTypes.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

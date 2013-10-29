@@ -20,12 +20,25 @@ ApiWindow::ApiWindow(QWidget *parent) :
 
     //set styles
     ui->stackedWidget->setStyleSheet("color: white;");
+    //taTable Style
+    ui->taTable->resizeColumnsToContents();
+    ui->taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->taTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->taTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->taTable->setStyleSheet("color: black;");
 }
 
 //PUBLIC SLOTS//
 void ApiWindow::recievedTaListForInstructor(QList<TeachingAssistant *> list) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse(QList<TeachingAssistant*>)), this, SLOT(recievedTaListForInstructor(QList<TeachingAssistant*>)));
+    ui->taTable->setRowCount(0);
     foreach (TeachingAssistant* ta, list) {
         qDebug() << "TA Username: " << ta->getUsername();
+        int row = ui->taTable->rowCount();
+        ui->taTable->insertRow(row);
+        ui->taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
+        ui->taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
+        ui->taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
     }
 }
 

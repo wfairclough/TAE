@@ -513,11 +513,30 @@
            <item>
             <widget class="QLabel" name="label_7">
              <property name="text">
-              <string>6</string>
+              <string>List of All Teaching Assistants for an Instructor</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="taTable">
+             <column>
+              <property name="text">
+               <string>First Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Last Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>User Name</string>
+              </property>
+             </column>
             </widget>
            </item>
           </layout>

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "instructorcontrol.h"
+#include "teachingassistant.h"
 
 namespace Ui {
 class ApiWindow;
@@ -15,6 +16,9 @@ class ApiWindow : public QMainWindow
 public:
     explicit ApiWindow(QWidget *parent = 0);
     ~ApiWindow();
+
+public slots:
+    void recievedTaListForInstructor(QList<TeachingAssistant*> list);
 
 private slots:
     void handleNewTask();

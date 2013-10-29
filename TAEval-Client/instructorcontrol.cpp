@@ -1,4 +1,5 @@
 #include "instructorcontrol.h"
+#include "connectionclient.h"
 #include <QDebug>
 
 InstructorControl::InstructorControl(QObject *parent) :
@@ -13,5 +14,6 @@ InstructorControl::InstructorControl(QObject *parent) :
  */
 void InstructorControl::getTaForInstructor(QString uname) {
     //ConnectionClient request
-    qDebug() << uname;
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse()), this->parent(), SLOT(recievedTaListForInstructor));
+    ConnectionClient::getInstance().sendTaForInstructorMessage(uname);
 }

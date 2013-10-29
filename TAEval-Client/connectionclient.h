@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QList>
 #include "teachingassistant.h"
 #include "instructor.h"
 #include "teachingassistant.h"
@@ -22,10 +23,12 @@ public:
     void connectToServer();
 
     void sendLoginMessage(QString username);
+    void sendTaForInstructorMessage(QString username);
 
 signals:
     void recievedErrorResponse(QString errMsg);
     void recievedLoginResponse(User* user);
+    void recievedTaListForInstructorResponse(QList<TeachingAssistant*> list);
 
 private slots:
     void connectedToHost();

@@ -22,6 +22,13 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui->stackedWidget->setStyleSheet("color: white;");
 }
 
+//PUBLIC SLOTS//
+void ApiWindow::recievedTaListForInstructor(QList<TeachingAssistant *> list) {
+    qDebug() << list;
+}
+
+
+//PRIVATE SLOTS//
 /**
  * Description: Handles the released SIGNAL from newTaskButton
  * Paramters: None

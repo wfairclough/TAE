@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "instructorcontrol.h"
 #include "teachingassistant.h"
+#include "instructor.h"
 
 namespace Ui {
 class ApiWindow;
@@ -19,6 +20,7 @@ public:
 
 public slots:
     void recievedTaListForInstructor(QList<TeachingAssistant*> list);
+    void recievedInstructorList(QList<Instructor*> list);
 
 private slots:
     void handleNewTask();

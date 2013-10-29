@@ -120,6 +120,18 @@ void ConnectionClient::bytesReady()
             list << ta;
         }
         emit recievedTaListForInstructorResponse(list);
+
+    } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
+        QList<Instructor*> list;
+        quint16 listSize = 0;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Instructor *prof = new Instructor();
+            in >> *prof;
+            list << prof;
+        }
+        emit recievedInstructorListResponse(list);
     }
 
     nextBlockSize = 0;
@@ -149,8 +161,8 @@ void ConnectionClient::sendLoginMessage(QString username)
 }
 
 /**
- * Description: Send a login message to the server with the username
- * Paramters:
+ * Description: Send a message to the server asking for a list of TA's for a particular Instructor
+ * Paramters: the Instructors username
  * Returns: Void
  */
 void ConnectionClient::sendTaForInstructorMessage(QString username){
@@ -161,6 +173,28 @@ void ConnectionClient::sendTaForInstructorMessage(QString username){
     QString msgType(TA_LIST_FOR_INSTRUCTOR_REQ);
 
     out << quint16(0) << msgType << username;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Instructors
+ * Paramters: None
+ * Returns: Void
+ */
+void ConnectionClient::sendInstructorListMessage(){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(INSTRUCTOR_LIST_REQ);
+
+    out << quint16(0) << msgType;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

@@ -24,11 +24,13 @@ public:
 
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString username);
+    void sendInstructorListMessage();
 
 signals:
     void recievedErrorResponse(QString errMsg);
     void recievedLoginResponse(User* user);
     void recievedTaListForInstructorResponse(QList<TeachingAssistant*> list);
+    void recievedInstructorListResponse(QList<Instructor*> list);
 
 private slots:
     void connectedToHost();

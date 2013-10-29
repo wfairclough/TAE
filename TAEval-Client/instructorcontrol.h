@@ -10,6 +10,7 @@ class InstructorControl : public QObject
 public:
     explicit InstructorControl(QObject *parent = 0);
     void getTaForInstructor(QString uname);
+    void getInstructors();
     
 signals:
     

@@ -36,11 +36,16 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui->dt_taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
     ui->dt_taTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
     ui->dt_taTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->dt_instructorTable->resizeColumnsToContents();
+    ui->dt_instructorTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->dt_instructorTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->dt_instructorTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
     ui->dt_taskTable->resizeColumnsToContents();
     ui->dt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
     ui->dt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
     ui->dt_taTable->setStyleSheet("color:#222");
     ui->dt_taskTable->setStyleSheet("color:#222");
+    ui->dt_instructorTable->setStyleSheet("color: #222");
     ui->dt_execute->setStyleSheet("color: #222;"
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
@@ -58,6 +63,19 @@ void ApiWindow::recievedTaListForInstructor(QList<TeachingAssistant *> list) {
         ui->taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
         ui->taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
         ui->taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+    }
+}
+
+void ApiWindow::recievedInstructorList(QList<Instructor*> list) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedInstructorListResponse(QList<Instructor*>)), this, SLOT(recievedInstructorList(QList<Instructor*>)));
+    ui->dt_instructorTable->setRowCount(0);
+    foreach (Instructor* prof, list) {
+        qDebug() << "Instructor Username: " << prof->getUsername();
+        int row = ui->dt_instructorTable->rowCount();
+        ui->dt_instructorTable->insertRow(row);
+        ui->dt_instructorTable->setItem(row, 0, new QTableWidgetItem(prof->getFirstName()));
+        ui->dt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
+        ui->dt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
     }
 }
 
@@ -91,6 +109,8 @@ void ApiWindow::handleEditTask() {
 void ApiWindow::handleDeleteTask() {
     qDebug("delete task");
     ui->stackedWidget->setCurrentIndex(3);
+    InstructorControl ic(this);
+    ic.getInstructors();
 }
 
 /**

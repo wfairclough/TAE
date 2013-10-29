@@ -38,10 +38,11 @@ QList<Instructor *> InstructorManager::fetchAllInstructors() {
                     list << prof;
                 }
             } else {
-                qDebug() << "Could not find TAs for Course ID " << instructorId;
+                qDebug() << "Could not find Instructor with id " << instructorId;
             }
         }
     }
+    return list;
 }
 
 

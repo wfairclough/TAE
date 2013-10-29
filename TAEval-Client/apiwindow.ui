@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>460</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="palette">
@@ -416,7 +416,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="defaultPage">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -473,6 +473,32 @@
          </widget>
          <widget class="QWidget" name="deleteTaskPage">
           <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="dt_instructorText">
+             <property name="text">
+              <string>Instructors</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="dt_instructorTable">
+             <column>
+              <property name="text">
+               <string>First Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Last Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Username</string>
+              </property>
+             </column>
+            </widget>
+           </item>
            <item>
             <widget class="QLabel" name="dt_taTableText">
              <property name="text">

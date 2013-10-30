@@ -9,8 +9,9 @@
  * @return the opened database
  */
 QSqlDatabase DbCoordinator::getDatabase() {
-    if (isOpened() == false)
-        qDebug() << "Database has not been opened yet. Please Open.";
+    if (isOpened() == false) {
+        qDebug() << "Database has not been opened yet. Please Open." << isOpened();
+    }
 
     return m_db;
 }
@@ -22,8 +23,10 @@ QSqlDatabase DbCoordinator::getDatabase() {
  */
 void DbCoordinator::openDatabase(QString dbName)
 {
-    if (isOpened())
+    if (isOpened()) {
+        qDebug() << "Database is already opened!";
         return;
+    }
 
     QFile dbFile(dbName);
     bool needsGenerateSchema = false;
@@ -34,9 +37,9 @@ void DbCoordinator::openDatabase(QString dbName)
 
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(dbName);
-    bool opened = m_db.open();
+    bool db_opened = m_db.open();
 
-    if (opened) {
+    if (db_opened) {
         qDebug() << "Opened Database for access.";
 
         if (needsGenerateSchema) {

@@ -2,6 +2,7 @@
 #define DBCOORDINATOR_H
 
 #include <QObject>
+#include <QDebug>
 #include <QSqlDatabase>
 #include <QFile>
 

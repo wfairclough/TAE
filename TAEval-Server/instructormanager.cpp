@@ -56,7 +56,7 @@ QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForInstr
             }
         }
     } else {
-        qDebug() << "Courld not find courses";
+        qDebug() << "Could not find courses";
     }
 
     return list;

@@ -151,7 +151,9 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(TA_LIST_REQ)) == 0) {
+        QString view;
         qDebug() << "[TeachingAssistantReq] - All TAs";
+        in >> view;
 
         TaManager tm;
         TeachingAssistant* i = new TeachingAssistant(this);
@@ -164,7 +166,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(TA_LIST_RSP);
 
-        out << quint16(0) << msgRspType << quint16(list.size());
+        out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (TeachingAssistant* ta, list) {
             out << *ta;

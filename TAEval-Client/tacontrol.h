@@ -8,7 +8,7 @@ class TaControl : public QObject
     Q_OBJECT
 public:
     explicit TaControl(QObject *parent = 0);
-    void getTas();
+    void getTas(QString view);
     void getTaskListForTa(QString view, QString uname);
 signals:
     

@@ -25,7 +25,7 @@ public:
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString view, QString username);
     void sendInstructorListMessage(QString view);
-    void sendTaListMessage();
+    void sendTaListMessage(QString view);
     void sendTaskForTa(QString view, QString uname);
 
 signals:
@@ -33,7 +33,7 @@ signals:
     void recievedLoginResponse(User* user);
     void recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*> list);
     void recievedInstructorListResponse(QString view, QList<Instructor*> list);
-    void recievedTaListResponse(QList<TeachingAssistant*> list);
+    void recievedTaListResponse(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTaResponse(QString view, QList<Task*> list);
 
 private slots:

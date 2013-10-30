@@ -95,7 +95,10 @@ void ApiWindow::recievedInstructorList(QString view, QList<Instructor*> list) {
 }
 
 void ApiWindow::recievedTaList(QString view, QList<TeachingAssistant *> list) {
-    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QList<TeachingAssistant*>)), this, SLOT(recievedTaList(QList<TeachingAssistant*>)));
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QString, QList<TeachingAssistant*>)), this, SLOT(recievedTaList(QString, QList<TeachingAssistant*>)));
+    if (view.compare("0") == 0) {
+
+    }
 }
 
 void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
@@ -148,6 +151,7 @@ void ApiWindow::handleDeleteTask() {
     ic.getInstructors(QString("3"));
     ic.getTaForInstructor(QString("3"), QString("claurendeau"));
     tc.getTaskListForTa(QString("3"), QString("shurtado"));
+    tc.getTas(QString("0"));
     ui->dt_instructorTable->selectRow(0);
 }
 

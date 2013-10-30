@@ -1,6 +1,6 @@
 #include <QtCore/QCoreApplication>
 #include "connectionserver.h"
-
+#include "dbcoordinator.h"
 
 /**
  * Description: Main Entry point to the TAEval-Server Application
@@ -17,6 +17,9 @@ int main(int argc, char *argv[])
         qDebug() << "Error: Could not bind to port.";
         return 1;
     }
+
+
+    DbCoordinator::getInstance().openDatabase(qApp->applicationDirPath() + "/db/TAEval.db");
 
     return a.exec();
 }

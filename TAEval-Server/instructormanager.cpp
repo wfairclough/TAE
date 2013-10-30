@@ -16,7 +16,6 @@ InstructorManager::InstructorManager(QObject *parent) :
 QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForInstructor(Instructor* instructor) {
     QList<TeachingAssistant *> list;
 
-    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     QSqlQuery courseQuery(db);
@@ -61,5 +60,4 @@ QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForInstr
 
     return list;
 }
-
 

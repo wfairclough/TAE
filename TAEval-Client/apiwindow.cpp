@@ -14,8 +14,9 @@ ApiWindow::ApiWindow(QWidget *parent) :
     connect(ui->editTaskButton, SIGNAL(released()), this, SLOT(handleEditTask()));
     // Delete Task View
     connect(ui->deleteTaskButton, SIGNAL(released()), this, SLOT(handleDeleteTask()));
-    connect(ui->dt_instructorTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(dtinstructorCellClicked(int, int, int, int)));
-    connect(ui->dt_taTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(dttaCellClicked(int, int, int, int)));
+    connect(ui->dt_instructorTable, SIGNAL(cellClicked(int,int)), this, SLOT(dtinstructorCellClicked(int, int)));
+    connect(ui->dt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaCellClicked(int, int)));
+    connect(ui->dt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaskCellClicked(int, int)));
     // Assign Task View
     connect(ui->assignTaskButton, SIGNAL(released()), this, SLOT(handleAssignTask()));
     // Evaluate TAsk View
@@ -218,11 +219,10 @@ void ApiWindow::handleViewTask() {
  * Paramters: the row and column that was clikced
  * Returns: None
  */
-void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol, int prevRow, int PrevCol){
-    if (currentRow != prevRow) {
-        InstructorControl ic(this);
-        ic.getTaForInstructor(QString("3"),ui->dt_instructorTable->item(currentRow,2)->text());
-    }
+void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol){
+    InstructorControl ic(this);
+    ic.getTaForInstructor(QString("3"),ui->dt_instructorTable->item(currentRow,2)->text());
+    ui->dt_taskTable->setRowCount(0);
 }
 
 /**
@@ -230,11 +230,18 @@ void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol, int prev
  * Paramters: the row and column that was clikced
  * Returns: None
  */
-void ApiWindow::dttaCellClicked(int currentRow, int currentCol, int prevRow, int PrevCol){
-    if (currentRow != prevRow) {
-        TaControl tc(this);
-        tc.getTaskListForTa(QString("3"),ui->dt_taTable->item(currentRow,2)->text());
-    }
+void ApiWindow::dttaCellClicked(int currentRow, int currentCol){
+    TaControl tc(this);
+    tc.getTaskListForTa(QString("3"),ui->dt_taTable->item(currentRow,2)->text());
+}
+
+/**
+ * Description: handles everytime dt_taskTable's cell's are clicked
+ * Paramters: the row and column that was clikced
+ * Returns: None
+ */
+void ApiWindow::dttaskCellClicked(int currentRow, int currentCol){
+    qDebug() << currentRow << ", " << currentCol;
 }
 
 ApiWindow::~ApiWindow()

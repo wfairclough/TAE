@@ -14,12 +14,14 @@ SOURCES += main.cpp\
         loginwindow.cpp \
     connectionclient.cpp \
     apiwindow.cpp \
-    instructorcontrol.cpp
+    instructorcontrol.cpp \
+    tacontrol.cpp
 
 HEADERS  += loginwindow.h \
     connectionclient.h \
     apiwindow.h \
-    instructorcontrol.h
+    instructorcontrol.h \
+    tacontrol.h
 
 FORMS    += loginwindow.ui \
     apiwindow.ui

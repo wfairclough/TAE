@@ -7,9 +7,47 @@ InstructorManager::InstructorManager(QObject *parent) :
 {
 }
 
+/**
+ * @brief InstructorManager::fetchAllInstructors
+ * @return
+ */
+QList<Instructor *> InstructorManager::fetchAllInstructors() {
+    QList<Instructor *> list;
+
+    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+    QSqlQuery allInstructorQuery(db);
+    allInstructorQuery.prepare("SELECT * FROM instructor");
+    if(allInstructorQuery.exec()) {
+        while(allInstructorQuery.next()) {
+            int instructorId = allInstructorQuery.value(0).toInt();
+
+            QSqlQuery instructorQuery(db);
+            instructorQuery.prepare("SELECT id, firstName, lastName, username, type FROM user WHERE id=?");
+            instructorQuery.addBindValue(instructorId);
+            if (instructorQuery.exec()) {
+                while (instructorQuery.next()) {
+                    int index = 0;
+                    Instructor* prof = new Instructor();
+                    instructorId = instructorQuery.value(index++).toInt();
+                    prof->setFirstName(instructorQuery.value(index++).toString());
+                    prof->setLastName(instructorQuery.value(index++).toString());
+                    prof->setUsername(instructorQuery.value(index++).toString());
+                    qDebug() << "Adding Instructor " << prof->getUsername() << " to list.";
+                    list << prof;
+                }
+            } else {
+                qDebug() << "Could not find Instructor with id " << instructorId;
+            }
+        }
+    }
+    return list;
+}
+
 
 /**
- * @brief TaManager::fetchAllTeachingAssistanceForInstructor
+ * @brief InstructorManager::fetchAllTeachingAssistanceForInstructor
  * @param instructor
  * @return
  */

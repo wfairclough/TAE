@@ -6,8 +6,8 @@
 #include <QList>
 #include "teachingassistant.h"
 #include "instructor.h"
-#include "teachingassistant.h"
 #include "administrator.h"
+#include "task.h"
 
 
 class ConnectionClient : public QObject
@@ -23,12 +23,18 @@ public:
     void connectToServer();
 
     void sendLoginMessage(QString username);
-    void sendTaForInstructorMessage(QString username);
+    void sendTaForInstructorMessage(QString view, QString username);
+    void sendInstructorListMessage();
+    void sendTaListMessage();
+    void sendTaskForTa(QString view, QString uname);
 
 signals:
     void recievedErrorResponse(QString errMsg);
     void recievedLoginResponse(User* user);
-    void recievedTaListForInstructorResponse(QList<TeachingAssistant*> list);
+    void recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*> list);
+    void recievedInstructorListResponse(QList<Instructor*> list);
+    void recievedTaListResponse(QList<TeachingAssistant*> list);
+    void recievedTaskListForTaResponse(QString view, QList<Task*> list);
 
 private slots:
     void connectedToHost();

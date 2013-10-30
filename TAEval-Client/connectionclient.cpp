@@ -110,6 +110,32 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_RSP)) == 0) {
+        QString view;
+        QList<TeachingAssistant*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            TeachingAssistant *ta = new TeachingAssistant();
+            in >> *ta;
+            list << ta;
+        }
+        emit recievedTaListForInstructorResponse(view, list);
+
+    } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
+        QList<Instructor*> list;
+        quint16 listSize = 0;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Instructor *prof = new Instructor();
+            in >> *prof;
+            list << prof;
+        }
+        emit recievedInstructorListResponse(list);
+
+    } else if (msgType.compare(QString(TA_LIST_RSP)) == 0) {
         QList<TeachingAssistant*> list;
         quint16 listSize = 0;
         in >> listSize;
@@ -119,7 +145,34 @@ void ConnectionClient::bytesReady()
             in >> *ta;
             list << ta;
         }
-        emit recievedTaListForInstructorResponse(list);
+        emit recievedTaListResponse(list);
+
+    } else if (msgType.compare(QString(TASK_LIST_FOR_TA_RSP)) == 0) {
+        QString view;
+        QList<Task*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Task *task = new Task();
+            in >> *task;
+            list << task;
+        }
+        emit recievedTaskListForTaResponse(view, list);
+
+    }
+
+    if (clientSocket.bytesAvailable() > 0) {
+        nextBlockSize = 0;
+        bytesReady();
+    }
+
+
+    // Need to check if there is any more messages on the socket
+    if (clientSocket.bytesAvailable() > 0) {
+        nextBlockSize = 0;
+        bytesReady();
     }
 
     nextBlockSize = 0;
@@ -149,18 +202,84 @@ void ConnectionClient::sendLoginMessage(QString username)
 }
 
 /**
- * Description: Send a login message to the server with the username
- * Paramters:
+ * Description: Send a message to the server asking for a list of TA's for a particular Instructor
+ * Paramters: the Instructors username
  * Returns: Void
  */
-void ConnectionClient::sendTaForInstructorMessage(QString username){
+void ConnectionClient::sendTaForInstructorMessage(QString view, QString username){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(TA_LIST_FOR_INSTRUCTOR_REQ);
 
-    out << quint16(0) << msgType << username;
+    out << quint16(0) << msgType << view << username;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Instructors
+ * Paramters: None
+ * Returns: Void
+ */
+void ConnectionClient::sendInstructorListMessage(){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(INSTRUCTOR_LIST_REQ);
+
+    out << quint16(0) << msgType;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Tas
+ * Paramters: None
+ * Returns: Void
+ */
+void ConnectionClient::sendTaListMessage(){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TA_LIST_REQ);
+
+    out << quint16(0) << msgType;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Tasks for a TA
+ * Paramters: view that made the call, username of TA
+ * Returns: Void
+ */
+void ConnectionClient::sendTaskForTa(QString view, QString uname){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TASK_LIST_FOR_TA_REQ);
+
+    out << quint16(0) << msgType << view << uname;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

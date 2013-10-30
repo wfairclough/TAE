@@ -9,6 +9,7 @@ class TaControl : public QObject
 public:
     explicit TaControl(QObject *parent = 0);
     void getTas();
+    void getTaskListForTa(QString view, QString uname);
 signals:
     
 public slots:

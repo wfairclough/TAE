@@ -95,9 +95,11 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_REQ)) == 0) {
+        QString view;
         QString instructorUsername;
+        in >> view;
         in >> instructorUsername;
-        qDebug() << "[TaListForInstructorReq] - Instructor: " << instructorUsername;
+        qDebug() << "View: " << view << " [TaListForInstructorReq] - Instructor: " << instructorUsername;
 
         InstructorManager im;
         Instructor* i = new Instructor(this);
@@ -111,7 +113,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(TA_LIST_FOR_INSTRUCTOR_RSP);
 
-        out << quint16(0) << msgRspType << quint16(list.size());
+        out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (TeachingAssistant* ta, list) {
             out << *ta;
@@ -126,7 +128,6 @@ void ConnectionThread::readClient()
         qDebug() << "[InstructorReq] - All Instructors";
 
         InstructorManager im;
-        Instructor* i = new Instructor(this);
         QList<Instructor*> list = im.fetchAllInstructors();
 
 
@@ -165,6 +166,36 @@ void ConnectionThread::readClient()
 
         foreach (TeachingAssistant* ta, list) {
             out << *ta;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
+    } else if (msgType.compare(QString(TASK_LIST_FOR_TA_REQ)) == 0) {
+        QString view;
+        QString taUsername;
+        in >> view;
+        in >> taUsername;
+        qDebug() << "View: " << view << " [TaskListForTA] - Teaching Assistant: " << taUsername;
+
+        TaManager tm;
+        TeachingAssistant* ta = new TeachingAssistant(this);
+        ta->setUsername(taUsername);
+        QList<Task*> list = tm.fetchAllTasksForTeachingAssistance(ta);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(TASK_LIST_FOR_TA_RSP);
+
+        out << quint16(0) << msgRspType << view << quint16(list.size());
+
+        foreach (Task* task, list) {
+            out << *task;
         }
 
         out.device()->seek(0);

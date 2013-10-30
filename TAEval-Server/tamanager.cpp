@@ -44,3 +44,45 @@ QList<TeachingAssistant *> TaManager::fetchAllTas() {
     }
     return list;
 }
+
+/**
+ * @brief TaManager::fetchAllTasksForTeachingAssistance
+ * @param instructor
+ * @return
+ */
+QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* ta) {
+    QList<Task *> list;
+
+    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+    QSqlQuery allTaQuery(db);
+    allTaQuery.prepare("SELECT id FROM user WHERE username=?");
+    allTaQuery.addBindValue(ta->getUsername());
+    if(allTaQuery.exec()) {
+        while(allTaQuery.next()) {
+            qDebug() << "query value: " << allTaQuery.value(0).toInt();
+            int taId = allTaQuery.value(0).toInt();
+            qDebug() << taId;
+            QSqlQuery TaskQuery(db);
+            TaskQuery.prepare("SELECT id, name, description, taid, course FROM task WHERE taid=?");
+            qDebug() << "task query prep";
+            TaskQuery.addBindValue(taId);
+            if (TaskQuery.exec()) {
+                qDebug() << "task query exec";
+                while (TaskQuery.next()) {
+                    int index = 0;
+                    Task* task = new Task();
+                    int taskId = TaskQuery.value(index++).toInt();
+                    task->setName(TaskQuery.value(index++).toString());
+                    task->setDescription(TaskQuery.value(index++).toString());
+                    qDebug() << "Adding Task " << task->getName() << " to list.";
+                    list << task;
+                }
+            } else {
+                qDebug() << "Could not find Task with id " << taId;
+            }
+        }
+    }
+    return list;
+}

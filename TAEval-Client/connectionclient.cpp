@@ -110,8 +110,10 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_RSP)) == 0) {
+        QString view;
         QList<TeachingAssistant*> list;
         quint16 listSize = 0;
+        in >> view;
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -119,7 +121,7 @@ void ConnectionClient::bytesReady()
             in >> *ta;
             list << ta;
         }
-        emit recievedTaListForInstructorResponse(list);
+        emit recievedTaListForInstructorResponse(view, list);
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
         QList<Instructor*> list;
@@ -144,6 +146,20 @@ void ConnectionClient::bytesReady()
             list << ta;
         }
         emit recievedTaListResponse(list);
+
+    } else if (msgType.compare(QString(TASK_LIST_FOR_TA_RSP)) == 0) {
+        QString view;
+        QList<Task*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Task *task = new Task();
+            in >> *task;
+            list << task;
+        }
+        emit recievedTaskListForTaResponse(view, list);
 
     }
 
@@ -184,14 +200,14 @@ void ConnectionClient::sendLoginMessage(QString username)
  * Paramters: the Instructors username
  * Returns: Void
  */
-void ConnectionClient::sendTaForInstructorMessage(QString username){
+void ConnectionClient::sendTaForInstructorMessage(QString view, QString username){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(TA_LIST_FOR_INSTRUCTOR_REQ);
 
-    out << quint16(0) << msgType << username;
+    out << quint16(0) << msgType << view << username;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -236,6 +252,28 @@ void ConnectionClient::sendTaListMessage(){
     QString msgType(TA_LIST_REQ);
 
     out << quint16(0) << msgType;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Tasks for a TA
+ * Paramters: view that made the call, username of TA
+ * Returns: Void
+ */
+void ConnectionClient::sendTaskForTa(QString view, QString uname){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TASK_LIST_FOR_TA_REQ);
+
+    out << quint16(0) << msgType << view << uname;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

@@ -16,6 +16,7 @@ class TaManager : public QObject
 public:
     explicit TaManager(QObject *parent = 0);
     QList<TeachingAssistant *> fetchAllTas();
+    QList<Task *> fetchAllTasksForTeachingAssistance(TeachingAssistant* ta);
     
 signals:
     

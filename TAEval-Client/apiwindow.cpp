@@ -54,26 +54,28 @@ ApiWindow::ApiWindow(QWidget *parent) :
 }
 
 //PUBLIC SLOTS//
-void ApiWindow::recievedTaListForInstructor(QList<TeachingAssistant *> list) {
-    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse(QList<TeachingAssistant*>)), this, SLOT(recievedTaListForInstructor(QList<TeachingAssistant*>)));
-    ui->taTable->setRowCount(0);
-    foreach (TeachingAssistant* ta, list) {
-        qDebug() << "TA Username: " << ta->getUsername();
-        int row = ui->taTable->rowCount();
-        ui->taTable->insertRow(row);
-        ui->taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
-        ui->taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
-        ui->taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
-    }
-
-    ui->dt_taTable->setRowCount(0);
-    foreach (TeachingAssistant* ta, list) {
-        qDebug() << "TA Username: " << ta->getUsername();
-        int row = ui->dt_taTable->rowCount();
-        ui->dt_taTable->insertRow(row);
-        ui->dt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
-        ui->dt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
-        ui->dt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+void ApiWindow::recievedTaListForInstructor(QString view, QList<TeachingAssistant *> list) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*>)), this, SLOT(recievedTaListForInstructor(QString, QList<TeachingAssistant*>)));
+    if (view.compare("6") == 0) {
+        ui->taTable->setRowCount(0);
+        foreach (TeachingAssistant* ta, list) {
+            qDebug() << "TA Username: " << ta->getUsername() << " in View: " << view;
+            int row = ui->taTable->rowCount();
+            ui->taTable->insertRow(row);
+            ui->taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
+            ui->taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
+            ui->taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+        }
+    } else if(view.compare("3") == 0) {
+        ui->dt_taTable->setRowCount(0);
+        foreach (TeachingAssistant* ta, list) {
+            qDebug() << "TA Username: " << ta->getUsername() << " in View: " << view;
+            int row = ui->dt_taTable->rowCount();
+            ui->dt_taTable->insertRow(row);
+            ui->dt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
+            ui->dt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
+            ui->dt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+        }
     }
 }
 
@@ -90,8 +92,22 @@ void ApiWindow::recievedInstructorList(QList<Instructor*> list) {
     }
 }
 
-void ApiWindow::recievedTaList(QList<TeachingAssistant *> list) {
+void ApiWindow::recievedTaList(QString view, QList<TeachingAssistant *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QList<TeachingAssistant*>)), this, SLOT(recievedTaList(QList<TeachingAssistant*>)));
+}
+
+void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
+    if (view.compare("3")) {
+        ui->dt_taskTable->setRowCount(0);
+        foreach (Task* task, list) {
+            qDebug() << "View: " << view << " Task name: " << task->getName();
+            int row = ui->dt_taskTable->rowCount();
+            ui->dt_taskTable->insertRow(row);
+            ui->dt_taskTable->setItem(row, 0, new QTableWidgetItem(task->getName()));
+            ui->dt_taskTable->setItem(row, 1, new QTableWidgetItem(task->getDescription()));
+        }
+    }
 }
 
 
@@ -127,7 +143,9 @@ void ApiWindow::handleDeleteTask() {
     InstructorControl ic(this);
     TaControl tc(this);
     ic.getInstructors();
-    ic.getTaForInstructor(QString("claurendeau"));
+    ic.getTaForInstructor(QString("3"), QString("claurendeau"));
+    tc.getTaskListForTa(QString("3"), QString("shurtado"));
+    ui->dt_instructorTable->selectRow(0);
 }
 
 /**
@@ -159,7 +177,7 @@ void ApiWindow::handleViewTa() {
     qDebug("view TA");
     ui->stackedWidget->setCurrentIndex(6);
     InstructorControl ic(this);
-    ic.getTaForInstructor(QString("claurendeau"));
+    ic.getTaForInstructor(QString("6"), QString("claurendeau"));
 }
 
 /**

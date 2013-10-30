@@ -1,6 +1,7 @@
 #include "apiwindow.h"
 #include "ui_apiwindow.h"
 #include "connectionclient.h"
+#include "tacontrol.h"
 
 ApiWindow::ApiWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -64,6 +65,16 @@ void ApiWindow::recievedTaListForInstructor(QList<TeachingAssistant *> list) {
         ui->taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
         ui->taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
     }
+
+    ui->dt_taTable->setRowCount(0);
+    foreach (TeachingAssistant* ta, list) {
+        qDebug() << "TA Username: " << ta->getUsername();
+        int row = ui->dt_taTable->rowCount();
+        ui->dt_taTable->insertRow(row);
+        ui->dt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
+        ui->dt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
+        ui->dt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+    }
 }
 
 void ApiWindow::recievedInstructorList(QList<Instructor*> list) {
@@ -77,6 +88,10 @@ void ApiWindow::recievedInstructorList(QList<Instructor*> list) {
         ui->dt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
         ui->dt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
     }
+}
+
+void ApiWindow::recievedTaList(QList<TeachingAssistant *> list) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QList<TeachingAssistant*>)), this, SLOT(recievedTaList(QList<TeachingAssistant*>)));
 }
 
 
@@ -110,7 +125,9 @@ void ApiWindow::handleDeleteTask() {
     qDebug("delete task");
     ui->stackedWidget->setCurrentIndex(3);
     InstructorControl ic(this);
+    TaControl tc(this);
     ic.getInstructors();
+    ic.getTaForInstructor(QString("claurendeau"));
 }
 
 /**

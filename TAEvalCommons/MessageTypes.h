@@ -37,5 +37,7 @@
 #define NEW_INSTRUCTOR_RSP "newInstructorRsp"
 #define INSTRUCTOR_LIST_REQ "instructorListReq"
 #define INSTRUCTOR_LIST_RSP "instructorListRsp"
+#define TA_LIST_REQ "taListReq"
+#define TA_LIST_RSP "taListRsp"
 
 #endif // MESSAGETYPES_H

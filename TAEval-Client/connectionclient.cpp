@@ -132,6 +132,19 @@ void ConnectionClient::bytesReady()
             list << prof;
         }
         emit recievedInstructorListResponse(list);
+
+    } else if (msgType.compare(QString(TA_LIST_RSP)) == 0) {
+        QList<TeachingAssistant*> list;
+        quint16 listSize = 0;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            TeachingAssistant *ta = new TeachingAssistant();
+            in >> *ta;
+            list << ta;
+        }
+        emit recievedTaListResponse(list);
+
     }
 
     nextBlockSize = 0;
@@ -193,6 +206,28 @@ void ConnectionClient::sendInstructorListMessage(){
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(INSTRUCTOR_LIST_REQ);
+
+    out << quint16(0) << msgType;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Tas
+ * Paramters: None
+ * Returns: Void
+ */
+void ConnectionClient::sendTaListMessage(){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TA_LIST_REQ);
 
     out << quint16(0) << msgType;
 

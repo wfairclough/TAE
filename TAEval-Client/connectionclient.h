@@ -6,7 +6,6 @@
 #include <QList>
 #include "teachingassistant.h"
 #include "instructor.h"
-#include "teachingassistant.h"
 #include "administrator.h"
 
 
@@ -25,12 +24,14 @@ public:
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString username);
     void sendInstructorListMessage();
+    void sendTaListMessage();
 
 signals:
     void recievedErrorResponse(QString errMsg);
     void recievedLoginResponse(User* user);
     void recievedTaListForInstructorResponse(QList<TeachingAssistant*> list);
     void recievedInstructorListResponse(QList<Instructor*> list);
+    void recievedTaListResponse(QList<TeachingAssistant*> list);
 
 private slots:
     void connectedToHost();

@@ -21,6 +21,7 @@ public:
 public slots:
     void recievedTaListForInstructor(QList<TeachingAssistant*> list);
     void recievedInstructorList(QList<Instructor*> list);
+    void recievedTaList(QList<TeachingAssistant*> list);
 
 private slots:
     void handleNewTask();

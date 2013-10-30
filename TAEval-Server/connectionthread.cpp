@@ -147,6 +147,31 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
+    } else if (msgType.compare(QString(TA_LIST_REQ)) == 0) {
+        qDebug() << "[TeachingAssistantReq] - All TAs";
+
+        TaManager tm;
+        TeachingAssistant* i = new TeachingAssistant(this);
+        QList<TeachingAssistant*> list = tm.fetchAllTas();
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(TA_LIST_RSP);
+
+        out << quint16(0) << msgRspType << quint16(list.size());
+
+        foreach (TeachingAssistant* ta, list) {
+            out << *ta;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;
         in >> i;

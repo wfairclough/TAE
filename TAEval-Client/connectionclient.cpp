@@ -147,6 +147,12 @@ void ConnectionClient::bytesReady()
 
     }
 
+    if (clientSocket.bytesAvailable() > 0) {
+        nextBlockSize = 0;
+        bytesReady();
+    }
+
+
     nextBlockSize = 0;
 }
 

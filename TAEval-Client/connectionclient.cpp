@@ -165,6 +165,20 @@ void ConnectionClient::bytesReady()
         }
         emit recievedTaskListForTaResponse(view, list);
 
+    } else if (msgType.compare(QString(DELETE_TASK_FOR_TA_RSP)) == 0) {
+        QString view;
+        QList<Task*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Task *task = new Task();
+            in >> *task;
+            list << task;
+        }
+        emit recievedDeleteTaskForTaResponse(view, list);
+
     }
 
     if (clientSocket.bytesAvailable() > 0) {
@@ -284,6 +298,28 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname){
     QString msgType(TASK_LIST_FOR_TA_REQ);
 
     out << quint16(0) << msgType << view << uname;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking to delete Task for a TA
+ * Paramters: view that made the call, username of TA
+ * Returns: Void
+ */
+void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QString username){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(DELETE_TASK_FOR_TA_REQ);
+
+    out << quint16(0) << msgType << view << taskName << username;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

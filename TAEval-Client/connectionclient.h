@@ -27,6 +27,7 @@ public:
     void sendInstructorListMessage(QString view);
     void sendTaListMessage(QString view);
     void sendTaskForTa(QString view, QString uname);
+    void sendDeleteTaskForTa(QString view, QString taskName, QString username);
 
 signals:
     void recievedErrorResponse(QString errMsg);
@@ -35,6 +36,7 @@ signals:
     void recievedInstructorListResponse(QString view, QList<Instructor*> list);
     void recievedTaListResponse(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTaResponse(QString view, QList<Task*> list);
+    void recievedDeleteTaskForTaResponse(QString view, QList<Task*> list);
 
 private slots:
     void connectedToHost();

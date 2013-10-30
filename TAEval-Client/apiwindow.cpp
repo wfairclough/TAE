@@ -17,6 +17,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
     connect(ui->dt_instructorTable, SIGNAL(cellClicked(int,int)), this, SLOT(dtinstructorCellClicked(int, int)));
     connect(ui->dt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaCellClicked(int, int)));
     connect(ui->dt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaskCellClicked(int, int)));
+    connect(ui->dt_execute, SIGNAL(released()), this, SLOT(dtexecuteClicked()));
     // Assign Task View
     connect(ui->assignTaskButton, SIGNAL(released()), this, SLOT(handleAssignTask()));
     // Evaluate TAsk View
@@ -124,6 +125,13 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
             ui->dt_taskTable->setItem(row, 0, new QTableWidgetItem(task->getName()));
             ui->dt_taskTable->setItem(row, 1, new QTableWidgetItem(task->getDescription()));
         }
+    }
+}
+
+void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString,QList<Task*>)), this, SLOT(recievedDeleteTaskForTa(QString,QList<Task*>)));
+    if (view.compare("3") == 0) {
+        ui->dt_taskTable->removeRow(ui->dt_taskTable->currentRow());
     }
 }
 
@@ -242,6 +250,16 @@ void ApiWindow::dttaCellClicked(int currentRow, int currentCol){
  */
 void ApiWindow::dttaskCellClicked(int currentRow, int currentCol){
     qDebug() << currentRow << ", " << currentCol;
+}
+
+/**
+ * Description: handles everytime dt_executeButton is clicked
+ * Paramters: the row and column that was clikced
+ * Returns: None
+ */
+void ApiWindow::dtexecuteClicked() {
+    TaControl tc(this);
+    tc.deleteTaskForTA(QString("3"), ui->dt_taskTable->item(ui->dt_taskTable->currentRow(),0)->text(), ui->dt_taTable->item(ui->dt_taTable->currentRow(),2)->text());
 }
 
 ApiWindow::~ApiWindow()

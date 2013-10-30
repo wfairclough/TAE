@@ -24,6 +24,7 @@ public slots:
     void recievedInstructorList(QString view,QList<Instructor*> list);
     void recievedTaList(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTa(QString view, QList<Task*> list);
+    void recievedDeleteTaskForTa(QString view, QList<Task*> list);
 
 private slots:
     void handleNewTask();
@@ -38,6 +39,7 @@ private slots:
     void dtinstructorCellClicked(int currentRow, int currentCol);
     void dttaCellClicked(int currentRow, int currentCol);
     void dttaskCellClicked(int currentRow, int currentCol);
+    void dtexecuteClicked();
 
 private:
     Ui::ApiWindow *ui;

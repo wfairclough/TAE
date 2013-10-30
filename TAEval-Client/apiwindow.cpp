@@ -15,6 +15,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
     // Delete Task View
     connect(ui->deleteTaskButton, SIGNAL(released()), this, SLOT(handleDeleteTask()));
     connect(ui->dt_instructorTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(dtinstructorCellClicked(int, int, int, int)));
+    connect(ui->dt_taTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(dttaCellClicked(int, int, int, int)));
     // Assign Task View
     connect(ui->assignTaskButton, SIGNAL(released()), this, SLOT(handleAssignTask()));
     // Evaluate TAsk View
@@ -221,6 +222,18 @@ void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol, int prev
     if (currentRow != prevRow) {
         InstructorControl ic(this);
         ic.getTaForInstructor(QString("3"),ui->dt_instructorTable->item(currentRow,2)->text());
+    }
+}
+
+/**
+ * Description: handles everytime dt_taTable's cell's are clicked
+ * Paramters: the row and column that was clikced
+ * Returns: None
+ */
+void ApiWindow::dttaCellClicked(int currentRow, int currentCol, int prevRow, int PrevCol){
+    if (currentRow != prevRow) {
+        TaControl tc(this);
+        tc.getTaskListForTa(QString("3"),ui->dt_taTable->item(currentRow,2)->text());
     }
 }
 

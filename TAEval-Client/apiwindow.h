@@ -36,6 +36,7 @@ private slots:
     void handleViewTask();
 
     void dtinstructorCellClicked(int currentRow, int currentCol, int prevRow, int prevCol);
+    void dttaCellClicked(int currentRow, int currentCol, int prevRow, int prevCol);
 
 private:
     Ui::ApiWindow *ui;

@@ -59,10 +59,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui->dt_taTable->setStyleSheet("color:#222");
     ui->dt_taskTable->setStyleSheet("color:#222");
     ui->dt_instructorTable->setStyleSheet("color: #222");
-    ui->dt_execute->setStyleSheet("color: #222;"
-                                  "font: Hevetica Neue;"
-                                  "font-size: 14pt;"
-                                  "font-style: bold;");
+    disableExecuteButton();
 }
 
 //PUBLIC SLOTS//
@@ -231,6 +228,7 @@ void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol){
     InstructorControl ic(this);
     ic.getTaForInstructor(QString("3"),ui->dt_instructorTable->item(currentRow,2)->text());
     ui->dt_taskTable->setRowCount(0);
+    disableExecuteButton();
 }
 
 /**
@@ -241,6 +239,7 @@ void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol){
 void ApiWindow::dttaCellClicked(int currentRow, int currentCol){
     TaControl tc(this);
     tc.getTaskListForTa(QString("3"),ui->dt_taTable->item(currentRow,2)->text());
+    disableExecuteButton();
 }
 
 /**
@@ -249,7 +248,7 @@ void ApiWindow::dttaCellClicked(int currentRow, int currentCol){
  * Returns: None
  */
 void ApiWindow::dttaskCellClicked(int currentRow, int currentCol){
-    qDebug() << currentRow << ", " << currentCol;
+    enableExecuteButton();
 }
 
 /**
@@ -260,8 +259,37 @@ void ApiWindow::dttaskCellClicked(int currentRow, int currentCol){
 void ApiWindow::dtexecuteClicked() {
     TaControl tc(this);
     tc.deleteTaskForTA(QString("3"), ui->dt_taskTable->item(ui->dt_taskTable->currentRow(),0)->text(), ui->dt_taTable->item(ui->dt_taTable->currentRow(),2)->text());
+    disableExecuteButton();
 }
 
+//PRIVATE FUNCTIONS
+/**
+ * Description: Enables the Execute Button and changes its style to match
+ * Paramters: None
+ * Returns: None
+ */
+void ApiWindow::enableExecuteButton() {
+    ui->dt_execute->setEnabled(true);
+    ui->dt_execute->setStyleSheet("color: #222;"
+                                  "background-color: #eee;"
+                                  "font: Hevetica Neue;"
+                                  "font-size: 14pt;"
+                                  "font-style: bold;");
+}
+
+/**
+ * Description: Disables the Execute Button and changes its style to match
+ * Paramters: None
+ * Returns: None
+ */
+void ApiWindow::disableExecuteButton() {
+    ui->dt_execute->setEnabled(false);
+    ui->dt_execute->setStyleSheet("color: #ccc;"
+                                  "background-color: #999;"
+                                  "font: Hevetica Neue;"
+                                  "font-size: 14pt;"
+                                  "font-style: bold;");
+}
 ApiWindow::~ApiWindow()
 {
     delete ui;

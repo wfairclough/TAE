@@ -43,6 +43,8 @@ private slots:
 
 private:
     Ui::ApiWindow *ui;
+    void enableExecuteButton();
+    void disableExecuteButton();
 };
 
 #endif // APIWINDOW_H

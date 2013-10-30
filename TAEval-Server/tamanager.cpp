@@ -61,15 +61,11 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
     allTaQuery.addBindValue(ta->getUsername());
     if(allTaQuery.exec()) {
         while(allTaQuery.next()) {
-            qDebug() << "query value: " << allTaQuery.value(0).toInt();
             int taId = allTaQuery.value(0).toInt();
-            qDebug() << taId;
             QSqlQuery TaskQuery(db);
-            TaskQuery.prepare("SELECT id, name, description, taid, course FROM task WHERE taid=?");
-            qDebug() << "task query prep";
+            TaskQuery.prepare("SELECT id, name, description, taid FROM task WHERE taid=?");
             TaskQuery.addBindValue(taId);
             if (TaskQuery.exec()) {
-                qDebug() << "task query exec";
                 while (TaskQuery.next()) {
                     int index = 0;
                     Task* task = new Task();

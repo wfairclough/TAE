@@ -98,7 +98,8 @@ void ApiWindow::recievedTaList(QString view, QList<TeachingAssistant *> list) {
 
 void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
-    if (view.compare("3")) {
+    if (view.compare("3") == 0) {
+        qDebug() << "View 3";
         ui->dt_taskTable->setRowCount(0);
         foreach (Task* task, list) {
             qDebug() << "View: " << view << " Task name: " << task->getName();

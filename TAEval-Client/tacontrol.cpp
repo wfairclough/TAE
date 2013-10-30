@@ -22,6 +22,6 @@ void TaControl::getTas() {
  * Returns: None
  */
 void TaControl::getTaskListForTa(QString view, QString uname) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QList<TeachingAssistant*>)), this->parent(), SLOT(recievedTaskListForTa(QList<TeachingAssistant*>)));
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedTaskListForTa(QString, QList<Task*>)));
     ConnectionClient::getInstance().sendTaskForTa(view, uname);
 }

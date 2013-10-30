@@ -169,6 +169,12 @@ void ConnectionClient::bytesReady()
     }
 
 
+    // Need to check if there is any more messages on the socket
+    if (clientSocket.bytesAvailable() > 0) {
+        nextBlockSize = 0;
+        bytesReady();
+    }
+
     nextBlockSize = 0;
 }
 

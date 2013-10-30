@@ -24,16 +24,16 @@ public:
 
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString view, QString username);
-    void sendInstructorListMessage();
-    void sendTaListMessage();
+    void sendInstructorListMessage(QString view);
+    void sendTaListMessage(QString view);
     void sendTaskForTa(QString view, QString uname);
 
 signals:
     void recievedErrorResponse(QString errMsg);
     void recievedLoginResponse(User* user);
     void recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*> list);
-    void recievedInstructorListResponse(QList<Instructor*> list);
-    void recievedTaListResponse(QList<TeachingAssistant*> list);
+    void recievedInstructorListResponse(QString view, QList<Instructor*> list);
+    void recievedTaListResponse(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTaResponse(QString view, QList<Task*> list);
 
 private slots:

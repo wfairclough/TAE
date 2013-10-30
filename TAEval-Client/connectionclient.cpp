@@ -124,8 +124,10 @@ void ConnectionClient::bytesReady()
         emit recievedTaListForInstructorResponse(view, list);
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
+        QString view;
         QList<Instructor*> list;
         quint16 listSize = 0;
+        in >>view;
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -133,11 +135,13 @@ void ConnectionClient::bytesReady()
             in >> *prof;
             list << prof;
         }
-        emit recievedInstructorListResponse(list);
+        emit recievedInstructorListResponse(view, list);
 
     } else if (msgType.compare(QString(TA_LIST_RSP)) == 0) {
+        QString view;
         QList<TeachingAssistant*> list;
         quint16 listSize = 0;
+        in >> view;
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -145,7 +149,7 @@ void ConnectionClient::bytesReady()
             in >> *ta;
             list << ta;
         }
-        emit recievedTaListResponse(list);
+        emit recievedTaListResponse(view, list);
 
     } else if (msgType.compare(QString(TASK_LIST_FOR_TA_RSP)) == 0) {
         QString view;
@@ -228,14 +232,14 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
  * Paramters: None
  * Returns: Void
  */
-void ConnectionClient::sendInstructorListMessage(){
+void ConnectionClient::sendInstructorListMessage(QString view){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(INSTRUCTOR_LIST_REQ);
 
-    out << quint16(0) << msgType;
+    out << quint16(0) << msgType << view;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -250,14 +254,14 @@ void ConnectionClient::sendInstructorListMessage(){
  * Paramters: None
  * Returns: Void
  */
-void ConnectionClient::sendTaListMessage(){
+void ConnectionClient::sendTaListMessage(QString view){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(TA_LIST_REQ);
 
-    out << quint16(0) << msgType;
+    out << quint16(0) << msgType << view;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

@@ -23,8 +23,8 @@ void InstructorControl::getTaForInstructor(QString view, QString uname) {
  * Paramters:
  * Returns: None
  */
-void InstructorControl::getInstructors() {
+void InstructorControl::getInstructors(QString view) {
     //ConnectionClient request
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedInstructorListResponse(QList<Instructor*>)), this->parent(), SLOT(recievedInstructorList(QList<Instructor*>)));
-    ConnectionClient::getInstance().sendInstructorListMessage();
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedInstructorListResponse(QString, QList<Instructor*>)), this->parent(), SLOT(recievedInstructorList(QString, QList<Instructor*>)));
+    ConnectionClient::getInstance().sendInstructorListMessage(view);
 }

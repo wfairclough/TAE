@@ -11,9 +11,9 @@ TaControl::TaControl(QObject *parent) :
  * Paramters:
  * Returns: None
  */
-void TaControl::getTas() {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QList<TeachingAssistant*>)), this->parent(), SLOT(recievedTaList(QList<TeachingAssistant*>)));
-    ConnectionClient::getInstance().sendTaListMessage();
+void TaControl::getTas(QString view) {
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QString, QList<TeachingAssistant*>)), this->parent(), SLOT(recievedTaList(QString, QList<TeachingAssistant*>)));
+    ConnectionClient::getInstance().sendTaListMessage(view);
 }
 
 /**

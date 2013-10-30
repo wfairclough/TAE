@@ -35,6 +35,8 @@ private slots:
     void handleViewCourse();
     void handleViewTask();
 
+    void dtinstructorCellClicked(int currentRow, int currentCol, int prevRow, int prevCol);
+
 private:
     Ui::ApiWindow *ui;
 };

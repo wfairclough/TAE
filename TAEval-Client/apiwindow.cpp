@@ -8,13 +8,22 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui(new Ui::ApiWindow)
 {
     ui->setupUi(this);
+    // New Task View
     connect(ui->newTaskButton, SIGNAL(released()), this, SLOT(handleNewTask()));
+    // Edit Task View
     connect(ui->editTaskButton, SIGNAL(released()), this, SLOT(handleEditTask()));
+    // Delete Task View
     connect(ui->deleteTaskButton, SIGNAL(released()), this, SLOT(handleDeleteTask()));
+    connect(ui->dt_instructorTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(dtinstructorCellClicked(int, int, int, int)));
+    // Assign Task View
     connect(ui->assignTaskButton, SIGNAL(released()), this, SLOT(handleAssignTask()));
+    // Evaluate TAsk View
     connect(ui->evaluateTaskButton, SIGNAL(released()), this, SLOT(handleEvaluateTask()));
+    // View Teaching Assistants View
     connect(ui->viewTaButton, SIGNAL(released()), this, SLOT(handleViewTa()));
+    // View Course View
     connect(ui->viewCourseButton, SIGNAL(released()), this, SLOT(handleViewCourse()));
+    // View Tasks View
     connect(ui->viewTaskButton, SIGNAL(released()), this, SLOT(handleViewTask()));
 
     ConnectionClient::getInstance().connectToServer();
@@ -80,7 +89,7 @@ void ApiWindow::recievedTaListForInstructor(QString view, QList<TeachingAssistan
 }
 
 void ApiWindow::recievedInstructorList(QString view, QList<Instructor*> list) {
-    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedInstructorListResponse(QList<Instructor*>)), this, SLOT(recievedInstructorList(QList<Instructor*>)));
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedInstructorListResponse(QString, QList<Instructor*>)), this, SLOT(recievedInstructorList(QString, QList<Instructor*>)));
     if (view.compare("3") == 0) {
         ui->dt_instructorTable->setRowCount(0);
         foreach (Instructor* prof, list) {
@@ -147,12 +156,7 @@ void ApiWindow::handleDeleteTask() {
     qDebug("delete task");
     ui->stackedWidget->setCurrentIndex(3);
     InstructorControl ic(this);
-    TaControl tc(this);
     ic.getInstructors(QString("3"));
-    ic.getTaForInstructor(QString("3"), QString("claurendeau"));
-    tc.getTaskListForTa(QString("3"), QString("shurtado"));
-    tc.getTas(QString("0"));
-    ui->dt_instructorTable->selectRow(0);
 }
 
 /**
@@ -205,6 +209,19 @@ void ApiWindow::handleViewCourse() {
 void ApiWindow::handleViewTask() {
     qDebug("view task");
     ui->stackedWidget->setCurrentIndex(8);
+}
+
+// Delete Task Slots
+/**
+ * Description: handles everytime dt_instructorTable's cell's are clicked
+ * Paramters: the row and column that was clikced
+ * Returns: None
+ */
+void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol, int prevRow, int PrevCol){
+    if (currentRow != prevRow) {
+        InstructorControl ic(this);
+        ic.getTaForInstructor(QString("3"),ui->dt_instructorTable->item(currentRow,2)->text());
+    }
 }
 
 ApiWindow::~ApiWindow()

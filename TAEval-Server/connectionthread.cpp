@@ -178,8 +178,12 @@ void ConnectionThread::readClient()
         qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();
     }
 
-    qDebug() << "Message: " << msgType;
+    if (tcpSocket.bytesAvailable() > 0) {
+        nextBlockSize = 0;
+        readClient();
+    }
 
+    qDebug() << "Message: " << msgType;
 
     nextBlockSize = 0;
 }

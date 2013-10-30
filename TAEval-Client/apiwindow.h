@@ -21,7 +21,7 @@ public:
 
 public slots:
     void recievedTaListForInstructor(QString view, QList<TeachingAssistant*> list);
-    void recievedInstructorList(QList<Instructor*> list);
+    void recievedInstructorList(QString view,QList<Instructor*> list);
     void recievedTaList(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTa(QString view, QList<Task*> list);
 

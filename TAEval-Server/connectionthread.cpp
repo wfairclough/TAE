@@ -125,7 +125,9 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_REQ)) == 0) {
+        QString view;
         qDebug() << "[InstructorReq] - All Instructors";
+        in >> view;
 
         InstructorManager im;
         QList<Instructor*> list = im.fetchAllInstructors();
@@ -137,7 +139,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(INSTRUCTOR_LIST_RSP);
 
-        out << quint16(0) << msgRspType << quint16(list.size());
+        out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (Instructor* prof, list) {
             out << *prof;

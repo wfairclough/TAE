@@ -130,6 +130,11 @@ void ConnectionThread::readClient()
 
     qDebug() << "Message: " << msgType;
 
+    // Need to check if there is any more messages on the socket
+    if (tcpSocket.bytesAvailable() > 0) {
+        nextBlockSize = 0;
+        readClient();
+    }
 
     nextBlockSize = 0;
 }

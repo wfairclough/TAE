@@ -68,7 +68,6 @@ void DbCoordinator::openDatabase(QString path, QString dbName)
  */
 void DbCoordinator::runSqlScript(QFile* file) {
     if (isOpened()) {
-        qDebug() << "Open script";
         QString script;
         if(file->exists()){
             file->open(QIODevice::Text | QIODevice::ReadOnly);
@@ -76,11 +75,9 @@ void DbCoordinator::runSqlScript(QFile* file) {
             script = stream.readAll();
 
             QSqlQuery query(m_db);
-            qDebug() << "Create Query from database";
             QStringList queryes = script.split(QChar(';'));
 
             foreach(QString queryString, queryes){
-                qDebug() << queryString;
                 query.exec(queryString);
             }
         } else {

@@ -123,6 +123,30 @@ void ConnectionThread::readClient()
         out << quint16(block.size() - sizeof(quint16));
 
         tcpSocket.write(block);
+////////////////////////////////////////////////////////////////////////////////////////////// added///////////////////////////////
+    } else if (msgType.compare(QString(COURSE_LIST_FOR_INSTRUCTOR_REQ)) == 0) {
+        QString view;
+        QString instructorUsername;
+        in >> view;
+        in >> instructorUsername;
+        qDebug() << "View: " << view << " [CourseListForInstructorReq] - Instructor: " << instructorUsername;
+
+        InstructorManager im;
+        Instructor* i = new Instructor(this);
+        i->setUsername(instructorUsername);
+        QList<Course*> list = im.fetchAllCoursesforInstructor(i);
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(COURSE_LIST_FOR_INSTRUCTOR_RSP);
+
+        out << quint16(0) << msgRspType << view << quint16(list.size());
+
+        foreach (Course* course, list) {
+            out << *course;
+        }
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_REQ)) == 0) {
         QString view;

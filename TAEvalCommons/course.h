@@ -36,6 +36,9 @@ public:
     // Setter
     void setInstructor(Instructor* i) { instructor = i; }
     void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
+    void setName(QString cName) { name = cName;} ////////////// ADDED /////////
+    void setSemester(semester_t cSemester) {semester = cSemester; } ///////// Added /////////
+    void setYear(QDate cYear) {year = cYear;} ///////// Added ///////////
 
     // Persistable
     QString getTableName() { return COURSE_TABLE_NAME; }

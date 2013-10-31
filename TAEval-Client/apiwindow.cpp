@@ -32,6 +32,18 @@ ApiWindow::ApiWindow(QWidget *parent) :
                                "background-color: #fafafa");
     ui->taTable->horizontalHeader()->setStyleSheet("font-size: 12pt");
     ui->taTable->verticalHeader()->setStyleSheet("font-size: 12pt");
+
+    //View Courses Styles                                               ////////////////////////////////////////ADDED //////////////////////////////////////
+    ui->courseTable->resizeColumnsToContents();
+    ui->courseTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->courseTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->courseTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->courseTable->setStyleSheet("color: #222;"
+                                  "font: Helvetica Neue;"
+                                  "background-color: #fafafa");
+    ui->courseTable->horizontalHeader()->setStyleSheet("font-size: 12pt");
+    ui->courseTable->verticalHeader()->setStyleSheet("font-size: 12pt");
+
     //Delete Task Style
     ui->dt_taTable->resizeColumnsToContents();
     ui->dt_taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
@@ -75,6 +87,20 @@ void ApiWindow::recievedTaListForInstructor(QString view, QList<TeachingAssistan
             ui->dt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
             ui->dt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
             ui->dt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+        }
+    }
+}
+void ApiWindow::recievedCourseListForInstructor(QString view, QList<Course *> list) { ////////////////////////////////////////ADDED //////////////////////////////////////
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedCourseListForInstructorResponse(QString,QList<Course*>)), this, SLOT(recievedCourseListForInstructor(QString,QList<Course*>)));
+    if (view.compare("7") == 0) {
+        ui->courseTable->setRowCount(0);
+        foreach (Course* course, list) {
+            qDebug() << "Course Name:" << course->getName() << "in View: " << view;
+            int row = ui->courseTable->rowCount();
+            ui->courseTable->insertRow(row);
+            ui->courseTable->setItem(row, 0, new QTableWidgetItem(course->getName()));
+            ui->courseTable->setItem(row, 1, new QTableWidgetItem(course->getSemesterType()));
+            ui->courseTable->setItem(row, 2, new QTableWidgetItem(course->getYear()));
         }
     }
 }
@@ -192,9 +218,11 @@ void ApiWindow::handleViewTa() {
  * Paramters: None
  * Returns: None
  */
-void ApiWindow::handleViewCourse() {
+void ApiWindow::handleViewCourse() { ////////////////////////////////////Added ////////////////////////////////////
     qDebug("view course");
     ui->stackedWidget->setCurrentIndex(7);
+    InstructorControl ic(this);
+    ic.getCoursesForInstructor(QString("7"), QString("claurendeau"));
 }
 
 /**

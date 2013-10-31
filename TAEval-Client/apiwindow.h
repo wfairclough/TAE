@@ -6,6 +6,7 @@
 #include "teachingassistant.h"
 #include "instructor.h"
 #include "task.h"
+#include "course.h" ////////////////////////ADDED //////////////
 
 namespace Ui {
 class ApiWindow;
@@ -24,6 +25,7 @@ public slots:
     void recievedInstructorList(QString view,QList<Instructor*> list);
     void recievedTaList(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTa(QString view, QList<Task*> list);
+    void recievedCourseListForInstructor(QString view, QList<Course*> list); ///////////////////////////////////// ADDED
 
 private slots:
     void handleNewTask();

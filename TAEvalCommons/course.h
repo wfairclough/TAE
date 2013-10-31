@@ -26,6 +26,9 @@ public:
     explicit Course(QObject *parent = 0);
     
     // Getter
+
+    QDate getYear() { return year;} ////////////////////////////////////// ADDED /////////////////////////////////////////////
+    QString getName() const { return name; } ////////////////////////////////////// ADDED /////////////////////////////////////////////
     semester_t getSemesterType() { return semester; }
     Instructor* getInstructor() { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() { return taList; }

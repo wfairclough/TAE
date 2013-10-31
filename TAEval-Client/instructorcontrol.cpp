@@ -17,6 +17,16 @@ void InstructorControl::getTaForInstructor(QString view, QString uname) {
     connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*>)), this->parent(), SLOT(recievedTaListForInstructor(QString, QList<TeachingAssistant*>)));
     ConnectionClient::getInstance().sendTaForInstructorMessage(view, uname);
 }
+/**
+ * Description: Send request for list of Instructor's Courses  ///////////////////////////////////////////////////////ADDED ///////////////////////////////////////////
+ * Paramters: username of the Instructor
+ * Returns: None
+ */
+
+void InstructorControl::getCoursesForInstructor(QString view, Qstring uname) {
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedCourseListForInstructorResponse(QString,QList<Course*>)), this->parent(), SLOT(recievedCourseListForInstructor(QString, QList<Course*>)));
+    ConnectionClient::getInstance().sendCourseForInstructorMessage(view, uname);
+}
 
 /**
  * Description: Send request for list of Instructors

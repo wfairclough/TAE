@@ -241,6 +241,46 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
+    } else if (msgType.compare(QString(NEW_TASK_REQ)) == 0) {
+        QString view;
+        QString taUsername;
+        QString taskName;
+        QString description;
+        in >> view >> taUsername >> taskName >> description;
+
+        qDebug() << "View: " << view << " [NEW_TASK_REQ] - Teaching Assistant: " << taUsername << " Task: " << taskName << " " << description;
+
+        TaManager tm;
+        Task* task = new Task(this);
+        task->setName(taskName);
+        task->setDescription(description);
+        TeachingAssistant* ta = new TeachingAssistant(this);
+        ta->setUsername(taUsername);
+
+
+        // Call Data Access
+        QList<Task*> list = tm.addTaskForTa(task, ta);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(NEW_TASK_RSP);
+
+        out << quint16(0) << msgRspType << view << quint16(list.size());
+
+        foreach (Task* task, list) {
+            out << *task;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
+
+
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;
         in >> i;

@@ -45,6 +45,17 @@ private:
     Ui::ApiWindow *ui;
     void enableExecuteButton();
     void disableExecuteButton();
+
+    // Initialize the each of the Views
+    void initCreateTaskView();
+    void initEditTaskView();
+    void initDeleteTaskView();
+    void initAssignTaskView();
+    void initEvaluateTask();
+    void initViewTaView();
+    void initViewCourseView();
+    void initViewTaskView();
+
 };
 
 #endif // APIWINDOW_H

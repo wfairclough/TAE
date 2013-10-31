@@ -8,28 +8,39 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui(new Ui::ApiWindow)
 {
     ui->setupUi(this);
+
+    ConnectionClient::getInstance().connectToServer();
+
+
+    initCreateTaskView();
+    initEditTaskView();
+    initDeleteTaskView();
+    initAssignTaskView();
+    initEvaluateTask();
+    initViewTaView();
+    initViewCourseView();
+    initViewTaskView();
+
+}
+
+void ApiWindow::initCreateTaskView() {
     // New Task View
     connect(ui->newTaskButton, SIGNAL(released()), this, SLOT(handleNewTask()));
+}
+
+void ApiWindow::initEditTaskView() {
     // Edit Task View
     connect(ui->editTaskButton, SIGNAL(released()), this, SLOT(handleEditTask()));
+}
+
+void ApiWindow::initDeleteTaskView() {
     // Delete Task View
     connect(ui->deleteTaskButton, SIGNAL(released()), this, SLOT(handleDeleteTask()));
     connect(ui->dt_instructorTable, SIGNAL(cellClicked(int,int)), this, SLOT(dtinstructorCellClicked(int, int)));
     connect(ui->dt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaCellClicked(int, int)));
     connect(ui->dt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaskCellClicked(int, int)));
     connect(ui->dt_execute, SIGNAL(released()), this, SLOT(dtexecuteClicked()));
-    // Assign Task View
-    connect(ui->assignTaskButton, SIGNAL(released()), this, SLOT(handleAssignTask()));
-    // Evaluate TAsk View
-    connect(ui->evaluateTaskButton, SIGNAL(released()), this, SLOT(handleEvaluateTask()));
-    // View Teaching Assistants View
-    connect(ui->viewTaButton, SIGNAL(released()), this, SLOT(handleViewTa()));
-    // View Course View
-    connect(ui->viewCourseButton, SIGNAL(released()), this, SLOT(handleViewCourse()));
-    // View Tasks View
-    connect(ui->viewTaskButton, SIGNAL(released()), this, SLOT(handleViewTask()));
 
-    ConnectionClient::getInstance().connectToServer();
 
     //set styles
     ui->stackedWidget->setCurrentIndex(0);
@@ -60,6 +71,31 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui->dt_taskTable->setStyleSheet("color:#222");
     ui->dt_instructorTable->setStyleSheet("color: #222");
     disableExecuteButton();
+}
+
+void ApiWindow::initAssignTaskView() {
+    // Assign Task View
+    connect(ui->assignTaskButton, SIGNAL(released()), this, SLOT(handleAssignTask()));
+}
+
+void ApiWindow::initEvaluateTask() {
+    // Evaluate TAsk View
+    connect(ui->evaluateTaskButton, SIGNAL(released()), this, SLOT(handleEvaluateTask()));
+}
+
+void ApiWindow::initViewTaView() {
+    // View Teaching Assistants View
+    connect(ui->viewTaButton, SIGNAL(released()), this, SLOT(handleViewTa()));
+}
+
+void ApiWindow::initViewCourseView() {
+    // View Course View
+    connect(ui->viewCourseButton, SIGNAL(released()), this, SLOT(handleViewCourse()));
+}
+
+void ApiWindow::initViewTaskView() {
+    // View Tasks View
+    connect(ui->viewTaskButton, SIGNAL(released()), this, SLOT(handleViewTask()));
 }
 
 //PUBLIC SLOTS//

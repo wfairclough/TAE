@@ -129,28 +129,16 @@ QList<Task *> TaManager::addTaskForTa(Task* task, TeachingAssistant* ta) {
     int taId = idForUsername(ta->getUsername());
 
     if (taId != -1) {
-        QSqlQuery TaskQuery(db);
-        TaskQuery.prepare("SELECT id, name, description, taid FROM task WHERE taid=? AND name=?");
-        TaskQuery.addBindValue(taId);
-        TaskQuery.addBindValue(task->getName());
-        if (TaskQuery.exec()) {
-            while (TaskQuery.next()) {
-                int index = 0;
-                Task* task = new Task();
-                int taskId = TaskQuery.value(index++).toInt();
-                task->setName(TaskQuery.value(index++).toString());
-                task->setDescription(TaskQuery.value(index++).toString());
-                qDebug() << "Adding Task " << task->getName() << " to list.";
-                list << task;
-            }
+        QSqlQuery taskQuery(db);
+        taskQuery.prepare("INSERT INTO TASK (name, description, taid) VALUES (?, ?, ?)");
+        taskQuery.addBindValue(task->getName());
+        taskQuery.addBindValue(task->getDescription());
+        taskQuery.addBindValue(taId);
+        if (taskQuery.exec()) {
+            qDebug() << "Task " << task->getName() << " Added";
         }
-        QSqlQuery deleteTaskQuery(db);
-        deleteTaskQuery.prepare("DELETE FROM task where taid=? AND name=?");
-        deleteTaskQuery.addBindValue(taId);
-        deleteTaskQuery.addBindValue(task->getName());
-        if (deleteTaskQuery.exec()) {
-            qDebug() << "Deleted Task Successfully";
-        }
+
+        list = fetchAllTasksForTeachingAssistance(ta);
     }
 
     return list;

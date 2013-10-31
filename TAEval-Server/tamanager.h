@@ -2,23 +2,20 @@
 #define TAMANAGER_H
 
 #include <QObject>
-#include <QtSql>
 
-#include <instructor.h>
-#include <teachingassistant.h>
-#include <course.h>
-#include <task.h>
-#include <evaluation.h>
+#include <dataaccessmanager.h>
 
-class TaManager : public QObject
+
+class TaManager : public DataAccessManager
 {
     Q_OBJECT
 public:
-    explicit TaManager(QObject *parent = 0);
+    explicit TaManager();
     QList<TeachingAssistant *> fetchAllTas();
     QList<Task *> fetchAllTasksForTeachingAssistance(TeachingAssistant* ta);
     QList<Task *> deleteTaskForTa(Task* task, TeachingAssistant* ta);
-    
+    QList<Task *> addTaskForTa(Task* task, TeachingAssistant* ta);
+
 signals:
     
 public slots:

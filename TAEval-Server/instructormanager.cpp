@@ -2,8 +2,7 @@
 #include "dbcoordinator.h"
 #include <QList>
 
-InstructorManager::InstructorManager(QObject *parent) :
-    QObject(parent)
+InstructorManager::InstructorManager()
 {
 }
 
@@ -14,7 +13,6 @@ InstructorManager::InstructorManager(QObject *parent) :
 QList<Instructor *> InstructorManager::fetchAllInstructors() {
     QList<Instructor *> list;
 
-    DbCoordinator::getInstance().openDatabase("db/TAEval.db");
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     QSqlQuery allInstructorQuery(db);

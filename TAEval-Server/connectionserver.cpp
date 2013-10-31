@@ -1,5 +1,6 @@
 #include "connectionserver.h"
 #include "connectionthread.h"
+#include "dbcoordinator.h"
 
 ConnectionServer::ConnectionServer(QObject *parent) :
     QTcpServer(parent)

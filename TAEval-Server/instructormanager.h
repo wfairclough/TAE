@@ -2,19 +2,15 @@
 #define INSTRUCTORMANAGER_H
 
 #include <QObject>
-#include <QtSql>
 
-#include <instructor.h>
-#include <teachingassistant.h>
-#include <course.h>
-#include <task.h>
-#include <evaluation.h>
+#include <dataaccessmanager.h>
 
-class InstructorManager : public QObject
+
+class InstructorManager : public DataAccessManager
 {
     Q_OBJECT
 public:
-    explicit InstructorManager(QObject *parent = 0);
+    explicit InstructorManager();
     QList<Instructor *> fetchAllInstructors();
     QList<TeachingAssistant *> fetchAllTeachingAssistanceForInstructor(Instructor* instructor);
 

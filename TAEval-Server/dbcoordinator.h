@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QSqlDatabase>
+#include <QtSql>
 #include <QFile>
 
 
@@ -18,7 +18,7 @@ public:
         return instance;
     }
 
-    void openDatabase(QString dbName);
+    void openDatabase(QString path, QString dbName);
     bool isOpened() { return opened; }
     QSqlDatabase getDatabase();
 
@@ -28,7 +28,7 @@ private:
     void operator=(DbCoordinator const&);
 
     bool opened;
-    void runSqlScript(QSqlDatabase db, QFile* file);
+    void runSqlScript(QFile* file);
 
     QSqlDatabase m_db;
 };

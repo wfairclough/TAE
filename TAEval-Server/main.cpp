@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-
-    DbCoordinator::getInstance().openDatabase(qApp->applicationDirPath() + "/db/TAEval.db");
+    DbCoordinator::getInstance().openDatabase(qApp->applicationDirPath() + "/db/", "TAEval.db");
 
     return a.exec();
 }

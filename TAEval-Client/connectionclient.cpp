@@ -179,7 +179,22 @@ void ConnectionClient::bytesReady()
         }
         emit recievedDeleteTaskForTaResponse(view, list);
 
+    } else if (msgType.compare(QString(NEW_TASK_RSP)) == 0) {
+        QString view;
+        QList<Task*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Task *task = new Task();
+            in >> *task;
+            list << task;
+        }
+        emit recievedAddTaskForTaResponse(view, list);
+
     }
+
 
     if (clientSocket.bytesAvailable() > 0) {
         nextBlockSize = 0;
@@ -216,7 +231,7 @@ void ConnectionClient::sendLoginMessage(QString username)
 
     clientSocket.write(block);
 
-    qDebug() << "Wrote Data to server.";
+    qDebug() << "Wrote LOGIN_REQ Data to server.";
 }
 
 /**
@@ -224,7 +239,7 @@ void ConnectionClient::sendLoginMessage(QString username)
  * Paramters: the Instructors username
  * Returns: Void
  */
-void ConnectionClient::sendTaForInstructorMessage(QString view, QString username){
+void ConnectionClient::sendTaForInstructorMessage(QString view, QString username) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -238,7 +253,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
 
     clientSocket.write(block);
 
-    qDebug() << "Wrote Data to server.";
+    qDebug() << "Wrote TA_LIST_FOR_INSTRUCTOR_REQ Data to server.";
 }
 
 /**
@@ -246,7 +261,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
  * Paramters: None
  * Returns: Void
  */
-void ConnectionClient::sendInstructorListMessage(QString view){
+void ConnectionClient::sendInstructorListMessage(QString view) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -260,7 +275,7 @@ void ConnectionClient::sendInstructorListMessage(QString view){
 
     clientSocket.write(block);
 
-    qDebug() << "Wrote Data to server.";
+    qDebug() << "Wrote INSTRUCTOR_LIST_REQ Data to server.";
 }
 
 /**
@@ -268,7 +283,7 @@ void ConnectionClient::sendInstructorListMessage(QString view){
  * Paramters: None
  * Returns: Void
  */
-void ConnectionClient::sendTaListMessage(QString view){
+void ConnectionClient::sendTaListMessage(QString view) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -282,7 +297,7 @@ void ConnectionClient::sendTaListMessage(QString view){
 
     clientSocket.write(block);
 
-    qDebug() << "Wrote Data to server.";
+    qDebug() << "Wrote TA_LIST_REQ Data to server.";
 }
 
 /**
@@ -290,7 +305,7 @@ void ConnectionClient::sendTaListMessage(QString view){
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendTaskForTa(QString view, QString uname){
+void ConnectionClient::sendTaskForTa(QString view, QString uname) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -304,7 +319,7 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname){
 
     clientSocket.write(block);
 
-    qDebug() << "Wrote Data to server.";
+    qDebug() << "Wrote TASK_LIST_FOR_TA_REQ Data to server.";
 }
 
 /**
@@ -312,7 +327,7 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname){
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QString username){
+void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QString username) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -326,8 +341,31 @@ void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QStri
 
     clientSocket.write(block);
 
-    qDebug() << "Wrote Data to server.";
+    qDebug() << "Wrote DELETE_TASK_FOR_TA_REQ Data to server.";
 }
+
+/**
+ * Description: Send a message to server asking to add Task for a TA
+ * Paramters: view that made the call, username of TA
+ * Returns: Void
+ */
+void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(NEW_TASK_REQ);
+
+    out << quint16(0) << msgType << view << username << taskName << taskDescription;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote NEW_TASK_REQ Data to server.";
+}
+
 
 /**
  * Description: SLOT thriggers by the server disconnecting.

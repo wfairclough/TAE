@@ -30,11 +30,13 @@ public:
     void setId(quint32 aId) { id = aId; }
     void setComment(QString com) { comment = com; }
     void setComment(RATING::rating_t rate) { rating = rate; }
+    void setRating(RATING::rating_t rate);
+    void setRating(quint8 rate);
 
     // Getters
-    quint32 getId() { return id; }
-    QString getComment() { return comment; }
-    RATING::rating_t getRating() { return rating; }
+    quint32 getId() const { return id; }
+    QString getComment() const { return comment; }
+    RATING::rating_t getRating() const { return rating; }
     QString getRatingString();
     QString ratingForEnum(RATING::rating_t rate);
 

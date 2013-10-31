@@ -13,8 +13,11 @@ public:
     explicit TaManager();
     QList<TeachingAssistant *> fetchAllTas();
     QList<Task *> fetchAllTasksForTeachingAssistance(TeachingAssistant* ta);
+    QList<Task *> fetchAllTasksForCourse(Course* course);
     QList<Task *> deleteTaskForTa(Task* task, TeachingAssistant* ta);
-    QList<Task *> addTaskForTa(Task* task, TeachingAssistant* ta);
+    QList<Task *> addTaskForCourse(Task* task, Course* course);
+    Evaluation* fetchEvaluationForTask(Task* task);
+    bool addEvaluationToTask(Evaluation* eval, Task* task);
 
 signals:
     

@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Task (
   id INTEGER PRIMARY KEY NOT NULL,
   name varchar(45) NOT NULL,
   description varchar(45) NOT NULL,
-  taid INTEGER NOT NULL,
+  taid INTEGER,
   courseid INTEGER NOT NULL,
   FOREIGN KEY(taId) REFERENCES TA(id),
   FOREIGN KEY(courseId) REFERENCES Course(id)

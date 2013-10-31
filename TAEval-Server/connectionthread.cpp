@@ -254,12 +254,12 @@ void ConnectionThread::readClient()
         Task* task = new Task(this);
         task->setName(taskName);
         task->setDescription(description);
-        TeachingAssistant* ta = new TeachingAssistant(this);
-        ta->setUsername(taUsername);
+        Course* course = new Course(this);
+        // TODO add course info
 
 
         // Call Data Access
-        QList<Task*> list = tm.addTaskForTa(task, ta);
+        QList<Task*> list = tm.addTaskForCourse(task, course);
 
 
         QByteArray block;

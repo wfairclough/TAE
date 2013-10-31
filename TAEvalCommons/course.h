@@ -11,28 +11,37 @@
 
 #define COURSE_TABLE_NAME "COURSE"
 
+namespace Semester {
+    enum semester_t {
+        FALL = 0,
+        WINTER,
+        SUMMER
+    };
+}
+
+
 class Course : public QObject, public Persistable
 {
     Q_OBJECT
     Q_ENUMS(semester_t)
 public:
 
-    enum semester_t {
-        FALL = 0,
-        WINTER,
-        SUMMER
-    };
 
     explicit Course(QObject *parent = 0);
     
     // Getter
-    semester_t getSemesterType() { return semester; }
+    Semester::semester_t getSemesterType() { return semester; }
+    int getYear() { return year; }
+    QString getName() { return name;}
     Instructor* getInstructor() { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() { return taList; }
 
     // Setter
     void setInstructor(Instructor* i) { instructor = i; }
     void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
+    void setName(QString aName) { name = aName; }
+    void setSemesterType(Semester::semester_t sem) { semester = sem; }
+    void setYear(int y) { year = y; }
 
     // Persistable
     QString getTableName() { return COURSE_TABLE_NAME; }
@@ -45,8 +54,8 @@ public slots:
 
 private:
     QString name;
-    semester_t semester;
-    QDate year;
+    Semester::semester_t semester;
+    int year;
     Instructor* instructor;
     QList<TeachingAssistant*> taList;
 

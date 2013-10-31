@@ -25,6 +25,7 @@ public slots:
     void recievedTaList(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTa(QString view, QList<Task*> list);
     void recievedDeleteTaskForTa(QString view, QList<Task*> list);
+    void recievedAddTaskForTa(QString view, QList<Task*> list);
 
 private slots:
     void handleNewTask();

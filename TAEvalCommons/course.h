@@ -27,9 +27,9 @@ public:
     
     // Getter
 
-    QDate getYear() { return year;} ////////////////////////////////////// ADDED /////////////////////////////////////////////
+    QDate getYear() const { return year;} ////////////////////////////////////// ADDED /////////////////////////////////////////////
     QString getName() const { return name; } ////////////////////////////////////// ADDED /////////////////////////////////////////////
-    semester_t getSemesterType() { return semester; }
+    semester_t getSemesterType() const { return semester; }
     Instructor* getInstructor() { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() { return taList; }
 

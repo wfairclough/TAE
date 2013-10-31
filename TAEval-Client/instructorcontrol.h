@@ -10,7 +10,7 @@ public:
     explicit InstructorControl(QObject *parent = 0);
     void getTaForInstructor(QString view, QString uname);
     void getInstructors(QString view);
-    void getCoursesForInstructor(QString view, Qstring uname); ///////////////////////////////////////////ADDED/////////////////////////////////////////
+    void getCoursesForInstructor(QString view, QString uname); ///////////////////////////////////////////ADDED/////////////////////////////////////////
     
 signals:
     

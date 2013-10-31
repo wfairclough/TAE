@@ -1,5 +1,6 @@
 #include "connectionclient.h"
 #include "MessageTypes.h"
+#include <QDataStream> ////////// added?
 
 /**
  * Description: Constructor for the ConnectionClient
@@ -129,9 +130,9 @@ void ConnectionClient::bytesReady()
         quint16 listSize = 0;
         in >> view;
         in >> listSize;
-        for(int i = 0; i <listSize; i++){
+        for(int i = 0; i < listSize; i++){
             Course *course = new Course();
-            in >> *couse;
+            in >> *course;
             list << course;
         }
         emit recievedCourseListForInstructorResponse(view, list);
@@ -248,7 +249,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
 void ConnectionClient::sendCourseForInstructorMessage(QString view, QString username){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::QT_4_8);
+    out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(COURSE_LIST_FOR_INSTRUCTOR_REQ);
 

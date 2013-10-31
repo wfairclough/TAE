@@ -17,6 +17,7 @@ public:
     explicit TaManager(QObject *parent = 0);
     QList<TeachingAssistant *> fetchAllTas();
     QList<Task *> fetchAllTasksForTeachingAssistance(TeachingAssistant* ta);
+    QList<Task *> deleteTaskForTa(Task* task, TeachingAssistant* ta);
     
 signals:
     

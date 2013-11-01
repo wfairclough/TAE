@@ -36,10 +36,11 @@ void ApiWindow::initEditTaskView() {
 void ApiWindow::initDeleteTaskView() {
     // Delete Task View
     connect(ui->deleteTaskButton, SIGNAL(released()), this, SLOT(handleDeleteTask()));
-    connect(ui->dt_instructorTable, SIGNAL(cellClicked(int,int)), this, SLOT(dtinstructorCellClicked(int, int)));
-    connect(ui->dt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaCellClicked(int, int)));
-    connect(ui->dt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(dttaskCellClicked(int, int)));
-    connect(ui->dt_execute, SIGNAL(released()), this, SLOT(dtexecuteClicked()));
+    connect(ui->mt_instructorTable, SIGNAL(cellClicked(int,int)), this, SLOT(mtinstructorCellClicked(int, int)));
+    connect(ui->mt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaCellClicked(int, int)));
+    connect(ui->mt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaskCellClicked(int, int)));
+    connect(ui->mt_delete, SIGNAL(released()), this, SLOT(mtdeleteClicked()));
+    connect(ui->mt_taskTable, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(mtcellItemChanged(QTableWidgetItem*)));
 
 
     //set styles
@@ -56,21 +57,27 @@ void ApiWindow::initDeleteTaskView() {
     ui->taTable->horizontalHeader()->setStyleSheet("font-size: 12pt");
     ui->taTable->verticalHeader()->setStyleSheet("font-size: 12pt");
     //Delete Task Style
-    ui->dt_taTable->resizeColumnsToContents();
-    ui->dt_taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    ui->dt_taTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-    ui->dt_taTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-    ui->dt_instructorTable->resizeColumnsToContents();
-    ui->dt_instructorTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    ui->dt_instructorTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-    ui->dt_instructorTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-    ui->dt_taskTable->resizeColumnsToContents();
-    ui->dt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    ui->dt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-    ui->dt_taTable->setStyleSheet("color:#222");
-    ui->dt_taskTable->setStyleSheet("color:#222");
-    ui->dt_instructorTable->setStyleSheet("color: #222");
-    disableExecuteButton();
+    ui->mt_taTable->resizeColumnsToContents();
+    ui->mt_taTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->mt_taTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->mt_taTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->mt_instructorTable->resizeColumnsToContents();
+    ui->mt_instructorTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->mt_instructorTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->mt_instructorTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->mt_taskTable->resizeColumnsToContents();
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->mt_taTable->setStyleSheet("color:#222");
+    ui->mt_taskTable->setStyleSheet("color:#222");
+    ui->mt_instructorTable->setStyleSheet("color: #222");
+    ui->mt_update->setEnabled(true);
+    ui->mt_update->setStyleSheet("color: #222;"
+                                  "background-color: #eee;"
+                                  "font: Hevetica Neue;"
+                                  "font-size: 14pt;"
+                                  "font-style: bold;");
+    disableDeleteButton();
 }
 
 void ApiWindow::initAssignTaskView() {
@@ -112,14 +119,14 @@ void ApiWindow::recievedTaListForInstructor(QString view, QList<TeachingAssistan
             ui->taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
         }
     } else if(view.compare("3") == 0) {
-        ui->dt_taTable->setRowCount(0);
+        ui->mt_taTable->setRowCount(0);
         foreach (TeachingAssistant* ta, list) {
             qDebug() << "TA Username: " << ta->getUsername() << " in View: " << view;
-            int row = ui->dt_taTable->rowCount();
-            ui->dt_taTable->insertRow(row);
-            ui->dt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
-            ui->dt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
-            ui->dt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+            int row = ui->mt_taTable->rowCount();
+            ui->mt_taTable->insertRow(row);
+            ui->mt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
+            ui->mt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
+            ui->mt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
         }
     }
 }
@@ -127,14 +134,14 @@ void ApiWindow::recievedTaListForInstructor(QString view, QList<TeachingAssistan
 void ApiWindow::recievedInstructorList(QString view, QList<Instructor*> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedInstructorListResponse(QString, QList<Instructor*>)), this, SLOT(recievedInstructorList(QString, QList<Instructor*>)));
     if (view.compare("3") == 0) {
-        ui->dt_instructorTable->setRowCount(0);
+        ui->mt_instructorTable->setRowCount(0);
         foreach (Instructor* prof, list) {
             qDebug() << "Instructor Username: " << prof->getUsername();
-            int row = ui->dt_instructorTable->rowCount();
-            ui->dt_instructorTable->insertRow(row);
-            ui->dt_instructorTable->setItem(row, 0, new QTableWidgetItem(prof->getFirstName()));
-            ui->dt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
-            ui->dt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
+            int row = ui->mt_instructorTable->rowCount();
+            ui->mt_instructorTable->insertRow(row);
+            ui->mt_instructorTable->setItem(row, 0, new QTableWidgetItem(prof->getFirstName()));
+            ui->mt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
+            ui->mt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
         }
     }
 }
@@ -150,13 +157,13 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
     if (view.compare("3") == 0) {
         qDebug() << "View 3";
-        ui->dt_taskTable->setRowCount(0);
+        ui->mt_taskTable->setRowCount(0);
         foreach (Task* task, list) {
             qDebug() << "View: " << view << " Task name: " << task->getName();
-            int row = ui->dt_taskTable->rowCount();
-            ui->dt_taskTable->insertRow(row);
-            ui->dt_taskTable->setItem(row, 0, new QTableWidgetItem(task->getName()));
-            ui->dt_taskTable->setItem(row, 1, new QTableWidgetItem(task->getDescription()));
+            int row = ui->mt_taskTable->rowCount();
+            ui->mt_taskTable->insertRow(row);
+            ui->mt_taskTable->setItem(row, 0, new QTableWidgetItem(task->getName()));
+            ui->mt_taskTable->setItem(row, 1, new QTableWidgetItem(task->getDescription()));
         }
     }
 }
@@ -164,7 +171,7 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
 void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString,QList<Task*>)), this, SLOT(recievedDeleteTaskForTa(QString,QList<Task*>)));
     if (view.compare("3") == 0) {
-        ui->dt_taskTable->removeRow(ui->dt_taskTable->currentRow());
+        ui->mt_taskTable->removeRow(ui->mt_taskTable->currentRow());
     }
 }
 
@@ -256,57 +263,66 @@ void ApiWindow::handleViewTask() {
 
 // Delete Task Slots
 /**
- * Description: handles everytime dt_instructorTable's cell's are clicked
+ * Description: handles everytime mt_instructorTable's cell's are clicked
  * Paramters: the row and column that was clikced
  * Returns: None
  */
-void ApiWindow::dtinstructorCellClicked(int currentRow, int currentCol){
+void ApiWindow::mtinstructorCellClicked(int currentRow, int currentCol){
     InstructorControl ic(this);
-    ic.getTaForInstructor(QString("3"),ui->dt_instructorTable->item(currentRow,2)->text());
-    ui->dt_taskTable->setRowCount(0);
-    disableExecuteButton();
+    ic.getTaForInstructor(QString("3"),ui->mt_instructorTable->item(currentRow,2)->text());
+    ui->mt_taskTable->setRowCount(0);
+    disableDeleteButton();
 }
 
 /**
- * Description: handles everytime dt_taTable's cell's are clicked
+ * Description: handles everytime mt_taTable's cell's are clicked
  * Paramters: the row and column that was clikced
  * Returns: None
  */
-void ApiWindow::dttaCellClicked(int currentRow, int currentCol){
+void ApiWindow::mttaCellClicked(int currentRow, int currentCol){
     TaControl tc(this);
-    tc.getTaskListForTa(QString("3"),ui->dt_taTable->item(currentRow,2)->text());
-    disableExecuteButton();
+    tc.getTaskListForTa(QString("3"),ui->mt_taTable->item(currentRow,2)->text());
+    disableDeleteButton();
 }
 
 /**
- * Description: handles everytime dt_taskTable's cell's are clicked
+ * Description: handles everytime mt_taskTable's cell's are clicked
  * Paramters: the row and column that was clikced
  * Returns: None
  */
-void ApiWindow::dttaskCellClicked(int currentRow, int currentCol){
-    enableExecuteButton();
+void ApiWindow::mttaskCellClicked(int currentRow, int currentCol){
+    enableDeleteButton();
 }
 
 /**
- * Description: handles everytime dt_executeButton is clicked
+ * Description: handles everytime mt_deleteButton is clicked
  * Paramters: the row and column that was clikced
  * Returns: None
  */
-void ApiWindow::dtexecuteClicked() {
+void ApiWindow::mtdeleteClicked() {
     TaControl tc(this);
-    tc.deleteTaskForTA(QString("3"), ui->dt_taskTable->item(ui->dt_taskTable->currentRow(),0)->text(), ui->dt_taTable->item(ui->dt_taTable->currentRow(),2)->text());
-    disableExecuteButton();
+    tc.deleteTaskForTA(QString("3"), ui->mt_taskTable->item(ui->mt_taskTable->currentRow(),0)->text(), ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    disableDeleteButton();
+}
+
+/**
+ * Description: handles everytime mt_taskTable item is edited
+ * Paramters: the item that was edited
+ * Returns: None
+ */
+void ApiWindow::mtcellItemChanged(QTableWidgetItem *item) {
+    qDebug() << item->text();
 }
 
 //PRIVATE FUNCTIONS
 /**
- * Description: Enables the Execute Button and changes its style to match
+ * Description: Enables the Delete Button and changes its style to match
  * Paramters: None
  * Returns: None
  */
-void ApiWindow::enableExecuteButton() {
-    ui->dt_execute->setEnabled(true);
-    ui->dt_execute->setStyleSheet("color: #222;"
+void ApiWindow::enableDeleteButton() {
+    ui->mt_delete->setEnabled(true);
+    ui->mt_delete->setStyleSheet("color: #222;"
                                   "background-color: #eee;"
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
@@ -314,13 +330,13 @@ void ApiWindow::enableExecuteButton() {
 }
 
 /**
- * Description: Disables the Execute Button and changes its style to match
+ * Description: Disables the Delete Button and changes its style to match
  * Paramters: None
  * Returns: None
  */
-void ApiWindow::disableExecuteButton() {
-    ui->dt_execute->setEnabled(false);
-    ui->dt_execute->setStyleSheet("color: #ccc;"
+void ApiWindow::disableDeleteButton() {
+    ui->mt_delete->setEnabled(false);
+    ui->mt_delete->setStyleSheet("color: #ccc;"
                                   "background-color: #999;"
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"

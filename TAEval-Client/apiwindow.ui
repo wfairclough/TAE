@@ -474,14 +474,14 @@
          <widget class="QWidget" name="deleteTaskPage">
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QLabel" name="dt_instructorText">
+            <widget class="QLabel" name="mt_instructorText">
              <property name="text">
               <string>Instructors</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="dt_instructorTable">
+            <widget class="QTableWidget" name="mt_instructorTable">
              <attribute name="horizontalHeaderHighlightSections">
               <bool>false</bool>
              </attribute>
@@ -503,7 +503,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="dt_taTableText">
+            <widget class="QLabel" name="mt_taTableText">
              <property name="text">
               <string>Teaching Assistants</string>
              </property>
@@ -513,7 +513,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="dt_taTable">
+            <widget class="QTableWidget" name="mt_taTable">
              <column>
               <property name="text">
                <string>First Name</string>
@@ -532,14 +532,14 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="dt_taskText">
+            <widget class="QLabel" name="mt_taskText">
              <property name="text">
               <string>Tasks</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="dt_taskTable">
+            <widget class="QTableWidget" name="mt_taskTable">
              <column>
               <property name="text">
                <string>Title</string>
@@ -568,12 +568,19 @@
               </spacer>
              </item>
              <item>
-              <widget class="QPushButton" name="dt_execute">
+              <widget class="QPushButton" name="mt_update">
+               <property name="text">
+                <string>Update Task Info</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mt_delete">
                <property name="autoFillBackground">
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Execute</string>
+                <string>Delete Task</string>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -589,14 +596,14 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="dt_resultsTitleText">
+            <widget class="QLabel" name="mt_resultsTitleText">
              <property name="text">
               <string>RESULTS</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="dt_resultsText">
+            <widget class="QLabel" name="mt_resultsText">
              <property name="font">
               <font>
                <pointsize>10</pointsize>

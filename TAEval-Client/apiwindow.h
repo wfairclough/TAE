@@ -2,6 +2,7 @@
 #define APIWINDOW_H
 
 #include <QMainWindow>
+#include <QTableWidgetItem>
 #include "instructorcontrol.h"
 #include "teachingassistant.h"
 #include "instructor.h"
@@ -36,15 +37,16 @@ private slots:
     void handleViewCourse();
     void handleViewTask();
 
-    void dtinstructorCellClicked(int currentRow, int currentCol);
-    void dttaCellClicked(int currentRow, int currentCol);
-    void dttaskCellClicked(int currentRow, int currentCol);
-    void dtexecuteClicked();
+    void mtinstructorCellClicked(int currentRow, int currentCol);
+    void mttaCellClicked(int currentRow, int currentCol);
+    void mttaskCellClicked(int currentRow, int currentCol);
+    void mtdeleteClicked();
+    void mtcellItemChanged(QTableWidgetItem* item);
 
 private:
     Ui::ApiWindow *ui;
-    void enableExecuteButton();
-    void disableExecuteButton();
+    void enableDeleteButton();
+    void disableDeleteButton();
 
     // Initialize the each of the Views
     void initCreateTaskView();

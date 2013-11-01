@@ -97,3 +97,35 @@ QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForInstr
     return list;
 }
 
+/**
+ * @brief InstructorManager::fetchAllCoursesForInstructor
+ * @param instructor
+ * @return
+ */
+
+QList<Course *> InstructorManager::fetchAllCoursesforInstructor(Instructor *instructor) {
+    QList<Course *> list;
+
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+    QSqlQuery courseQuery(db);
+    courseQuery.prepare("SELECT id, name, semester, year FROM course WHERE instructorId=(SELECT id FROM user WHERE username=?)");
+    courseQuery.addBindValue(instructor->getUsername());
+    if (courseQuery.exec()){
+        while (courseQuery.next()) {
+        int index = 0;
+        Course* course = new Course();
+        int courseID = courseQuery.value(index++).toInt();
+        course->setName(courseQuery.value(index++).toString());
+        course->setSemesterType(courseQuery.value(index++).toInt());
+        course->setYear(courseQuery.value(index++).toInt());
+        qDebug() << "Adding Course" << course->getName() << ", " << course->getSemesterTypeIntStr() << ", " << course->getYear() << " to list";
+        list << course;
+        }
+    }else {
+        qDebug() << "Could not find courses";
+    }
+
+    return list;
+
+ }

@@ -1,5 +1,6 @@
 #include "connectionclient.h"
 #include "MessageTypes.h"
+#include <QDataStream>
 
 /**
  * Description: Constructor for the ConnectionClient
@@ -122,6 +123,20 @@ void ConnectionClient::bytesReady()
             list << ta;
         }
         emit recievedTaListForInstructorResponse(view, list);
+
+    } else if (msgType.compare(QString(COURSE_LIST_FOR_INSTRUCTOR_RSP)) == 0){
+        QString view;
+        QList<Course*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++){
+            Course *course = new Course();
+            in >> *course;
+            list << course;
+        }
+        emit recievedCourseListForInstructorResponse(view, list);
+
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
         QString view;
@@ -254,6 +269,27 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
     clientSocket.write(block);
 
     qDebug() << "Wrote TA_LIST_FOR_INSTRUCTOR_REQ Data to server.";
+}
+/**
+ * Description: Send a message to the server asking for a list of Course's for a particular Instructor
+ * Paramters: the Instructors username                                      ///////////////////////////////////////////////////Added/////////////////////////////////////////////
+ * Returns: Void
+ */
+void ConnectionClient::sendCourseForInstructorMessage(QString view, QString username){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(COURSE_LIST_FOR_INSTRUCTOR_REQ);
+
+    out << quint16(0) << msgType << view << username;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));;
+
+    clientSocket.write(block);
+
+    qDebug() << "wrote Data to Server";
 }
 
 /**

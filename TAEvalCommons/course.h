@@ -23,12 +23,11 @@ namespace Semester {
 class Course : public QObject, public Persistable
 {
     Q_OBJECT
-    Q_ENUMS(semester_t)
+//    Q_ENUMS(semester_t)
 public:
-
-
     explicit Course(QObject *parent = 0);
-    
+    Course(QString cName, QString cSemester, QString cYear);
+
     // Getter
     Semester::semester_t getSemesterType() const { return semester; }
     QString getSemesterTypeIntStr() const { return QString("" + semester); }

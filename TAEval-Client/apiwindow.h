@@ -7,6 +7,7 @@
 #include "teachingassistant.h"
 #include "instructor.h"
 #include "task.h"
+#include "course.h"
 
 namespace Ui {
 class ApiWindow;
@@ -26,6 +27,7 @@ public slots:
     void recievedTaList(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTa(QString view, QList<Task*> list);
     void recievedDeleteTaskForTa(QString view, QList<Task*> list);
+    void recievedCourseListForInstructor(QString view, QList<Course*> list);
 
 private slots:
     void handleNewTask();
@@ -42,6 +44,7 @@ private slots:
     void mttaskCellClicked(int currentRow, int currentCol);
     void mtdeleteClicked();
     void mtcellItemChanged(QTableWidgetItem* item);
+    void vcinstructorComboBoxChanged(QString profInfo);
 
 private:
     Ui::ApiWindow *ui;

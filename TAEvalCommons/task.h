@@ -13,9 +13,13 @@ class Task : public QObject, public Persistable
     Q_OBJECT
 public:
     explicit Task(QObject *parent = 0);
-    
+
+    void setId(quint32 aId) { id = aId; }
     void setName(QString tName) { name = tName; }
     void setDescription(QString desc) { description = desc; }
+
+    // Getters
+    quint32 getId() { return id; }
     QString getName() const { return name; }
     QString getDescription() const { return description; }
     // Persistable
@@ -29,6 +33,7 @@ signals:
 public slots:
     
 private:
+    quint32 id;
     QString name;
     QString description;
 

@@ -1,6 +1,8 @@
 #include <QtCore/QCoreApplication>
 #include "connectionserver.h"
 #include "dbcoordinator.h"
+//#include "testtamanager.h"
+
 
 /**
  * Description: Main Entry point to the TAEval-Server Application
@@ -19,6 +21,14 @@ int main(int argc, char *argv[])
     }
 
     DbCoordinator::getInstance().openDatabase(qApp->applicationDirPath() + "/db/", "TAEval.db");
+
+
+//    Uncomment to do tests
+//    TestTaManager ttam(&a);
+
+//    ttam.testAddTaskForCourse();
+//    ttam.testAddEvaluationToTask();
+//    ttam.testFetchEvaluationForTask();
 
     return a.exec();
 }

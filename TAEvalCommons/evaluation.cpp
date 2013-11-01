@@ -59,3 +59,14 @@ QString Evaluation::ratingForEnum(RATING::rating_t rate)
         break;
     }
 }
+
+
+
+void Evaluation::setRating(RATING::rating_t rate) {
+    rating = rate;
+}
+
+
+void Evaluation::setRating(quint8 rate) {
+    rating = RATING::rating_t(rate);
+}

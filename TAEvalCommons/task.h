@@ -5,6 +5,8 @@
 #include <QMap>
 
 #include <persistable.h>
+#include <teachingassistant.h>
+
 
 #define TASK_TABLE_NAME "TASK"
 
@@ -19,9 +21,13 @@ public:
     void setDescription(QString desc) { description = desc; }
 
     // Getters
-    quint32 getId() { return id; }
+    quint32 getId() const { return id; }
     QString getName() const { return name; }
     QString getDescription() const { return description; }
+
+    void setTeachingAssistant(TeachingAssistant* ta) { teachingAssistant = ta; }
+
+
     // Persistable
     QString getTableName() { return TASK_TABLE_NAME; }
 
@@ -36,6 +42,8 @@ private:
     quint32 id;
     QString name;
     QString description;
+    TeachingAssistant* teachingAssistant;
+
 
 };
 

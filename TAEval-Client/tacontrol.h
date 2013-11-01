@@ -11,6 +11,7 @@ public:
     void getTas(QString view);
     void getTaskListForTa(QString view, QString uname);
     void deleteTaskForTA(QString view, QString taskName, QString username);
+    void addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription);
 signals:
     
 public slots:

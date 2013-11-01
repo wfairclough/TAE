@@ -24,12 +24,11 @@ public:
     };
 */
     explicit Course(QObject *parent = 0);
-    Course(QString cName, QString cSemester, QDate cYear); //////////////////ADDED ////////////////
+    Course(QString cName, QString cSemester, QString cYear); //////////////////ADDED ////////////////
     // Getter
 
-    QDate getYear() const { return year;} ////////////////////////////////////// ADDED /////////////////////////////////////////////
+    QString getYear() const { return year;} ////////////////////////////////////// ADDED /////////////////////////////////////////////
     QString getName() const { return name; } ////////////////////////////////////// ADDED /////////////////////////////////////////////
-  //  semester_t getSemesterType() const { return semester; }
     QString getSemesterType() const {return semester;}
     Instructor* getInstructor() { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() { return taList; }
@@ -38,9 +37,8 @@ public:
     void setInstructor(Instructor* i) { instructor = i; }
     void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
     void setName(QString cName) { name = cName;} ////////////// ADDED /////////
-   // void setSemester(semester_t cSemester) {semester = cSemester; } ///////// Added /////////
     void setSemester(QString cSemester) {semester = cSemester;}
-    void setYear(QDate cYear) {year = cYear;} ///////// Added ///////////
+    void setYear(QString cYear) {year = cYear;} ///////// Added ///////////
 
     // Persistable
     QString getTableName() { return COURSE_TABLE_NAME; }
@@ -53,12 +51,15 @@ public slots:
 
 private:
     QString name;
-   // semester_t semester;
     QString semester;
-    QDate year;
+    QString year;
     Instructor* instructor;
     QList<TeachingAssistant*> taList;
 
 };
+
+// Operator Override
+QDataStream &operator <<(QDataStream &stream, const Course &user);
+QDataStream &operator >>(QDataStream &stream, Course &user);
 
 #endif // COURSE_H

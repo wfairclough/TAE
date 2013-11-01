@@ -6,7 +6,7 @@ Course::Course(QObject *parent) :
 }
  //////////////////////////////////Addded /////////////////////
 
-Course::Course(QString cName, QString cSemester, QDate cYear)
+Course::Course(QString cName, QString cSemester, QString cYear)
 {
     setName(cName);
     setSemester(cSemester);
@@ -27,14 +27,11 @@ QDataStream &operator >>(QDataStream &stream, Course &course)
 {
     bool ok;
     QString str;
-    //semester_t semester;
-    QDate date;
+    QString date;
 
     stream >> str;
     course.setName(str);
 
-    //stream >> semester;
-    //course.setSemester(semester);
     stream >> str;
     course.setSemester(str);
 

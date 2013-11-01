@@ -16,6 +16,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
     connect(ui->viewTaButton, SIGNAL(released()), this, SLOT(handleViewTa()));
     connect(ui->viewCourseButton, SIGNAL(released()), this, SLOT(handleViewCourse()));
     connect(ui->viewTaskButton, SIGNAL(released()), this, SLOT(handleViewTask()));
+    connect(ui->vc_instructorComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(vcinstructorComboBoxChanged(QString)));
 
     ConnectionClient::getInstance().connectToServer();
 
@@ -34,15 +35,19 @@ ApiWindow::ApiWindow(QWidget *parent) :
     ui->taTable->verticalHeader()->setStyleSheet("font-size: 12pt");
 
     //View Courses Styles                                               ////////////////////////////////////////ADDED //////////////////////////////////////
-    ui->courseTable->resizeColumnsToContents();
-    ui->courseTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    ui->courseTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-    ui->courseTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-    ui->courseTable->setStyleSheet("color: #222;"
+    ui->vc_courseTable->resizeColumnsToContents();
+    ui->vc_courseTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->vc_courseTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->vc_courseTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+    ui->vc_courseTable->setStyleSheet("color: #222;"
                                   "font: Helvetica Neue;"
                                   "background-color: #fafafa");
-    ui->courseTable->horizontalHeader()->setStyleSheet("font-size: 12pt");
-    ui->courseTable->verticalHeader()->setStyleSheet("font-size: 12pt");
+    ui->vc_courseTable->horizontalHeader()->setStyleSheet("font-size: 12pt");
+    ui->vc_courseTable->verticalHeader()->setStyleSheet("font-size: 12pt");
+    ui->vc_instructorComboBox->setStyleSheet("color: #222;"
+                                      "font: Helvetica Neue;"
+                                       "font-size: 14pt;"
+                                       "font-weight: bold;");
 
     //Delete Task Style
     ui->dt_taTable->resizeColumnsToContents();
@@ -93,14 +98,22 @@ void ApiWindow::recievedTaListForInstructor(QString view, QList<TeachingAssistan
 void ApiWindow::recievedCourseListForInstructor(QString view, QList<Course *> list) { ////////////////////////////////////////ADDED //////////////////////////////////////
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedCourseListForInstructorResponse(QString,QList<Course*>)), this, SLOT(recievedCourseListForInstructor(QString,QList<Course*>)));
     if (view.compare("7") == 0) {
-        ui->courseTable->setRowCount(0);
+        ui->vc_courseTable->setRowCount(0);
         foreach (Course* course, list) {
             qDebug() << "Course Name:" << course->getName() << "in View: " << view;
-            int row = ui->courseTable->rowCount();
-            ui->courseTable->insertRow(row);
-            ui->courseTable->setItem(row, 0, new QTableWidgetItem(course->getName()));
-            ui->courseTable->setItem(row, 1, new QTableWidgetItem(course->getSemesterType()));
-            ui->courseTable->setItem(row, 2, new QTableWidgetItem(course->getYear()));
+            int row = ui->vc_courseTable->rowCount();
+            ui->vc_courseTable->insertRow(row);
+            ui->vc_courseTable->setItem(row, 0, new QTableWidgetItem(course->getName()));
+            QString semester;
+            if (course->getSemesterType().compare("0") == 0) {
+                semester = "Fall";
+            } else if (course->getSemesterType().compare("1") == 0) {
+                semester = "Winter";
+            } else if (course->getSemesterType().compare("2") == 0) {
+                semester = "Summer";
+            }
+            ui->vc_courseTable->setItem(row, 1, new QTableWidgetItem(semester));
+            ui->vc_courseTable->setItem(row, 2, new QTableWidgetItem(course->getYear()));
         }
     }
 }
@@ -117,6 +130,12 @@ void ApiWindow::recievedInstructorList(QString view, QList<Instructor*> list) {
             ui->dt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
             ui->dt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
         }
+    } else if (view.compare("7") == 0) {
+        QStringList profList;
+        foreach (Instructor* prof, list) {
+            profList.append(prof->getUsername() + " - " + prof->getFirstName() + " " + prof->getLastName());
+        }
+        ui->vc_instructorComboBox->addItems(profList);
     }
 }
 
@@ -222,7 +241,7 @@ void ApiWindow::handleViewCourse() { ////////////////////////////////////Added /
     qDebug("view course");
     ui->stackedWidget->setCurrentIndex(7);
     InstructorControl ic(this);
-    ic.getCoursesForInstructor(QString("7"), QString("claurendeau"));
+    ic.getInstructors("7");
 }
 
 /**
@@ -233,6 +252,18 @@ void ApiWindow::handleViewCourse() { ////////////////////////////////////Added /
 void ApiWindow::handleViewTask() {
     qDebug("view task");
     ui->stackedWidget->setCurrentIndex(8);
+}
+
+// View Course Slots
+/**
+ * Description: loads vc_courseTable with the Instructor selected in vc_comboBox's Courses
+ * Paramters: the QString from the comboBox that is currently selected
+ * Returns: None
+ */
+void ApiWindow::vcinstructorComboBoxChanged(QString profInfo) {
+    InstructorControl ic(this);
+    QString profUsername = QString(profInfo.split(' ').at(0));
+    ic.getCoursesForInstructor("7", profUsername);
 }
 
 ApiWindow::~ApiWindow()

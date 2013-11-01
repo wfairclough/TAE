@@ -105,22 +105,22 @@ QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForInstr
  * @return
  */
 
-QList<Course *> InstructorManager::fetchAllCoursesforInstructor(Instructor *Instructor) { ///////////////////////////////////////////ADDED /////////////////////////////////////
+QList<Course *> InstructorManager::fetchAllCoursesforInstructor(Instructor *instructor) { ///////////////////////////////////////////ADDED /////////////////////////////////////
     QList<Course *> list;
 
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     QSqlQuery courseQuery(db);
-    courseQuery.prepare("SELECT id FROM course WHERE instructorId=(SELECT id FROM user WHERE username=?)");
+    courseQuery.prepare("SELECT id, name, semester, year FROM course WHERE instructorId=(SELECT id FROM user WHERE username=?)");
     courseQuery.addBindValue(instructor->getUsername());
     if (courseQuery.exec()){
         while (courseQuery.next()) {
         int index = 0;
         Course* course =new Course();
         int courseID = courseQuery.value(index++).toInt();
-        course->setName(courseQuery.value(index++).tostring());
-        course->setSemester(courseQuery.value(index++).tostring());
-        course->setYear(courseQuery.value(index++).tostring());
+        course->setName(courseQuery.value(index++).toString());
+        course->setSemester(courseQuery.value(index++).toString());
+        course->setYear(courseQuery.value(index++).toString());
         qDebug() << "Adding Course" << course->getName() << "to list";
         list << course;
         }

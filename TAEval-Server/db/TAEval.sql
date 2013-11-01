@@ -85,30 +85,50 @@ INSERT OR REPLACE INTO ADMINISTRATOR (id) SELECT id from USER where username="ad
 
 
 --Insert a test instructor user
-INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Dr. Christine", "Laurendeau", "claurendeau", 2 );
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Christine", "Laurendeau", "claurendeau", 2 );
 INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="claurendeau";
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Louis", "Nel", "ldnel", 2 );
+INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="ldnel";
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "David", "Maybury", "dmaybury", 2 );
+INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="dmaybury";
 
 
 --Insert a test TA user
 INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Stephanie", "Hurtado", "shurtado", 3 );
 INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="shurtado";
-
-
 --Insert a test TA user
 INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Joshua", "Beltramin", "jbeltramin", 3 );
 INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jbeltramin";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Han", "Solo", "hsolo", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="hsolo";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Emilie", "de Ravinan", "ederavi", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="ederavi";
 
 
 --Insert a test Course
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3004", 0, 2013, (SELECT id from USER where username='claurendeau') );
+--Insert a test Course
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3005", 0, 2013, (SELECT id from USER where username='ldnel') );
+--Insert a test Course
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1901", 0, 2013, (SELECT id from USER where username='dmaybury') );
 
 
 -- Add a TA to a Couse
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=0 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='ederavi'), (SELECT id from COURSE where name="COMP3005" and semester=0 and year=2013));
 
 -- Add a Task to a TA
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Create Assignment 1", "Make an Assignment", (SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Field Trip", "Organize a Trip to the Observatory", (SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=0 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Projects", "Mark the Projects from your Section", (SELECT id from USER where username='ederavi'), (SELECT id from COURSE where name="COMP3005" and semester=0 and year=2013) );
 
 
 end transaction;

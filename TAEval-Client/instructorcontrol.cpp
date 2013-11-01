@@ -23,7 +23,7 @@ void InstructorControl::getTaForInstructor(QString view, QString uname) {
  * Returns: None
  */
 
-void InstructorControl::getCoursesForInstructor(QString view, Qstring uname) {
+void InstructorControl::getCoursesForInstructor(QString view, QString uname) {
     connect(&ConnectionClient::getInstance(), SIGNAL(recievedCourseListForInstructorResponse(QString,QList<Course*>)), this->parent(), SLOT(recievedCourseListForInstructor(QString, QList<Course*>)));
     ConnectionClient::getInstance().sendCourseForInstructorMessage(view, uname);
 }

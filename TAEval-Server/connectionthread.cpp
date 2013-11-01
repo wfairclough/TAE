@@ -148,6 +148,11 @@ void ConnectionThread::readClient()
             out << *course;
         }
 
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_REQ)) == 0) {
         QString view;
         qDebug() << "[InstructorReq] - All Instructors";

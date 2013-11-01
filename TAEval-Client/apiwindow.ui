@@ -416,7 +416,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>7</number>
          </property>
          <widget class="QWidget" name="defaultPage">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -664,21 +664,33 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="viewTaskPage">
+         <widget class="QWidget" name="viewCoursePage">
           <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>7</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
+            <widget class="QComboBox" name="vc_instructorComboBox"/>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="vc_courseTable">
+             <column>
+              <property name="text">
+               <string>Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Semester</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Year</string>
+              </property>
+             </column>
             </widget>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="viewTaskPage_2">
+         <widget class="QWidget" name="viewTaskPage">
           <layout class="QVBoxLayout" name="verticalLayout_11">
            <item>
             <widget class="QLabel" name="label_9">

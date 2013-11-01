@@ -37,6 +37,8 @@ private slots:
     void handleViewCourse();
     void handleViewTask();
 
+    void vcinstructorComboBoxChanged(QString profInfo);
+
 private:
     Ui::ApiWindow *ui;
 };

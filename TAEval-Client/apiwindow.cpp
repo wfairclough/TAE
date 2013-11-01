@@ -143,16 +143,6 @@ void ApiWindow::recievedInstructorList(QString view, QList<Instructor*> list) {
             ui->mt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
             ui->mt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
         }
-    } else if (view.compare("1") == 0) {
-        ui->dt_instructorTable->setRowCount(0);
-        foreach (Instructor* prof, list) {
-            qDebug() << "Instructor Username: " << prof->getUsername();
-            int row = ui->dt_instructorTable->rowCount();
-            ui->dt_instructorTable->insertRow(row);
-            ui->dt_instructorTable->setItem(row, 0, new QTableWidgetItem(prof->getFirstName()));
-            ui->dt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
-            ui->dt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
-        }
     }
 }
 
@@ -185,13 +175,6 @@ void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
     }
 }
 
-void ApiWindow::recievedAddTaskForTa(QString view, QList<Task*> list) {
-    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedAddTaskForTaResponse(QString,QList<Task*>)), this, SLOT(recievedAddTaskForTa(QString,QList<Task*>)));
-    if (view.compare("1") == 0) {
-        // Update View 1 with new list of Tasks
-    }
-}
-
 
 //PRIVATE SLOTS//
 /**
@@ -202,11 +185,6 @@ void ApiWindow::recievedAddTaskForTa(QString view, QList<Task*> list) {
 void ApiWindow::handleNewTask() {
     qDebug("create task");
     ui->stackedWidget->setCurrentIndex(1);
-
-    TaControl taControl(this);
-
-    taControl.addTaskForTa("1", "ederavi", "Mark Database Schema", "Make sure that all students DB schemas run with no errors. Follow Marking Scheme.");
-
 }
 
 /**

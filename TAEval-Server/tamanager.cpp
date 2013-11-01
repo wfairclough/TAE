@@ -19,14 +19,14 @@ QList<TeachingAssistant *> TaManager::fetchAllTas() {
     allTaQuery.prepare("SELECT * FROM ta");
     if(allTaQuery.exec()) {
         while(allTaQuery.next()) {
-            int taId = allTaQuery.value(0).toInt();
+            quint32 taId = allTaQuery.value(0).toInt();
 
             QSqlQuery TaQuery(db);
             TaQuery.prepare("SELECT id, firstName, lastName, username, type FROM user WHERE id=?");
             TaQuery.addBindValue(taId);
             if (TaQuery.exec()) {
                 while (TaQuery.next()) {
-                    int index = 0;
+                    quint32 index = 0;
                     TeachingAssistant* ta = new TeachingAssistant();
                     taId = TaQuery.value(index++).toInt();
                     ta->setFirstName(TaQuery.value(index++).toString());

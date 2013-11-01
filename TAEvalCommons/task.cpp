@@ -1,29 +1,34 @@
 #include "task.h"
 
 Task::Task(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    id(-1)
 {
 }
 
-QDataStream &operator <<(QDataStream &stream, const Task &user)
+QDataStream &operator <<(QDataStream &stream, const Task &task)
 {
-    stream << user.getName();
-    stream << user.getDescription();
+    stream << task.getIdString();
+    stream << task.getName();
+    stream << task.getDescription();
 
     return stream;
 }
 
 
-QDataStream &operator >>(QDataStream &stream, Task &user)
+QDataStream &operator >>(QDataStream &stream, Task &task)
 {
-    bool ok;
     QString str;
+    QString aId;
+
+    stream >> aId;
+    task.setId(aId.toUInt());
 
     stream >> str;
-    user.setName(str);
+    task.setName(str);
 
     stream >> str;
-    user.setDescription(str);
+    task.setDescription(str);
 
     return stream;
 }

@@ -1,7 +1,8 @@
 #include "evaluation.h"
 
 Evaluation::Evaluation(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    id(-1)
 {
 }
 
@@ -70,3 +71,34 @@ void Evaluation::setRating(RATING::rating_t rate) {
 void Evaluation::setRating(quint8 rate) {
     rating = RATING::rating_t(rate);
 }
+
+
+QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation) {
+    stream << evaluation.getIdString();
+    stream << evaluation.getRating();
+    stream << evaluation.getComment();
+
+    return stream;
+}
+
+
+QDataStream &operator >>(QDataStream &stream, Evaluation &evaluation) {
+    QString comment;
+    QString aId;
+    QString rate;
+
+    stream >> aId;
+    evaluation.setId(aId.toUInt());
+
+    stream >> rate;
+    evaluation.setRating(rate.toUInt());
+
+    stream >> comment;
+    evaluation.setComment(comment);
+
+    return stream;
+}
+
+
+
+

@@ -29,16 +29,17 @@ public:
     // Setter
     void setId(quint32 aId) { id = aId; }
     void setComment(QString com) { comment = com; }
-    void setComment(RATING::rating_t rate) { rating = rate; }
     void setRating(RATING::rating_t rate);
     void setRating(quint8 rate);
 
     // Getters
     quint32 getId() const { return id; }
+    QString getIdString() const { return QString("" + id); }
     QString getComment() const { return comment; }
     RATING::rating_t getRating() const { return rating; }
     QString getRatingString();
     QString ratingForEnum(RATING::rating_t rate);
+
 
     // Persistable
     QString getTableName() { return EVALUATION_TABLE_NAME; }
@@ -54,5 +55,10 @@ private:
     QString comment;
     RATING::rating_t rating;
 };
+
+// Operator Override
+QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation);
+QDataStream &operator >>(QDataStream &stream, Evaluation &evaluation);
+
 
 #endif // EVALUATION_H

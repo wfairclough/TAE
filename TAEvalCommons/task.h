@@ -22,6 +22,7 @@ public:
 
     // Getters
     quint32 getId() const { return id; }
+    QString getIdString() const { return QString(""+id); }
     QString getName() const { return name; }
     QString getDescription() const { return description; }
 

@@ -13,7 +13,6 @@ QDataStream &operator <<(QDataStream &stream, const User &user)
 
 QDataStream &operator >>(QDataStream &stream, User &user)
 {
-    bool ok;
     QString str;
 
     stream >> str;

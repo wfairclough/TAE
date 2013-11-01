@@ -64,10 +64,11 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
             while (TaskQuery.next()) {
                 int index = 0;
                 Task* task = new Task();
-                int taskId = TaskQuery.value(index++).toInt();
+                quint32 taskId = TaskQuery.value(index++).toInt();
+                task->setId(taskId);
                 task->setName(TaskQuery.value(index++).toString());
                 task->setDescription(TaskQuery.value(index++).toString());
-                qDebug() << "Adding Task " << task->getName() << " to list.";
+                qDebug() << "Adding Task " << task->getId() << " named - " << task->getName() << " to list.";
                 list << task;
             }
         } else {

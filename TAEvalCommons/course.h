@@ -30,17 +30,20 @@ public:
     explicit Course(QObject *parent = 0);
     
     // Getter
-    Semester::semester_t getSemesterType() { return semester; }
-    int getYear() { return year; }
-    QString getName() { return name;}
-    Instructor* getInstructor() { return instructor; }
-    QList<TeachingAssistant*> getTeachingAssistants() { return taList; }
+    Semester::semester_t getSemesterType() const { return semester; }
+    QString getSemesterTypeIntStr() const { return QString("" + semester); }
+    int getYear() const { return year; }
+    QString getYearString() const { return QString("" + year); }
+    QString getName() const { return name;}
+    Instructor* getInstructor() const { return instructor; }
+    QList<TeachingAssistant*> getTeachingAssistants() const { return taList; }
 
     // Setter
     void setInstructor(Instructor* i) { instructor = i; }
     void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
     void setName(QString aName) { name = aName; }
     void setSemesterType(Semester::semester_t sem) { semester = sem; }
+    void setSemesterType(quint8 sem) { semester = Semester::semester_t(sem); }
     void setYear(int y) { year = y; }
 
     // Persistable
@@ -60,5 +63,8 @@ private:
     QList<TeachingAssistant*> taList;
 
 };
+
+QDataStream &operator <<(QDataStream &stream, const Course &course);
+QDataStream &operator >>(QDataStream &stream, Course &course);
 
 #endif // COURSE_H

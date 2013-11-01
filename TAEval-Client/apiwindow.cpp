@@ -161,7 +161,7 @@ void ApiWindow::recievedCourseListForInstructor(QString view, QList<Course *> li
             int row = ui->vc_courseTable->rowCount();
             ui->vc_courseTable->insertRow(row);
             ui->vc_courseTable->setItem(row, 0, new QTableWidgetItem(course->getName()));
-            ui->vc_courseTable->setItem(row, 1, new QTableWidgetItem(course->getSemesterTypeIntStr()));
+            ui->vc_courseTable->setItem(row, 1, new QTableWidgetItem(course->getSemesterTypeString()));
             ui->vc_courseTable->setItem(row, 2, new QTableWidgetItem(course->getYear()));
         }
     }
@@ -240,9 +240,9 @@ void ApiWindow::handleEditTask() {
     // TESTING COURSE METHODS
     Course* c = new Course();
     c->setName("C!");
-    c->setSemesterType(0);
+    c->setSemesterType(Semester::WINTER);
     c->setYear(2015);
-    qDebug() << c->getName() << "|" << c->getSemesterTypeIntStr() << "|" << c->getYear();
+    qDebug() << c->getName() << "|" << c->getSemesterTypeString() << "|" << c->getYear();
 }
 
 /**

@@ -30,7 +30,8 @@ public:
 
     // Getter
     Semester::semester_t getSemesterType() const { return semester; }
-    QString getSemesterTypeIntStr() const { return QString("" + semester); }
+    QString getSemesterTypeString() const;
+    int getSemesterTypeInt() const { return semester; }
     int getYear() const { return year; }
     QString getYearString() const { return QString("" + year); }
     QString getName() const { return name;}
@@ -42,7 +43,7 @@ public:
     void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
     void setName(QString aName) { name = aName; }
     void setSemesterType(Semester::semester_t sem) { semester = sem; }
-    void setSemesterType(quint8 sem) { semester = Semester::semester_t(sem); }
+    void setSemesterType(int sem) { semester = static_cast<Semester::semester_t>(sem); }
     void setYear(int y) { year = y; }
 
     // Persistable

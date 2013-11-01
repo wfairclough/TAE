@@ -119,7 +119,7 @@ QList<Course *> InstructorManager::fetchAllCoursesforInstructor(Instructor *inst
         course->setName(courseQuery.value(index++).toString());
         course->setSemesterType(courseQuery.value(index++).toInt());
         course->setYear(courseQuery.value(index++).toInt());
-        qDebug() << "Adding Course" << course->getName() << ", " << course->getSemesterTypeIntStr() << ", " << course->getYear() << " to list";
+        qDebug() << "Adding Course" << course->getName() << ", " << course->getSemesterTypeString() << ", " << course->getYear() << " to list";
         list << course;
         }
     }else {

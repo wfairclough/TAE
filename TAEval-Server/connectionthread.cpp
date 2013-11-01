@@ -143,10 +143,11 @@ void ConnectionThread::readClient()
         QString msgRspType(COURSE_LIST_FOR_INSTRUCTOR_RSP);
 
         out << quint16(0) << msgRspType << view << quint16(list.size());
-
+        qDebug() << "|1|";
         foreach (Course* course, list) {
             out << *course;
         }
+        qDebug() << "|2|";
 
         out.device()->seek(0);
         out << quint16(block.size() - sizeof(quint16));

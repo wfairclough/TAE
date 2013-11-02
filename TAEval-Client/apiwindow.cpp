@@ -99,6 +99,10 @@ void ApiWindow::initDeleteTaskView() {
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
                                   "font-style: bold;");
+
+    connect(ui->mt_taskTable, SIGNAL(cellChanged(int,int)), this, SLOT(taskTableCellChanged(int, int)) );
+
+
     disableDeleteButton();
 }
 
@@ -203,11 +207,28 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
         foreach (Task* task, list) {
             qDebug() << "View: " << view << " Task name: " << task->getName();
             int row = ui->mt_taskTable->rowCount();
+            taskMap.insert(row, task);
+
             ui->mt_taskTable->insertRow(row);
-            ui->mt_taskTable->setItem(row, 0, new QTableWidgetItem(task->getName()));
-            ui->mt_taskTable->setItem(row, 1, new QTableWidgetItem(task->getDescription()));
+            ui->mt_taskTable->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
+            ui->mt_taskTable->setItem(row, TASK_DESCRIPTION_COL, new QTableWidgetItem(task->getDescription()));
         }
     }
+
+}
+
+void ApiWindow::taskTableCellChanged(int row, int column) {
+    Task* task = taskMap.value(row);
+
+    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
+    if (column == TASK_NAME_COL) {
+        task->setName(item->text());
+    } else if (column == TASK_DESCRIPTION_COL) {
+        task->setDescription(item->text());
+    }
+
+    TaControl tc(this);
+    tc.updateTask(task);
 }
 
 void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {

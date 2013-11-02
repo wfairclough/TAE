@@ -372,6 +372,23 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname) {
     qDebug() << "Wrote TASK_LIST_FOR_TA_REQ Data to server.";
 }
 
+void ConnectionClient::sendUpdateTask(Task* task) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(EDIT_TASK_REQ);
+
+    out << quint16(0) << msgType << "1" << *task;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote EDIT_TASK_REQ Data to server.";
+}
+
 /**
  * Description: Send a message to server asking to delete Task for a TA
  * Paramters: view that made the call, username of TA

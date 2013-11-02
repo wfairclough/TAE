@@ -45,3 +45,13 @@ void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QStr
     connect(&ConnectionClient::getInstance(), SIGNAL(recievedAddTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(addTaskForTa(QString, QList<Task*>)));
     ConnectionClient::getInstance().sendAddTaskForTa(view, taskName, taskDescription, uname, courseName, sem, courseYear);
 }
+
+/**
+  * Description: Send request to update a Task from a TA
+  * Parameters: The Task object with proper ID and TA attached
+  * Returns: None
+  */
+void TaControl::updateTask(Task* task) {
+//    connect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedDeleteTaskForTa(QString, QList<Task*>)));
+    ConnectionClient::getInstance().sendUpdateTask(task);
+}

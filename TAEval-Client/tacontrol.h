@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <course.h>
+#include <task.h>
 
 class TaControl : public QObject
 {
@@ -13,7 +14,7 @@ public:
     void getTaskListForTa(QString view, QString uname);
     void deleteTaskForTA(QString view, QString taskName, QString username);
     void addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear);
-
+    void updateTask(Task* task);
 
 signals:
     

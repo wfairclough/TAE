@@ -351,9 +351,7 @@ void ConnectionThread::readClient()
         TeachingAssistant* ta = new TeachingAssistant(this);
         Task* task = new Task(this);
 
-        in >> view >> *ta >> *task;
-
-        task->setTeachingAssistant(ta);
+        in >> view >> *task;
 
         TaManager tm;
 

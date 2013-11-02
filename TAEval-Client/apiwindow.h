@@ -3,11 +3,17 @@
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
+#include <QMap>
+
 #include "instructorcontrol.h"
 #include "teachingassistant.h"
 #include "instructor.h"
 #include "task.h"
 #include "course.h"
+
+#define TASK_NAME_COL 0
+#define TASK_DESCRIPTION_COL 1
+
 
 namespace Ui {
 class ApiWindow;
@@ -45,6 +51,7 @@ private slots:
     void mtdeleteClicked();
     void mtcellItemChanged(QTableWidgetItem* item);
     void vcinstructorComboBoxChanged(QString profInfo);
+    void taskTableCellChanged(int row, int column);
 
 private:
     Ui::ApiWindow *ui;
@@ -60,6 +67,8 @@ private:
     void initViewTaView();
     void initViewCourseView();
     void initViewTaskView();
+
+    QMap<quint32, Task*> taskMap;
 
 };
 

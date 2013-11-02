@@ -13,6 +13,9 @@
 
 #define TASK_NAME_COL 0
 #define TASK_DESCRIPTION_COL 1
+#define MANAGE_TASK_VIEW "manageTaskView"
+#define VIEW_COURSE_VIEW "viewCourseView"
+
 
 
 namespace Ui {
@@ -36,37 +39,30 @@ public slots:
     void recievedCourseListForInstructor(QString view, QList<Course*> list);
 
 private slots:
-    void handleNewTask();
-    void handleEditTask();
-    void handleDeleteTask();
-    void handleAssignTask();
-    void handleEvaluateTask();
-    void handleViewTa();
+    void handleManageTask();
     void handleViewCourse();
-    void handleViewTask();
 
     void mtinstructorCellClicked(int currentRow, int currentCol);
     void mttaCellClicked(int currentRow, int currentCol);
     void mttaskCellClicked(int currentRow, int currentCol);
     void mtdeleteClicked();
     void mtcellItemChanged(QTableWidgetItem* item);
+    void mttaskTableCellChanged(int row, int column);
     void vcinstructorComboBoxChanged(QString profInfo);
-    void taskTableCellChanged(int row, int column);
 
 private:
     Ui::ApiWindow *ui;
+    void mangeTaskSelectedStyle();
+    void manageTaskDeselectedStyle();
+    void viewCourseSelectedStyle();
+    void viewCourseDeSelectedStyle();
+    void updateViewStyles(QString selectedView);
     void enableDeleteButton();
     void disableDeleteButton();
 
     // Initialize the each of the Views
-    void initCreateTaskView();
-    void initEditTaskView();
-    void initDeleteTaskView();
-    void initAssignTaskView();
-    void initEvaluateTask();
-    void initViewTaView();
+    void initManageTaskView();
     void initViewCourseView();
-    void initViewTaskView();
 
     QMap<quint32, Task*> taskMap;
 

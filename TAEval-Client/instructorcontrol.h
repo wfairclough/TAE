@@ -2,6 +2,8 @@
 #define APICONTROL_H
 
 #include <QObject>
+#include <instructor.h>
+
 
 class InstructorControl : public QObject
 {
@@ -10,7 +12,7 @@ public:
     explicit InstructorControl(QObject *parent = 0);
     void getTaForInstructor(QString view, QString uname);
     void getInstructors(QString view);
-    void getCoursesForInstructor(QString view, QString uname); ///////////////////////////////////////////ADDED/////////////////////////////////////////
+    void getCoursesForInstructor(QString view, QString uname);
     
 signals:
     

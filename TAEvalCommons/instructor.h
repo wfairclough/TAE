@@ -40,7 +40,7 @@ public slots:
 };
 
 // Operator Override
-QDataStream &operator <<(QDataStream &stream, const Instructor &user);
-QDataStream &operator >>(QDataStream &stream, Instructor &user);
+//QDataStream &operator <<(QDataStream &stream, const Instructor &user);
+//QDataStream &operator >>(QDataStream &stream, Instructor &user);
 
 #endif // INSTRUCTOR_H

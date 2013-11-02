@@ -18,7 +18,7 @@ void InstructorControl::getTaForInstructor(QString view, QString uname) {
     ConnectionClient::getInstance().sendTaForInstructorMessage(view, uname);
 }
 /**
- * Description: Send request for list of Instructor's Courses  ///////////////////////////////////////////////////////ADDED ///////////////////////////////////////////
+ * Description: Send request for list of Instructor's Courses
  * Paramters: username of the Instructor
  * Returns: None
  */

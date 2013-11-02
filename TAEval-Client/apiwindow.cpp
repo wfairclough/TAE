@@ -162,7 +162,7 @@ void ApiWindow::recievedCourseListForInstructor(QString view, QList<Course *> li
             ui->vc_courseTable->insertRow(row);
             ui->vc_courseTable->setItem(row, 0, new QTableWidgetItem(course->getName()));
             ui->vc_courseTable->setItem(row, 1, new QTableWidgetItem(course->getSemesterTypeString()));
-            ui->vc_courseTable->setItem(row, 2, new QTableWidgetItem(course->getYear()));
+            ui->vc_courseTable->setItem(row, 2, new QTableWidgetItem(QString::number(course->getYear())));
         }
     }
 }

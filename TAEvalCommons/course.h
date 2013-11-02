@@ -33,7 +33,7 @@ public:
     QString getSemesterTypeString() const;
     int getSemesterTypeInt() const { return semester; }
     int getYear() const { return year; }
-    QString getYearString() const { return QString("" + year); }
+    QString getYearString() const { return QString::number(year); }
     QString getName() const { return name;}
     Instructor* getInstructor() const { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() const { return taList; }

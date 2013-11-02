@@ -3,7 +3,8 @@
 Evaluation::Evaluation(QObject *parent) :
     QObject(parent),
     id(-1),
-    taskSet(false)
+    taskSet(false),
+    task(NULL)
 {
 }
 
@@ -80,8 +81,11 @@ QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation) {
     stream << evaluation.getComment();
 
     if (evaluation.hasTask()) {
-        stream << QString(true);
-        stream << *evaluation.getTask();
+        Task* task = evaluation.getTask();
+        if (task != NULL) {
+            stream << QString(true);
+            stream << *task;
+        }
     }
 
 

@@ -3,7 +3,8 @@
 
 Task::Task(QObject *parent) :
     QObject(parent),
-    id(-1)
+    id(-1),
+    teachingAssistant(NULL)
 {
 }
 

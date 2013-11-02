@@ -13,7 +13,7 @@ public:
     explicit InstructorManager();
     QList<Instructor *> fetchAllInstructors();
     QList<TeachingAssistant *> fetchAllTeachingAssistanceForInstructor(Instructor* instructor);
-    QList<Course *> fetchAllCoursesforInstructor(Instructor* Instructor);  /////////////////////////////////////////Added //////////////////////////////////////
+    QList<Course *> fetchAllCoursesforInstructor(Instructor* Instructor);
 
 
 signals:

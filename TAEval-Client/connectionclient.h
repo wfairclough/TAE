@@ -8,7 +8,7 @@
 #include "instructor.h"
 #include "administrator.h"
 #include "task.h"
-#include "course.h" ///////////////////////////////////////ADDED //////////////////
+#include "course.h"
 
 
 class ConnectionClient : public QObject
@@ -25,7 +25,7 @@ public:
 
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString view, QString username);
-    void sendCourseForInstructorMessage(QString view, QString username); //////////////////////ADDED ////////////////////////////////////////
+    void sendCourseForInstructorMessage(QString view, QString username);
     void sendInstructorListMessage(QString view);
     void sendTaListMessage(QString view);
     void sendTaskForTa(QString view, QString uname);
@@ -36,7 +36,7 @@ signals:
     void recievedErrorResponse(QString errMsg);
     void recievedLoginResponse(User* user);
     void recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*> list);
-    void recievedCourseListForInstructorResponse(QString,QList<Course*> list); //////////////////////ADDED ////////////////////////////////////////
+    void recievedCourseListForInstructorResponse(QString,QList<Course*> list);
     void recievedInstructorListResponse(QString view, QList<Instructor*> list);
     void recievedTaListResponse(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTaResponse(QString view, QList<Task*> list);

@@ -286,7 +286,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
 }
 /**
  * Description: Send a message to the server asking for a list of Course's for a particular Instructor
- * Paramters: the Instructors username                                      ///////////////////////////////////////////////////Added/////////////////////////////////////////////
+ * Paramters: the Instructors username
  * Returns: Void
  */
 void ConnectionClient::sendCourseForInstructorMessage(QString view, QString username){

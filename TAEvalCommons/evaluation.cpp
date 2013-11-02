@@ -83,7 +83,7 @@ QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation) {
     if (evaluation.hasTask()) {
         Task* task = evaluation.getTask();
         if (task != NULL) {
-            stream << QString(true);
+            stream << QString("true");
             stream << *task;
         } else {
             stream << QString("false");

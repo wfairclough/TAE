@@ -23,15 +23,19 @@ QDataStream &operator >>(QDataStream &stream, User &user)
     QString str;
 
     stream >> str;
+    qDebug() << "ID " << str;
     user.setId(str.toUInt()); // Convert String id to quint32
 
     stream >> str;
+    qDebug() << "First " << str;
     user.setFirstName(str);
 
     stream >> str;
+    qDebug() << "Last " << str;
     user.setLastName(str);
 
     stream >> str;
+    qDebug() << "username " << str;
     user.setUsername(str);
 
     return stream;

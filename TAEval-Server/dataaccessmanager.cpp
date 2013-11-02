@@ -43,13 +43,13 @@ TeachingAssistant* DataAccessManager::teachingAssistantForId(int id) {
     TeachingAssistant* ta;
 
     QSqlQuery taQuery(db);
-    taQuery.prepare("SELECT firstName, lastName, username, type FROM user WHERE id=?");
+    taQuery.prepare("SELECT id, firstName, lastName, username, type FROM user WHERE id=?");
     taQuery.addBindValue(id);
     if(taQuery.exec()) {
         while(taQuery.next()) {
             int index = 0;
             ta = new TeachingAssistant();
-            id = taQuery.value(index++).toInt();
+            ta->setId(taQuery.value(index++).toInt());
             ta->setFirstName(taQuery.value(index++).toString());
             ta->setLastName(taQuery.value(index++).toString());
             ta->setUsername(taQuery.value(index++).toString());
@@ -66,17 +66,17 @@ Instructor* DataAccessManager::instructorForId(int id) {
 
     Instructor* instructor;
 
-    QSqlQuery taQuery(db);
-    taQuery.prepare("SELECT firstName, lastName, username, type FROM user WHERE id=?");
-    taQuery.addBindValue(id);
-    if(taQuery.exec()) {
-        while(taQuery.next()) {
+    QSqlQuery instructorQuery(db);
+    instructorQuery.prepare("SELECT firstName, lastName, username, type FROM user WHERE id=?");
+    instructorQuery.addBindValue(id);
+    if(instructorQuery.exec()) {
+        while(instructorQuery.next()) {
             int index = 0;
             instructor = new Instructor();
-            id = taQuery.value(index++).toInt();
-            instructor->setFirstName(taQuery.value(index++).toString());
-            instructor->setLastName(taQuery.value(index++).toString());
-            instructor->setUsername(taQuery.value(index++).toString());
+            instructor->setId(instructorQuery.value(index++).toInt());
+            instructor->setFirstName(instructorQuery.value(index++).toString());
+            instructor->setLastName(instructorQuery.value(index++).toString());
+            instructor->setUsername(instructorQuery.value(index++).toString());
             break;
         }
     }
@@ -91,17 +91,17 @@ Administrator* DataAccessManager::administratorForId(int id) {
 
     Administrator* administrator;
 
-    QSqlQuery taQuery(db);
-    taQuery.prepare("SELECT firstName, lastName, username, type FROM user WHERE id=?");
-    taQuery.addBindValue(id);
-    if(taQuery.exec()) {
-        while(taQuery.next()) {
+    QSqlQuery adminQuery(db);
+    adminQuery.prepare("SELECT firstName, lastName, username, type FROM user WHERE id=?");
+    adminQuery.addBindValue(id);
+    if(adminQuery.exec()) {
+        while(adminQuery.next()) {
             int index = 0;
             administrator = new Administrator();
-            id = taQuery.value(index++).toInt();
-            administrator->setFirstName(taQuery.value(index++).toString());
-            administrator->setLastName(taQuery.value(index++).toString());
-            administrator->setUsername(taQuery.value(index++).toString());
+            administrator->setId(adminQuery.value(index++).toInt());
+            administrator->setFirstName(adminQuery.value(index++).toString());
+            administrator->setLastName(adminQuery.value(index++).toString());
+            administrator->setUsername(adminQuery.value(index++).toString());
             break;
         }
     }

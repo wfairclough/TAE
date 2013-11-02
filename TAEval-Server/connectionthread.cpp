@@ -229,8 +229,6 @@ void ConnectionThread::readClient()
         out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (Task* task, list) {
-            qDebug() << " Sending Task ID" << task->getIdString();
-            qDebug() << " 2Sending Task ID" << task->getId();
             out << *task;
         }
 
@@ -311,6 +309,77 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
+    } else if (msgType.compare(QString(EVALUATE_TASK_FOR_TA_REQ)) == 0) {
+
+        QString view;
+        TeachingAssistant* ta = new TeachingAssistant(this);
+        Task* task = new Task(this);
+        Evaluation* evaluation = new Evaluation(this);
+
+        in >> view >> *ta >> *task >> *evaluation;
+
+        task->setTeachingAssistant(ta);
+
+        TaManager tm;
+
+        bool added = tm.addEvaluationToTask(evaluation, task);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(EVALUATE_TASK_FOR_TA_RSP);
+
+        out << quint16(0) << msgRspType << view;
+
+        if (added) {
+            qDebug() << "[" << EVALUATE_TASK_FOR_TA_RSP << "] added eval to task" << task->getName();
+
+            out << QString("true");
+        } else {
+            out << QString("false");
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
+    } else if (msgType.compare(QString(EDIT_TASK_REQ)) == 0) {
+        QString view;
+        TeachingAssistant* ta = new TeachingAssistant(this);
+        Task* task = new Task(this);
+
+        in >> view >> *ta >> *task;
+
+        task->setTeachingAssistant(ta);
+
+        TaManager tm;
+
+        bool added = tm.updateTask(task);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(EVALUATE_TASK_FOR_TA_RSP);
+
+        out << quint16(0) << msgRspType << view;
+
+        if (added) {
+            qDebug() << "[" << EVALUATE_TASK_FOR_TA_RSP << "] added eval to task" << task->getName();
+
+            out << QString("true");
+        } else {
+            out << QString("false");
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
 
 
     } else if (msgType.compare(QString("test")) == 0) {

@@ -56,7 +56,7 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
 
     int taId = idForUsername(ta->getUsername());
 
-    if (taId != -1) {
+    if (taId > 0) {
         QSqlQuery taskQuery(db);
         taskQuery.prepare("SELECT id, name, description, taId FROM task WHERE taId=?");
         taskQuery.addBindValue(taId);
@@ -64,10 +64,13 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
             while (taskQuery.next()) {
                 int index = 0;
                 Task* task = new Task();
-                quint32 taskId = taskQuery.value(index++).toInt();
-                task->setId(taskId);
+                task->setId(taskQuery.value(index++).toInt());
                 task->setName(taskQuery.value(index++).toString());
                 task->setDescription(taskQuery.value(index++).toString());
+
+                TeachingAssistant* teachingAssistant = teachingAssistantForId(taId);
+                task->setTeachingAssistant(teachingAssistant);
+
                 qDebug() << "Adding Task " << task->getId() << " named - " << task->getName() << " to list.";
                 list << task;
             }
@@ -89,7 +92,7 @@ QList<Task *> TaManager::deleteTaskForTa(Task* task, TeachingAssistant* ta) {
 
     int taId = idForUsername(ta->getUsername());
 
-    if (taId != -1) {
+    if (taId > 0) {
         QSqlQuery taskQuery(db);
         taskQuery.prepare("SELECT id, name, description, taId FROM task WHERE taId=? AND name=?");
         taskQuery.addBindValue(taId);
@@ -363,7 +366,7 @@ bool TaManager::addEvaluationToTask(Evaluation* eval, Task* task) {
 
 
     } else {
-        qDebug() << "The TA could not be found in the DB";
+        qDebug() << "The Task could not be found in the DB";
     }
 
     return added;
@@ -371,6 +374,38 @@ bool TaManager::addEvaluationToTask(Evaluation* eval, Task* task) {
 
 
 
+/**
+ * @brief TaManager::updateTask Update a task. The task must have a valid id.
+ * @param task to update
+ * @return
+ */
+bool TaManager::updateTask(Task* task) {
+    bool added = false;
+
+    if (task->getId() > 0) {
+        QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+        QSqlQuery taskQuery(db);
+        taskQuery.prepare("UPDATE TASK SET name=?, description=? WHERE id=?");
+        taskQuery.addBindValue(task->getName());
+        taskQuery.addBindValue(task->getDescription());
+        taskQuery.addBindValue(task->getId());
+
+        qDebug() << "Updating Task " << task->getIdString() << "in DB";
+        added = taskQuery.exec();
+        if (added) {
+            qDebug() << "Updated Task" << task->getName();
+        } else {
+            qDebug() << "Error exec new Task SQL: " << taskQuery.lastError().text();
+        }
+
+
+    } else {
+        qDebug() << "The task could not be found in the DB";
+    }
+
+    return added;
+}
 
 
 

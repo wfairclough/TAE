@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMap>
 
+#include <task.h>
 #include <persistable.h>
 
 #define EVALUATION_TABLE_NAME "EVALUATION"
@@ -31,14 +32,17 @@ public:
     void setComment(QString com) { comment = com; }
     void setRating(RATING::rating_t rate);
     void setRating(quint8 rate);
+    void setTask(Task* newTask) { task = newTask; taskSet = true; }
 
     // Getters
     quint32 getId() const { return id; }
-    QString getIdString() const { return QString("" + id); }
+    QString getIdString() const { return QString::number(id); }
     QString getComment() const { return comment; }
     RATING::rating_t getRating() const { return rating; }
     QString getRatingString();
     QString ratingForEnum(RATING::rating_t rate);
+    Task* getTask() const { return task; }
+    bool hasTask() const { return taskSet; }
 
 
     // Persistable
@@ -51,6 +55,8 @@ signals:
 public slots:
 
 private:
+    bool taskSet;
+    Task* task;
     quint32 id;
     QString comment;
     RATING::rating_t rating;

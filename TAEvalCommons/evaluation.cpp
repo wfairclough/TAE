@@ -2,7 +2,8 @@
 
 Evaluation::Evaluation(QObject *parent) :
     QObject(parent),
-    id(-1)
+    id(-1),
+    taskSet(false)
 {
 }
 
@@ -78,6 +79,12 @@ QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation) {
     stream << evaluation.getRating();
     stream << evaluation.getComment();
 
+    if (evaluation.hasTask()) {
+        stream << QString(true);
+        stream << *evaluation.getTask();
+    }
+
+
     return stream;
 }
 
@@ -86,6 +93,7 @@ QDataStream &operator >>(QDataStream &stream, Evaluation &evaluation) {
     QString comment;
     QString aId;
     QString rate;
+    QString hasTask;
 
     stream >> aId;
     evaluation.setId(aId.toUInt());
@@ -95,6 +103,13 @@ QDataStream &operator >>(QDataStream &stream, Evaluation &evaluation) {
 
     stream >> comment;
     evaluation.setComment(comment);
+
+    stream >> hasTask;
+    if (hasTask.compare(QString("true")) == 0) {
+        Task* task = new Task();
+        stream >> *task;
+        evaluation.setTask(task);
+    }
 
     return stream;
 }

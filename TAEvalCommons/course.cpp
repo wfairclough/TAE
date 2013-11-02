@@ -39,10 +39,10 @@ QDataStream &operator <<(QDataStream &stream, const Course &course)
     stream << course.getSemesterTypeInt();
     stream << course.getYearString();
 
-//    if (course.getInstructor() != NULL) {
-//        stream << QString("true");
-//        stream << *course.getInstructor();
-//    }
+    if (course.hasInstructor()) {
+        stream << QString("true");
+        stream << *course.getInstructor();
+    }
 
     return stream;
 }
@@ -64,13 +64,12 @@ QDataStream &operator >>(QDataStream &stream, Course &course)
     stream >> year;
     course.setYear(year.toInt());
 
-//    stream >> hasInstructor;
-//    if (hasInstructor.compare(QString("true")) == 0) {
-//        Instructor* inst = new Instructor;
-//        stream >> *inst;
-//        course.setInstructor(inst);
-//    }
-
+    stream >> hasInstructor;
+    if (hasInstructor.compare(QString("true")) == 0) {
+        Instructor* inst = new Instructor;
+        stream >> *inst;
+        course.setInstructor(inst);
+    }
 
     return stream;
 }

@@ -22,7 +22,7 @@ public:
 
     // Getters
     quint32 getId() const { return id; }
-    QString getIdString() const { return QString(""+id); }
+    QString getIdString() const { return QString::number(id); }
     QString getName() const { return name; }
     QString getDescription() const { return description; }
 
@@ -44,8 +44,6 @@ private:
     QString name;
     QString description;
     TeachingAssistant* teachingAssistant;
-
-
 };
 
 // Operator Override

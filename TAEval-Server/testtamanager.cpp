@@ -41,7 +41,7 @@ void TestTaManager::testAddTaskForCourse() {
     course->setYear(2013);
     course->setSemesterType(Semester::FALL);
 
-    tm.addTaskForCourse(task, course);
+//    tm.addTaskForCourse(task, course);
 
 //    QVERIFY(1 == 1);
 

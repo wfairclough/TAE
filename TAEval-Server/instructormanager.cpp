@@ -28,7 +28,7 @@ QList<Instructor *> InstructorManager::fetchAllInstructors() {
                 while (instructorQuery.next()) {
                     int index = 0;
                     Instructor* prof = new Instructor();
-                    instructorId = instructorQuery.value(index++).toInt();
+                    prof->setId(instructorQuery.value(index++).toInt());
                     prof->setFirstName(instructorQuery.value(index++).toString());
                     prof->setLastName(instructorQuery.value(index++).toString());
                     prof->setUsername(instructorQuery.value(index++).toString());
@@ -77,7 +77,7 @@ QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForInstr
                         while (taQuery.next()) {
                             int index = 0;
                             TeachingAssistant* ta = new TeachingAssistant();
-                            int taId = taQuery.value(index++).toInt();
+                            ta->setId(taQuery.value(index++).toInt());
                             ta->setFirstName(taQuery.value(index++).toString());
                             ta->setLastName(taQuery.value(index++).toString());
                             ta->setUsername(taQuery.value(index++).toString());

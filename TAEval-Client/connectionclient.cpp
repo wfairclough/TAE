@@ -121,6 +121,8 @@ void ConnectionClient::bytesReady()
             TeachingAssistant *ta = new TeachingAssistant();
             in >> *ta;
             list << ta;
+
+            qDebug() << "[" << TA_LIST_FOR_INSTRUCTOR_RSP << "] Recieved a TA with the ID == " << ta->getId();
         }
         emit recievedTaListForInstructorResponse(view, list);
 
@@ -134,6 +136,8 @@ void ConnectionClient::bytesReady()
             Course *course = new Course();
             in >> *course;
             list << course;
+
+            qDebug() << "[" << COURSE_LIST_FOR_INSTRUCTOR_RSP << "] Recieved a Course with the Sem == " << course->getName() << course->getSemesterTypeString() << " " << course->getYear();
         }
         emit recievedCourseListForInstructorResponse(view, list);
 
@@ -149,6 +153,8 @@ void ConnectionClient::bytesReady()
             Instructor *prof = new Instructor();
             in >> *prof;
             list << prof;
+
+            qDebug() << "[" << INSTRUCTOR_LIST_RSP << "] Recieved a Instructor with the ID == " << prof->getId();
         }
         emit recievedInstructorListResponse(view, list);
 
@@ -163,6 +169,8 @@ void ConnectionClient::bytesReady()
             TeachingAssistant *ta = new TeachingAssistant();
             in >> *ta;
             list << ta;
+
+            qDebug() << "[" << TA_LIST_RSP << "] Recieved a TA with the ID == " << ta->getId();
         }
         emit recievedTaListResponse(view, list);
 
@@ -177,6 +185,8 @@ void ConnectionClient::bytesReady()
             Task *task = new Task();
             in >> *task;
             list << task;
+
+            qDebug() << "[" << TASK_LIST_FOR_TA_RSP << "] Recieved a Task with the ID == " << task->getId();
         }
         emit recievedTaskListForTaResponse(view, list);
 
@@ -191,6 +201,8 @@ void ConnectionClient::bytesReady()
             Task *task = new Task();
             in >> *task;
             list << task;
+
+            qDebug() << "[" << DELETE_TASK_FOR_TA_RSP << "] Recieved a Task with the ID == " << task->getId();
         }
         emit recievedDeleteTaskForTaResponse(view, list);
 
@@ -205,6 +217,8 @@ void ConnectionClient::bytesReady()
             Task *task = new Task();
             in >> *task;
             list << task;
+
+            qDebug() << "[" << NEW_TASK_RSP << "] Recieved a Task with the ID == " << task->getId();
         }
         emit recievedAddTaskForTaResponse(view, list);
 

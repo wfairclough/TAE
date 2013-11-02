@@ -37,14 +37,18 @@ public:
     QString getName() const { return name;}
     Instructor* getInstructor() const { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() const { return taList; }
+    bool hasInstructor() const { return instructorSet; }
+
 
     // Setter
-    void setInstructor(Instructor* i) { instructor = i; }
+    void setInstructor(Instructor* i) { instructor = i; instructorSet = true; }
     void addTeachingAssistant(TeachingAssistant* ta) { taList << ta; }
     void setName(QString aName) { name = aName; }
     void setSemesterType(Semester::semester_t sem) { semester = sem; }
     void setSemesterType(int sem) { semester = static_cast<Semester::semester_t>(sem); }
     void setYear(int y) { year = y; }
+
+
 
     // Persistable
     QString getTableName() { return COURSE_TABLE_NAME; }
@@ -56,6 +60,7 @@ signals:
 public slots:
 
 private:
+    bool instructorSet;
     QString name;
     Semester::semester_t semester;
     int year;

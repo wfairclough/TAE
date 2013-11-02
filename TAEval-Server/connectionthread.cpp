@@ -229,6 +229,8 @@ void ConnectionThread::readClient()
         out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (Task* task, list) {
+            qDebug() << " Sending Task ID" << task->getIdString();
+            qDebug() << " 2Sending Task ID" << task->getId();
             out << *task;
         }
 
@@ -284,12 +286,16 @@ void ConnectionThread::readClient()
         Task* task = new Task(this);
         task->setName(taskName);
         task->setDescription(description);
+
         Course* course = new Course(this);
         // TODO add course info
+        TeachingAssistant* ta = new TeachingAssistant(this);
+        // TODO add TA info
+
 
 
         // Call Data Access
-        QList<Task*> list = tm.addTaskForCourse(task, course);
+        QList<Task*> list = tm.addTaskForTACourse(task, ta, course);
 
 
         QByteArray block;

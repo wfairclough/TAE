@@ -4,7 +4,8 @@
 Course::Course(QObject *parent) :
     QObject(parent),
     semester(Semester::FALL),
-    instructor(NULL)
+    instructor(NULL),
+    instructorSet(false)
 {
 
 }
@@ -37,19 +38,26 @@ QString Course::getSemesterTypeString() const {
 
 QDataStream &operator <<(QDataStream &stream, const Course &course)
 {
-    qDebug() << "5";
+    qDebug() << "Course Name " << course.getName();
     stream << course.getName();
+    qDebug() << "Course Sem Type " << course.getSemesterTypeInt();
     stream << course.getSemesterTypeInt();
+    qDebug() << "Course Year " << course.getYearString();
     stream << course.getYearString();
 
-    qDebug() << "6";
-
     if (course.hasInstructor()) {
+        qDebug() << "hasInstructor";
         Instructor* instructor = course.getInstructor();
         if (instructor != NULL) {
+            qDebug() << "Instructor is not null";
             stream << QString("true");
             stream << *instructor;
+            qDebug() << "Added instructor";
+        } else {
+            stream << QString("false");
         }
+    } else {
+        stream << QString("false");
     }
 
     return stream;

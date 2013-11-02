@@ -399,14 +399,19 @@ void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QStri
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username) {
+void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(NEW_TASK_REQ);
 
-    out << quint16(0) << msgType << view << username << taskName << taskDescription;
+    Course course;
+    course.setName(courseName);
+    course.setSemesterType(sem);
+    course.setYear(courseYear);
+
+    out << quint16(0) << msgType << view << username << course << taskName << taskDescription;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

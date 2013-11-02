@@ -278,24 +278,19 @@ void ConnectionThread::readClient()
         QString taUsername;
         QString taskName;
         QString description;
-        in >> view >> taUsername >> taskName >> description;
+        Course* course = new Course(this);
 
-        qDebug() << "View: " << view << " [NEW_TASK_REQ] - Teaching Assistant: " << taUsername << " Task: " << taskName << " " << description;
+        in >> view >> taUsername >> *course >> taskName >> description;
+
+        qDebug() << "View: " << view << " [NEW_TASK_REQ] - Teaching Assistant: " << taUsername << " Task: " << taskName << " " << description << "  cOurse " << course->getName() << course->getSemesterTypeString() << course->getYear();
 
         TaManager tm;
         Task* task = new Task(this);
         task->setName(taskName);
         task->setDescription(description);
 
-        Course* course = new Course(this);
-        // TODO add course info
-        TeachingAssistant* ta = new TeachingAssistant(this);
-        // TODO add TA info
-
-
-
         // Call Data Access
-        QList<Task*> list = tm.addTaskForTACourse(task, ta, course);
+        QList<Task*> list = tm.addTaskForTACourse(task, taUsername, course);
 
 
         QByteArray block;
@@ -307,6 +302,7 @@ void ConnectionThread::readClient()
         out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (Task* task, list) {
+            qDebug() << "[" << NEW_TASK_RSP << "] task with name " << task->getName() << "   " <<  task->getId();
             out << *task;
         }
 

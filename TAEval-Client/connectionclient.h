@@ -30,7 +30,7 @@ public:
     void sendTaListMessage(QString view);
     void sendTaskForTa(QString view, QString uname);
     void sendDeleteTaskForTa(QString view, QString taskName, QString username);
-    void sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username);
+    void sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
 
 signals:
     void recievedErrorResponse(QString errMsg);

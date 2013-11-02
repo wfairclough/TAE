@@ -41,7 +41,7 @@ void TaControl::deleteTaskForTA(QString view, QString taskName, QString username
   * Parameters: a string the represents the view that wants the information, the TA whose Task you want to add and Task info
   * Returns: None
   */
-void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedAddTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(addDeleteTaskForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendAddTaskForTa(view, taskName, taskDescription, uname);
+void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear) {
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedAddTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(addTaskForTa(QString, QList<Task*>)));
+    ConnectionClient::getInstance().sendAddTaskForTa(view, taskName, taskDescription, uname, courseName, sem, courseYear);
 }

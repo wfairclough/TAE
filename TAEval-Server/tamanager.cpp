@@ -28,7 +28,7 @@ QList<TeachingAssistant *> TaManager::fetchAllTas() {
                 while (TaQuery.next()) {
                     quint32 index = 0;
                     TeachingAssistant* ta = new TeachingAssistant();
-                    taId = TaQuery.value(index++).toInt();
+                    ta->setId(TaQuery.value(index++).toInt());
                     ta->setFirstName(TaQuery.value(index++).toString());
                     ta->setLastName(TaQuery.value(index++).toString());
                     ta->setUsername(TaQuery.value(index++).toString());
@@ -161,19 +161,21 @@ bool TaManager::deleteTask(Task* task) {
  * @brief TaManager::addTaskForCourse
  * @return the new list of Tasks for that course
  */
-QList<Task *> TaManager::addTaskForTACourse(Task* task, TeachingAssistant* ta, Course* course) {
+QList<Task *> TaManager::addTaskForTACourse(Task* task, QString taUsername, Course* course) {
     QList<Task *> list;
 
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     int courseId = idForCourse(course->getName(), course->getSemesterType(), course->getYear());
+    int taId = idForUsername(taUsername);
 
     if (courseId > 0) { // Check for valid IDs
         QSqlQuery taskQuery(db);
-        taskQuery.prepare("INSERT INTO TASK (name, description, courseId) VALUES (?, ?, ?)");
+        taskQuery.prepare("INSERT INTO TASK (name, description, courseId, taId) VALUES (?, ?, ?, ?)");
         taskQuery.addBindValue(task->getName());
         taskQuery.addBindValue(task->getDescription());
         taskQuery.addBindValue(courseId);
+        taskQuery.addBindValue(taId);
 
         qDebug() << "Adding Task to DB";
         if (taskQuery.exec()) {

@@ -227,6 +227,10 @@ void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
 void ApiWindow::handleNewTask() {
     qDebug("create task");
     ui->stackedWidget->setCurrentIndex(1);
+
+    TaControl tc(this);
+
+    tc.addTaskForTa("1", "shurtado", "This is a Test Task Name", "This is a description for a test task", "COMP3004", Semester::FALL, 2013);
 }
 
 /**

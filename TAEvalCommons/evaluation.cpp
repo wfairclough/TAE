@@ -85,7 +85,11 @@ QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation) {
         if (task != NULL) {
             stream << QString(true);
             stream << *task;
+        } else {
+            stream << QString("false");
         }
+    } else {
+        stream << QString("false");
     }
 
 

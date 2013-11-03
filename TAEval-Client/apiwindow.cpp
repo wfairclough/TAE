@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "apiwindow.h"
 #include "ui_apiwindow.h"
 #include "connectionclient.h"
@@ -29,6 +30,7 @@ void ApiWindow::initManageTaskView() {
     connect(ui->mt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaCellClicked(int, int)));
     connect(ui->mt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaskCellClicked(int, int)));
     connect(ui->mt_delete, SIGNAL(released()), this, SLOT(mtdeleteClicked()));
+    connect(ui->mt_update, SIGNAL(released()), this, SLOT(mtupdateClicked()));
     connect(ui->mt_taskTable, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(mtcellItemChanged(QTableWidgetItem*)));
     connect(ui->mt_taskTable, SIGNAL(cellChanged(int,int)), this, SLOT(mttaskTableCellChanged(int, int)) );
 
@@ -189,20 +191,6 @@ void ApiWindow::recievedEvaluationListForTasks(QString view, QList<Evaluation *>
     }
 }
 
-void ApiWindow::mttaskTableCellChanged(int row, int column) {
-//    Task* task = taskMap.value(row);
-
-//    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
-//    if (column == TASK_NAME_COL) {
-//        task->setName(item->text());
-//    } else if (column == TASK_DESCRIPTION_COL) {
-//        task->setDescription(item->text());
-//    }
-
-//    TaControl tc(this);
-    //tc.updateTask(task);
-}
-
 //PRIVATE SLOTS//
 /**
  * Description: Handles the released SIGNAL from deleteTaskButton
@@ -264,13 +252,44 @@ void ApiWindow::mttaskCellClicked(int currentRow, int currentCol){
 }
 
 /**
- * Description: handles everytime mt_deleteButton is clicked
- * Paramters: the row and column that was clikced
+ * Description: handles everytime mt_delete is clicked
+ * Paramters: None
  * Returns: None
  */
 void ApiWindow::mtdeleteClicked() {
     TaControl tc(this);
     tc.deleteTaskForTA(QString(MANAGE_TASK_VIEW), ui->mt_taskTable->item(ui->mt_taskTable->currentRow(),0)->text(), ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
+}
+
+/**
+ * Description: handles everytime mt_update is clicked
+ * Paramters: None
+ * Returns: None
+ */
+void ApiWindow::mtupdateClicked() {
+    int taRow, taskRow;
+    taRow = ui->mt_taTable->currentRow();
+    taskRow = ui->mt_taskTable->currentRow();
+    QString taUsername, taskName, taskDesc, evalRating, evalComment;
+    taUsername = ui->mt_taTable->item(taRow,0)->text();
+    taskName = ui->mt_taskTable->item(taskRow,0)->text();
+    taskDesc = ui->mt_taskTable->item(taskRow,1)->text();
+    evalRating = ui->mt_taskTable->item(taskRow,2)->text();
+    evalComment = ui->mt_taskTable->item(taskRow,3)->text();
+
+    qDebug() << "taRow: " << taRow << "taskRow: " << taskRow << "taUserName: " << taUsername << "TaskName: " << taskName << "taskDesc " << taskDesc << "evaluationRating: " << evalRating << "evaluationComment: " << evalComment;
+
+    if(checkEvaluationRating(evalRating)){
+        qDebug() << "Rating is valid";
+    } else {
+        qDebug() << "Rating is invalid";
+        QMessageBox message(this);
+        message.setText("The Rating for the selected task is invalid. It must match one of the following:\n 0, 1, 2, 3, 4, 5, None, Poor, Fair, Good, Very Good or Excellent");
+        message.exec();
+    }
+
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
 }
@@ -282,6 +301,22 @@ void ApiWindow::mtdeleteClicked() {
  */
 void ApiWindow::mtcellItemChanged(QTableWidgetItem *item) {
     enableButton(ui->mt_update);
+
+}
+
+// I took this out because it gets called way too often
+void ApiWindow::mttaskTableCellChanged(int row, int column) {
+//    Task* task = taskMap.value(row);
+
+//    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
+//    if (column == TASK_NAME_COL) {
+//        task->setName(item->text());
+//    } else if (column == TASK_DESCRIPTION_COL) {
+//        task->setDescription(item->text());
+//    }
+
+//    TaControl tc(this);
+    //tc.updateTask(task);
 }
 
 // View Course Slots
@@ -319,6 +354,42 @@ void ApiWindow::disableButton(QPushButton *&button) {
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
                                   "font-style: bold;");
+}
+
+/**
+ * Description: Checks to see if the Evaluation Rating is valid
+ * Paramters: QString of the Evaluation Rating
+ * Returns: true if it matches a valid rating or false if it doesn't
+ */
+bool ApiWindow::checkEvaluationRating(QString evalRating) {
+    evalRating = evalRating.toLower();
+    if (evalRating.compare("0") == 0) {
+        return true;
+    } else if (evalRating.compare("1") == 0) {
+        return true;
+    } else if (evalRating.compare("2") == 0) {
+        return true;
+    } else if (evalRating.compare("3") == 0) {
+        return true;
+    } else if (evalRating.compare("4") == 0) {
+        return true;
+    } else if (evalRating.compare("5") == 0) {
+        return true;
+    } else if (evalRating.compare("none") == 0) {
+        return true;
+    } else if (evalRating.compare("poor") == 0) {
+        return true;
+    } else if (evalRating.compare("fair") == 0) {
+        return true;
+    } else if (evalRating.compare("good") == 0) {
+        return true;
+    } else if (evalRating.compare("very good") == 0) {
+        return true;
+    } else if (evalRating.compare("excellent") == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**

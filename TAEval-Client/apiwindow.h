@@ -49,6 +49,7 @@ private slots:
     void mttaCellClicked(int currentRow, int currentCol);
     void mttaskCellClicked(int currentRow, int currentCol);
     void mtdeleteClicked();
+    void mtupdateClicked();
     void mtcellItemChanged(QTableWidgetItem* item);
     void mttaskTableCellChanged(int row, int column);
     void vcinstructorComboBoxChanged(QString profInfo);
@@ -62,6 +63,7 @@ private:
     void updateViewStyles(QString selectedView);
     void enableButton(QPushButton*& button);
     void disableButton(QPushButton*& button);
+    bool checkEvaluationRating(QString evalRating);
 
     // Initialize the each of the Views
     void initManageTaskView();

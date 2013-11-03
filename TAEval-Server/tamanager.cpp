@@ -390,16 +390,17 @@ bool TaManager::addEvaluationToTask(Evaluation* eval, Task* task) {
 
 
 /**
- * @brief TaManager::updateTask Update a task. The task must have a valid id.
- * @param task to update
+ * @brief TaManager::updateTask Update a task and evaluation. The task must have a valid id.
+ * @param task to update, evaluation to update
  * @return
  */
-bool TaManager::updateTask(Task* task) {
+bool TaManager::updateTaskAndEvaluation(Task* task, Evaluation* eval) {
     bool added = false;
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+    DataAccessManager dam(this);
 
-    if (task->getId() > 0) {
-        QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
-
+    int taskId = task->getId();
+    if (taskId > 0) {
         QSqlQuery taskQuery(db);
         taskQuery.prepare("UPDATE TASK SET name=?, description=? WHERE id=?");
         taskQuery.addBindValue(task->getName());
@@ -410,6 +411,12 @@ bool TaManager::updateTask(Task* task) {
         added = taskQuery.exec();
         if (added) {
             qDebug() << "Updated Task" << task->getName();
+            QSqlQuery evalQuery(db);
+            evalQuery.prepare("UPDATE EVALUATION SET rating=?, comment=? WHERE taskid=?");
+            evalQuery.addBindValue(eval->getRating());
+            evalQuery.addBindValue(eval->getComment());
+            evalQuery.addBindValue(task->getId());
+            evalQuery.exec();
         } else {
             qDebug() << "Error exec new Task SQL: " << taskQuery.lastError().text();
         }

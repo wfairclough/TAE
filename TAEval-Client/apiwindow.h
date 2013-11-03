@@ -70,6 +70,7 @@ private:
     void initViewCourseView();
 
     QMap<quint32, Task*> taskMap;
+    QList<quint32> taskIds;
 
 };
 

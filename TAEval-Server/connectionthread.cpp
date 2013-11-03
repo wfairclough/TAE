@@ -346,40 +346,6 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(QString(EDIT_TASK_REQ)) == 0) {
-        QString view;
-        TeachingAssistant* ta = new TeachingAssistant(this);
-        Task* task = new Task(this);
-
-        in >> view >> *task;
-
-        TaManager tm;
-
-        bool added = tm.updateTask(task);
-
-
-        QByteArray block;
-        QDataStream out(&block, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_4_8);
-
-        QString msgRspType(EDIT_TASK_RSP);
-
-        out << quint16(0) << msgRspType << view;
-
-        if (added) {
-            qDebug() << "[" << EDIT_TASK_RSP << "] added eval to task" << task->getName();
-
-            out << QString("true");
-        } else {
-            out << QString("false");
-        }
-
-        out.device()->seek(0);
-        out << quint16(block.size() - sizeof(quint16));
-
-        tcpSocket.write(block);
-
-
     } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_REQ)) == 0) {
         QString view;
         QList<quint32> idList;
@@ -422,6 +388,17 @@ void ConnectionThread::readClient()
         out << quint16(block.size() - sizeof(quint16));
 
         tcpSocket.write(block);
+
+    } else if (msgType.compare(QString(UPDATE_TASK_AND_EVALUATION_REQ)) == 0) {
+        QString view;
+        Task* task = new Task(this);
+        Evaluation* eval = new Evaluation(this);
+        in >> view >> *task >> *eval;
+
+        qDebug() << "[UPDATE_TASK_AND_EVALUATION_REQ]";
+
+        TaManager tm;
+        tm.updateTaskAndEvaluation(task, eval);
 
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;

@@ -76,17 +76,17 @@ void Evaluation::setRating(quint8 rate) {
 }
 
 void Evaluation::setRating(QString rate) {
-    if (rate.compare("None") == 0) {
+    if (rate.compare("None") == 0 || rate.compare("0") == 0) {
         setRating(0);
-    } else if (rate.compare("Poor") == 0) {
+    } else if (rate.compare("Poor") == 0 || rate.compare("1") == 0) {
         setRating(1);
-    } else if (rate.compare("Fair") == 0) {
+    } else if (rate.compare("Fair") == 0 || rate.compare("2") == 0) {
         setRating(2);
-    } else if (rate.compare("Good") == 0) {
+    } else if (rate.compare("Good") == 0 || rate.compare("3") == 0) {
         setRating(3);
-    } else if (rate.compare("Very Good") == 0) {
+    } else if (rate.compare("Very Good") == 0 || rate.compare("4") == 0) {
         setRating(4);
-    } else if (rate.compare("Excellent") == 0) {
+    } else if (rate.compare("Excellent") == 0 || rate.compare("5") == 0) {
         setRating(5);
     }
 }

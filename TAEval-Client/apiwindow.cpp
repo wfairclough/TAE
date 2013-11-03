@@ -142,7 +142,7 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
     if (view.compare(MANAGE_TASK_VIEW) == 0) {
         ui->mt_taskTable->setRowCount(0);
-        QList<quint32> taskIds;
+        taskIds.clear();
         foreach (Task* task, list) {
             qDebug() << "View: " << view << " Task name: " << task->getName() << " Task ID: " << task->getId();
             // Insert Task and Evaluation data into table
@@ -269,24 +269,32 @@ void ApiWindow::mtdeleteClicked() {
  * Returns: None
  */
 void ApiWindow::mtupdateClicked() {
-    int taRow, taskRow;
-    taRow = ui->mt_taTable->currentRow();
+    int taskRow;
     taskRow = ui->mt_taskTable->currentRow();
-    QString taUsername, taskName, taskDesc, evalRating, evalComment;
-    taUsername = ui->mt_taTable->item(taRow,0)->text();
+    QString taskName, taskDesc, evalRating, evalComment;
+    quint32 taskId;
+    taskId = taskIds[taskRow];
     taskName = ui->mt_taskTable->item(taskRow,0)->text();
     taskDesc = ui->mt_taskTable->item(taskRow,1)->text();
     evalRating = ui->mt_taskTable->item(taskRow,2)->text();
     evalComment = ui->mt_taskTable->item(taskRow,3)->text();
 
-    qDebug() << "taRow: " << taRow << "taskRow: " << taskRow << "taUserName: " << taUsername << "TaskName: " << taskName << "taskDesc " << taskDesc << "evaluationRating: " << evalRating << "evaluationComment: " << evalComment;
+    Task* builtTask = new Task(this);
+    builtTask->setId(taskId);
+    builtTask->setName(taskName);
+    builtTask->setDescription(taskDesc);
+    Evaluation* builtEvaluation = new Evaluation(this);
+    builtEvaluation->setRating(evalRating);
+    builtEvaluation->setComment(evalComment);
+
+    qDebug() << "taskRow: " << taskRow << "taskId: " << taskId << "TaskName: " << taskName << "taskDesc " << taskDesc << "evaluationRating: " << evalRating << "evaluationComment: " << evalComment;
 
     if(checkEvaluationRating(evalRating)){
-        qDebug() << "Rating is valid";
+        TaControl tc(this);
+        tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, builtTask, builtEvaluation);
     } else {
-        qDebug() << "Rating is invalid";
         QMessageBox message(this);
-        message.setText("The Rating for the selected task is invalid. It must match one of the following:\n 0, 1, 2, 3, 4, 5, None, Poor, Fair, Good, Very Good or Excellent");
+        message.setText("The Rating for the selected task is invalid. It must match one of the following:\n\n 0, 1, 2, 3, 4, 5, None, Poor, Fair, Good, Very Good or Excellent");
         message.exec();
     }
 

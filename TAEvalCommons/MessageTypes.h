@@ -41,5 +41,6 @@
 #define TA_LIST_RSP "taListRsp"
 #define EVALUATION_LIST_FOR_TASKS_REQ "evaluationListForTasksReq"
 #define EVALUATION_LIST_FOR_TASKS_RSP "evaluationListForTasksRsp"
+#define UPDATE_TASK_AND_EVALUATION_REQ "updateTaskAndEvaluationReq"
 
 #endif // MESSAGETYPES_H

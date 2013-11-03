@@ -58,7 +58,7 @@ void TestTaManager::testFetchEvaluationForTask() {
     task->setName("Test Task");
     task->setDescription("This is a test task");
 
-    tm.fetchEvaluationForTask(task);
+    //tm.fetchEvaluationForTask(task);
 
 }
 

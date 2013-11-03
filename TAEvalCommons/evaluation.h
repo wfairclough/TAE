@@ -16,7 +16,7 @@ namespace RATING {
         FAIR,
         GOOD,
         VERY_GOOD,
-        EXECELLENT
+        EXCELLENT
     };
 }
 
@@ -32,6 +32,7 @@ public:
     void setComment(QString com) { comment = com; }
     void setRating(RATING::rating_t rate);
     void setRating(quint8 rate);
+    void setRating(QString rate);
     void setTask(Task* newTask) { task = newTask; taskSet = true; }
 
     // Getters
@@ -63,7 +64,7 @@ private:
 };
 
 // Operator Override
-QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation);
+QDataStream &operator <<(QDataStream &stream, Evaluation &evaluation);
 QDataStream &operator >>(QDataStream &stream, Evaluation &evaluation);
 
 

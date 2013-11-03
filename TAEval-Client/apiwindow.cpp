@@ -41,8 +41,10 @@ void ApiWindow::initManageTaskView() {
     ui->mt_instructorTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
     ui->mt_instructorTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
     ui->mt_taskTable->resizeColumnsToContents();
-    ui->mt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
     ui->mt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
     ui->mt_taTable->setStyleSheet("color:#333");
     ui->mt_taskTable->setStyleSheet("color:#333");
     ui->mt_instructorTable->setStyleSheet("color: #333");
@@ -137,33 +139,24 @@ void ApiWindow::recievedTaList(QString view, QList<TeachingAssistant *> list) {
 void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
     if (view.compare(MANAGE_TASK_VIEW) == 0) {
-        qDebug() << "View 3";
         ui->mt_taskTable->setRowCount(0);
+        QList<quint32> taskIds;
         foreach (Task* task, list) {
-            qDebug() << "View: " << view << " Task name: " << task->getName();
+            qDebug() << "View: " << view << " Task name: " << task->getName() << " Task ID: " << task->getId();
+            // Insert Task and Evaluation data into table
             int row = ui->mt_taskTable->rowCount();
             taskMap.insert(row, task);
 
             ui->mt_taskTable->insertRow(row);
             ui->mt_taskTable->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
             ui->mt_taskTable->setItem(row, TASK_DESCRIPTION_COL, new QTableWidgetItem(task->getDescription()));
+            // Get Evaluation Data
+            taskIds.append(task->getId());
         }
+        TaControl tc(this);
+        tc.getEvaluationListForTasks(QString(MANAGE_TASK_VIEW), taskIds);
     }
 
-}
-
-void ApiWindow::mttaskTableCellChanged(int row, int column) {
-    Task* task = taskMap.value(row);
-
-    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
-    if (column == TASK_NAME_COL) {
-        task->setName(item->text());
-    } else if (column == TASK_DESCRIPTION_COL) {
-        task->setDescription(item->text());
-    }
-
-    TaControl tc(this);
-    tc.updateTask(task);
 }
 
 void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
@@ -173,6 +166,42 @@ void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
     }
 }
 
+void ApiWindow::recievedEvaluationListForTasks(QString view, QList<Evaluation *> evals) {
+    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedEvaluationListForTasksResponse(QString,QList<Evaluation*>)), this, SLOT(recievedEvaluationListForTasks(QString,QList<Evaluation*>)));
+    if (view.compare(MANAGE_TASK_VIEW) == 0) {
+        foreach (Evaluation* eval, evals) {
+            int rows = ui->mt_taskTable->rowCount();
+            for(int i = 0; i < rows; i++) {
+                if(eval->getTask()->getName().compare(ui->mt_taskTable->item(i,0)->text()) == 0) {
+                    QTableWidgetItem* ratingItem = new QTableWidgetItem(eval->getRatingString());
+                    QTableWidgetItem* commentItem = new QTableWidgetItem(eval->getComment());
+                    ui->mt_taskTable->setItem(i,2,ratingItem);
+                    ui->mt_taskTable->setItem(i,3,commentItem);
+                } else {
+                    QTableWidgetItem* ratingItem = new QTableWidgetItem("None");
+                    QTableWidgetItem* commentItem = new QTableWidgetItem("");
+                    ui->mt_taskTable->setItem(i,2,ratingItem);
+                    ui->mt_taskTable->setItem(i,3,commentItem);
+                }
+            }
+
+        }
+    }
+}
+
+void ApiWindow::mttaskTableCellChanged(int row, int column) {
+//    Task* task = taskMap.value(row);
+
+//    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
+//    if (column == TASK_NAME_COL) {
+//        task->setName(item->text());
+//    } else if (column == TASK_DESCRIPTION_COL) {
+//        task->setDescription(item->text());
+//    }
+
+//    TaControl tc(this);
+    //tc.updateTask(task);
+}
 
 //PRIVATE SLOTS//
 /**

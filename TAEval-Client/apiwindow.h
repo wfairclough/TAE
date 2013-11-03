@@ -11,6 +11,7 @@
 #include "instructor.h"
 #include "task.h"
 #include "course.h"
+#include "evaluation.h"
 
 #define TASK_NAME_COL 0
 #define TASK_DESCRIPTION_COL 1
@@ -38,6 +39,7 @@ public slots:
     void recievedTaskListForTa(QString view, QList<Task*> list);
     void recievedDeleteTaskForTa(QString view, QList<Task*> list);
     void recievedCourseListForInstructor(QString view, QList<Course*> list);
+    void recievedEvaluationListForTasks(QString view, QList<Evaluation*> evals);
 
 private slots:
     void handleManageTask();

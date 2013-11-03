@@ -130,6 +130,9 @@ INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Create
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Field Trip", "Organize a Trip to the Observatory", (SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=0 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Projects", "Mark the Projects from your Section", (SELECT id from USER where username='ederavi'), (SELECT id from COURSE where name="COMP3005" and semester=0 and year=2013) );
 
+-- Add Evaluation to Task
+INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (5, "You are doing very well", 2);
+
 
 end transaction;
 

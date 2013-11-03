@@ -362,12 +362,12 @@ void ConnectionThread::readClient()
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_8);
 
-        QString msgRspType(EVALUATE_TASK_FOR_TA_RSP);
+        QString msgRspType(EDIT_TASK_RSP);
 
         out << quint16(0) << msgRspType << view;
 
         if (added) {
-            qDebug() << "[" << EVALUATE_TASK_FOR_TA_RSP << "] added eval to task" << task->getName();
+            qDebug() << "[" << EDIT_TASK_RSP << "] added eval to task" << task->getName();
 
             out << QString("true");
         } else {
@@ -379,6 +379,49 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
+
+    } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_REQ)) == 0) {
+        QString view;
+        QList<quint32> idList;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            quint32 tId;
+            in >> tId;
+            idList << tId;
+        }
+        qDebug() << "[EvaluationListForTasksReq]";
+
+        QList<Task *> taskList;
+        foreach(quint32 id, idList) {
+            Task *t = new Task(this);
+            t->setId(id);
+            taskList.append(t);
+        }
+
+        TaManager tm;
+        QList<Evaluation*> list = tm.fetchEvaluationsForTasks(taskList);
+
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(EVALUATION_LIST_FOR_TASKS_RSP);
+
+        out << quint16(0) << msgRspType << view << quint16(list.size());
+
+        foreach (Evaluation* eval, list) {
+            out << *eval;
+            qDebug() << "Writing to client, Evaluation with comment: " << eval->getComment();
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
 
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;

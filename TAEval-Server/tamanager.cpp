@@ -238,39 +238,54 @@ QList<Task *> TaManager::fetchAllTasksForCourse(Course* course) {
 
 
 /**
- * @brief TaManager::fetchEvaluationForTask
- * @param instructor
+ * @brief TaManager::fetchEvaluationsForTasks
+ * @param list of tasks
  * @return
  */
-Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
+QList<Evaluation*> TaManager::fetchEvaluationsForTasks(QList<Task*> tasks) {
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+    QList<Evaluation*> evaluationList;
+    DataAccessManager dam(this);
 
-    Evaluation* evaluation;
-    int taskId = idForTask(task);
+    // task is just a fake built task that only includes an id
+    // that is why we rebuild the task here.
+    foreach (Task* task, tasks) {
+        int taskId = task->getId();
 
-    if (taskId != -1) {
-        QSqlQuery evaluationQuery(db);
-        evaluationQuery.prepare("SELECT id, rating, comment FROM evaluation WHERE taskId=?");
-        evaluationQuery.addBindValue(taskId);
-        if (evaluationQuery.exec()) {
-            evaluationQuery.next();
-            int index = 0;
-            evaluation->setId(evaluationQuery.value(index++).toInt());
-            evaluation->setRating(evaluationQuery.value(index++).toInt());
-            evaluation->setComment(evaluationQuery.value(index++).toString());
+        if (taskId != -1) {
+            QSqlQuery evaluationQuery(db);
+            evaluationQuery.prepare("SELECT id, rating, comment FROM evaluation WHERE taskId=?");
+            evaluationQuery.addBindValue(taskId);
+            if (evaluationQuery.exec()) {
+                if (evaluationQuery.next()) {
+                    Evaluation* evaluation = new Evaluation(this);
+                    int index = 0;
+                    evaluation->setId(evaluationQuery.value(index++).toInt());
+                    evaluation->setRating(evaluationQuery.value(index++).toInt());
+                    evaluation->setComment(evaluationQuery.value(index++).toString());
 
-            int taId = evaluationQuery.value(index++).toInt();
-
-            TeachingAssistant* ta = teachingAssistantForId(taId);
-
-            task->setTeachingAssistant(ta);
-            qDebug() << "Adding Task " << task->getName() << " to list.";
-        } else {
-            qDebug() << "Could not find Task with id " << taskId;
+                    Task* evalTask = new Task(this);
+                    QSqlQuery taQuery(db);
+                    taQuery.prepare("SELECT id, name, description, taid FROM task WHERE id=?");
+                    taQuery.addBindValue(taskId);
+                    if (taQuery.exec()) {
+                        taQuery.next();
+                        int index = 0;
+                        evalTask->setId(taQuery.value(index++).toInt());
+                        evalTask->setName(taQuery.value(index++).toString());
+                        evalTask->setDescription(taQuery.value(index++).toString());
+                        evalTask->setTeachingAssistant(dam.teachingAssistantForId(taQuery.value(index++).toInt()));
+                    }
+                    evaluation->setTask(evalTask);
+                    evaluationList.append(evaluation);
+                }
+            } else {
+                qDebug() << "Could not find Task with id " << taskId;
+            }
         }
     }
-
-    return evaluation;
+    qDebug() << "Evaluation List Size: " << evaluationList.size();
+    return evaluationList;
 }
 
 

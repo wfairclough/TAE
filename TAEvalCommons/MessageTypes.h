@@ -39,5 +39,7 @@
 #define INSTRUCTOR_LIST_RSP "instructorListRsp"
 #define TA_LIST_REQ "taListReq"
 #define TA_LIST_RSP "taListRsp"
+#define EVALUATION_LIST_FOR_TASKS_REQ "evaluationListForTasksReq"
+#define EVALUATION_LIST_FOR_TASKS_RSP "evaluationListForTasksRsp"
 
 #endif // MESSAGETYPES_H

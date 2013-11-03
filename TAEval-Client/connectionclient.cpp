@@ -222,6 +222,22 @@ void ConnectionClient::bytesReady()
         }
         emit recievedAddTaskForTaResponse(view, list);
 
+    } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_RSP)) == 0) {
+        QString view;
+        QList<Evaluation*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
+
+        for(int i = 0; i < listSize; i++) {
+            Evaluation* eval = new Evaluation();
+            in >> *eval;
+            list << eval;
+
+            qDebug() << "[" << EVALUATION_LIST_FOR_TASKS_RSP << "] Recieved an Evaluation with the ID == " << eval->getId() << " and rating: " << eval->getRating();
+        }
+        emit recievedEvaluationListForTasksResponse(view, list);
+
     }
 
 
@@ -436,6 +452,32 @@ void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString 
     clientSocket.write(block);
 
     qDebug() << "Wrote NEW_TASK_REQ Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Evaluations for Tasks
+ * Paramters: view that made the call, ids of Tasks
+ * Returns: Void
+ */
+void ConnectionClient::sendEvaluationListForTasks(QString view, QList<quint32> taskIds) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(EVALUATION_LIST_FOR_TASKS_REQ);
+
+    out << quint16(0) << msgType << view << quint16(taskIds.size());
+
+    foreach (quint32 i, taskIds) {
+        out << i;
+    }
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote " << EVALUATION_LIST_FOR_TASKS_REQ << " Data to server.";
 }
 
 

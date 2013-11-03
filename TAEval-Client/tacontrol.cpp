@@ -1,5 +1,6 @@
 #include "tacontrol.h"
 #include "connectionclient.h"
+#include <QList>
 
 TaControl::TaControl(QObject *parent) :
     QObject(parent)
@@ -24,6 +25,16 @@ void TaControl::getTas(QString view) {
 void TaControl::getTaskListForTa(QString view, QString uname) {
     connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedTaskListForTa(QString, QList<Task*>)));
     ConnectionClient::getInstance().sendTaskForTa(view, uname);
+}
+
+/**
+ * Description: Send request for an Evalution for a Task
+ * Paramters: a string the represents the view that wants the information, the id of the Task that owns the Evaluation
+ * Returns: None
+ */
+void TaControl::getEvaluationListForTasks(QString view, QList<quint32> taskIds) {
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedEvaluationListForTasksResponse(QString, QList<Evaluation*>)), this->parent(), SLOT(recievedEvaluationListForTasks(QString, QList<Evaluation*>)));
+    ConnectionClient::getInstance().sendEvaluationListForTasks(view, taskIds);
 }
 
 /**
@@ -53,5 +64,5 @@ void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QStr
   */
 void TaControl::updateTask(Task* task) {
 //    connect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedDeleteTaskForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendUpdateTask(task);
+    //ConnectionClient::getInstance().sendUpdateTask(task);
 }

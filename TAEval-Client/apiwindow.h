@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
+#include <QPushButton>
 #include <QMap>
 
 #include "instructorcontrol.h"
@@ -57,8 +58,8 @@ private:
     void viewCourseSelectedStyle();
     void viewCourseDeSelectedStyle();
     void updateViewStyles(QString selectedView);
-    void enableDeleteButton();
-    void disableDeleteButton();
+    void enableButton(QPushButton*& button);
+    void disableButton(QPushButton*& button);
 
     // Initialize the each of the Views
     void initManageTaskView();

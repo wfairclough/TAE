@@ -446,13 +446,16 @@
                <string>Description</string>
               </property>
              </column>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="mt_evaluationLabe">
-             <property name="text">
-              <string>Evaluations</string>
-             </property>
+             <column>
+              <property name="text">
+               <string>Rating</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Comment</string>
+              </property>
+             </column>
             </widget>
            </item>
            <item>
@@ -480,7 +483,7 @@
              <item>
               <widget class="QPushButton" name="mt_update">
                <property name="text">
-                <string>Update Task Info</string>
+                <string>Update Selected Task Info</string>
                </property>
               </widget>
              </item>
@@ -504,13 +507,6 @@
               </widget>
              </item>
             </layout>
-           </item>
-           <item>
-            <widget class="Line" name="line_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
            </item>
            <item>
             <widget class="QLabel" name="mt_resultsTitleText">

@@ -52,7 +52,7 @@ void ApiWindow::initManageTaskView() {
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
                                   "font-style: bold;");
-    disableDeleteButton();
+    disableButton(ui->mt_delete);
 }
 
 void ApiWindow::initViewCourseView() {
@@ -209,7 +209,8 @@ void ApiWindow::mtinstructorCellClicked(int currentRow, int currentCol){
     InstructorControl ic(this);
     ic.getTaForInstructor(QString(MANAGE_TASK_VIEW), ui->mt_instructorTable->item(currentRow,2)->text());
     ui->mt_taskTable->setRowCount(0);
-    disableDeleteButton();
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
 }
 
 /**
@@ -220,7 +221,8 @@ void ApiWindow::mtinstructorCellClicked(int currentRow, int currentCol){
 void ApiWindow::mttaCellClicked(int currentRow, int currentCol){
     TaControl tc(this);
     tc.getTaskListForTa(QString(MANAGE_TASK_VIEW),ui->mt_taTable->item(currentRow,2)->text());
-    disableDeleteButton();
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
 }
 
 /**
@@ -229,7 +231,7 @@ void ApiWindow::mttaCellClicked(int currentRow, int currentCol){
  * Returns: None
  */
 void ApiWindow::mttaskCellClicked(int currentRow, int currentCol){
-    enableDeleteButton();
+    enableButton(ui->mt_delete);
 }
 
 /**
@@ -240,7 +242,8 @@ void ApiWindow::mttaskCellClicked(int currentRow, int currentCol){
 void ApiWindow::mtdeleteClicked() {
     TaControl tc(this);
     tc.deleteTaskForTA(QString(MANAGE_TASK_VIEW), ui->mt_taskTable->item(ui->mt_taskTable->currentRow(),0)->text(), ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
-    disableDeleteButton();
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
 }
 
 /**
@@ -249,7 +252,7 @@ void ApiWindow::mtdeleteClicked() {
  * Returns: None
  */
 void ApiWindow::mtcellItemChanged(QTableWidgetItem *item) {
-    qDebug() << item->text();
+    enableButton(ui->mt_update);
 }
 
 // View Course Slots
@@ -265,14 +268,10 @@ void ApiWindow::vcinstructorComboBoxChanged(QString profInfo) {
 }
 
 //PRIVATE FUNCTIONS
-/**
- * Description: Enables the Delete Button and changes its style to match
- * Paramters: None
- * Returns: None
- */
-void ApiWindow::enableDeleteButton() {
-    ui->mt_delete->setEnabled(true);
-    ui->mt_delete->setStyleSheet("color: #333;"
+
+void ApiWindow::enableButton(QPushButton *&button) {
+    button->setEnabled(true);
+    button->setStyleSheet("color: #333;"
                                   "background-color: #eee;"
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
@@ -284,9 +283,9 @@ void ApiWindow::enableDeleteButton() {
  * Paramters: None
  * Returns: None
  */
-void ApiWindow::disableDeleteButton() {
-    ui->mt_delete->setEnabled(false);
-    ui->mt_delete->setStyleSheet("color: #ccc;"
+void ApiWindow::disableButton(QPushButton *&button) {
+    button->setEnabled(false);
+    button->setStyleSheet("color: #ccc;"
                                   "background-color: #999;"
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
@@ -301,7 +300,8 @@ void ApiWindow::disableDeleteButton() {
 void ApiWindow::mangeTaskSelectedStyle() {
     ui->manageTaskButton->setStyleSheet("background-color: #333;"
                                         "color: #fff;");
-    disableDeleteButton();
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
 }
 
 /**

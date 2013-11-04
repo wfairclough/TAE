@@ -62,16 +62,4 @@ void TestTaManager::testFetchEvaluationForTask() {
 
 }
 
-void TestTaManager::testAddEvaluationToTask() {
-    TaManager tm;
-
-    Task* task = new Task();
-    task->setName("Test Task");
-
-    Evaluation* eval = new Evaluation;
-    eval->setRating(RATING::GOOD);
-    eval->setComment("This is the comment for the test task. I guess they did GOOD.");
-
-    tm.addEvaluationToTask(eval, task);
-}
 

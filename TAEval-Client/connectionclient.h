@@ -33,7 +33,7 @@ public:
     void sendDeleteTaskForTa(QString view, QString taskName, QString username);
     void sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
     void sendEvaluationListForTasks(QString view, QList<quint32> taskIds);
-    void sendUpdateTaskAndEvaluation(QString view, Task* task, Evaluation* eval);
+    void sendUpdateTaskAndEvaluation(QString view, Task* task);
 
 signals:
     void recievedErrorResponse(QString errMsg);

@@ -253,32 +253,30 @@ void ApiWindow::mtdeleteClicked() {
 void ApiWindow::mtupdateClicked() {
     int taskRow;
     taskRow = ui->mt_taskTable->currentRow();
-    QString taskName, taskDesc, evalRating, evalComment;
-    quint32 taskId;
-    taskId = taskIds[taskRow];
-    taskName = ui->mt_taskTable->item(taskRow,0)->text();
-    taskDesc = ui->mt_taskTable->item(taskRow,1)->text();
-    evalRating = ui->mt_taskTable->item(taskRow,2)->text();
-    evalComment = ui->mt_taskTable->item(taskRow,3)->text();
+    Task* task = taskMap.value(taskRow);
 
-    Task* builtTask = new Task(this);
-    builtTask->setId(taskId);
-    builtTask->setName(taskName);
-    builtTask->setDescription(taskDesc);
-    Evaluation* builtEvaluation = new Evaluation(this);
-    builtEvaluation->setRating(evalRating);
-    builtEvaluation->setComment(evalComment);
-
-    qDebug() << "taskRow: " << taskRow << "taskId: " << taskId << "TaskName: " << taskName << "taskDesc " << taskDesc << "evaluationRating: " << evalRating << "evaluationComment: " << evalComment;
-
-    if(checkEvaluationRating(evalRating)){
+    task->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
+    task->setDescription(ui->mt_taskTable->item(taskRow, TASK_DESCRIPTION_COL)->text());
+    if(checkEvaluationRating(ui->mt_taskTable->item(taskRow,TASK_EVAL_RATING_COL)->text())){
         TaControl tc(this);
-        tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, builtTask, builtEvaluation);
+        if (task->hasEvaluation()) {
+            task->getEvaluation()->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+            task->getEvaluation()->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+        } else {
+            Evaluation* eval = new Evaluation();
+            eval->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+            eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+            task->setEvaluation(eval);
+        }
+        tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task);
     } else {
         QMessageBox message(this);
         message.setText("The Rating for the selected task is invalid. It must match one of the following:\n\n 0, 1, 2, 3, 4, 5, None, Poor, Fair, Good, Very Good or Excellent");
         message.exec();
     }
+
+
+
 
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);

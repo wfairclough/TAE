@@ -18,11 +18,11 @@ public:
     QList<Evaluation*> fetchEvaluationsForTasks(QList<Task*> tasks);
     QList<Task *> addTaskForTACourse(Task* task, QString taUsername, Course* course);
     Evaluation* fetchEvaluationForTask(Task* task);
-    bool addEvaluationToTask(Evaluation* eval, Task* task);
+    bool addEvaluationToTask(Task* task);
     bool deleteEvaluationForTask(int taskId, Evaluation* eval);
     bool deleteEvaluation(Evaluation* eval);
     bool deleteTask(Task* task);
-    bool updateTaskAndEvaluation(Task* task, Evaluation* eval);
+    bool updateTaskAndEvaluation(Task* task);
 
 signals:
     

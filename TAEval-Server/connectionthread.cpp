@@ -308,96 +308,15 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(QString(EVALUATE_TASK_FOR_TA_REQ)) == 0) {
-
-        QString view;
-        TeachingAssistant* ta = new TeachingAssistant(this);
-        Task* task = new Task(this);
-        Evaluation* evaluation = new Evaluation(this);
-
-        in >> view >> *ta >> *task >> *evaluation;
-
-        task->setTeachingAssistant(ta);
-
-        TaManager tm;
-
-        bool added = tm.addEvaluationToTask(evaluation, task);
-
-
-        QByteArray block;
-        QDataStream out(&block, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_4_8);
-
-        QString msgRspType(EVALUATE_TASK_FOR_TA_RSP);
-
-        out << quint16(0) << msgRspType << view;
-
-        if (added) {
-            qDebug() << "[" << EVALUATE_TASK_FOR_TA_RSP << "] added eval to task" << task->getName();
-
-            out << QString("true");
-        } else {
-            out << QString("false");
-        }
-
-        out.device()->seek(0);
-        out << quint16(block.size() - sizeof(quint16));
-
-        tcpSocket.write(block);
-
-    } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_REQ)) == 0) {
-        QString view;
-        QList<quint32> idList;
-        quint16 listSize = 0;
-        in >> view;
-        in >> listSize;
-        for(int i = 0; i < listSize; i++) {
-            // Find proper place to delete pointers later. Possibly in the view.
-            quint32 tId;
-            in >> tId;
-            idList << tId;
-        }
-        qDebug() << "[EvaluationListForTasksReq]";
-
-        QList<Task *> taskList;
-        foreach(quint32 id, idList) {
-            Task *t = new Task(this);
-            t->setId(id);
-            taskList.append(t);
-        }
-
-        TaManager tm;
-        QList<Evaluation*> list = tm.fetchEvaluationsForTasks(taskList);
-
-
-        QByteArray block;
-        QDataStream out(&block, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_4_8);
-
-        QString msgRspType(EVALUATION_LIST_FOR_TASKS_RSP);
-
-        out << quint16(0) << msgRspType << view << quint16(list.size());
-
-        foreach (Evaluation* eval, list) {
-            out << *eval;
-            qDebug() << "Writing to client, Evaluation with comment: " << eval->getComment();
-        }
-
-        out.device()->seek(0);
-        out << quint16(block.size() - sizeof(quint16));
-
-        tcpSocket.write(block);
-
     } else if (msgType.compare(QString(UPDATE_TASK_AND_EVALUATION_REQ)) == 0) {
         QString view;
         Task* task = new Task(this);
-        Evaluation* eval = new Evaluation(this);
-        in >> view >> *task >> *eval;
+        in >> view >> *task;
 
         qDebug() << "[UPDATE_TASK_AND_EVALUATION_REQ]";
 
         TaManager tm;
-        tm.updateTaskAndEvaluation(task, eval);
+        tm.updateTaskAndEvaluation(task);
 
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;

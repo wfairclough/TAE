@@ -284,6 +284,8 @@ void ApiWindow::mtupdateClicked() {
                 eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
                 task->setEvaluation(eval);
             }
+            TaControl tc(this);
+            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task);
         } else {
             Task* addTask = new Task();
             addTask->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
@@ -294,9 +296,10 @@ void ApiWindow::mtupdateClicked() {
                 eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
                 addTask->setEvaluation(eval);
             }
+            TaControl tc(this);
+            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, addTask);
         }
         TaControl tc(this);
-        tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task);
         tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
     }
 
@@ -388,7 +391,7 @@ void ApiWindow::disableButton(QPushButton *&button) {
  * Returns: true if it matches a valid rating or false if it doesn't
  */
 bool ApiWindow::checkEvaluationRating(QString evalRating) {
-    evalRating = evalRating.toLower();
+    evalRating = evalRating.toLower().trimmed();
     if (evalRating.compare("0") == 0) {
         return true;
     } else if (evalRating.compare("1") == 0) {

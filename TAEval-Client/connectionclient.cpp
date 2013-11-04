@@ -190,22 +190,6 @@ void ConnectionClient::bytesReady()
         }
         emit recievedTaskListForTaResponse(view, list);
 
-    } else if (msgType.compare(QString(DELETE_TASK_FOR_TA_RSP)) == 0) {
-        QString view;
-        QList<Task*> list;
-        quint16 listSize = 0;
-        in >> view;
-        in >> listSize;
-        for(int i = 0; i < listSize; i++) {
-            // Find proper place to delete pointers later. Possibly in the view.
-            Task *task = new Task();
-            in >> *task;
-            list << task;
-
-            qDebug() << "[" << DELETE_TASK_FOR_TA_RSP << "] Recieved a Task with the ID == " << task->getId();
-        }
-        emit recievedDeleteTaskForTaResponse(view, list);
-
     } else if (msgType.compare(QString(NEW_TASK_RSP)) == 0) {
         QString view;
         QList<Task*> list;
@@ -392,14 +376,14 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname) {
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QString username) {
+void ConnectionClient::sendDeleteTask(QString view, Task *task) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
-    QString msgType(DELETE_TASK_FOR_TA_REQ);
+    QString msgType(DELETE_TASK_REQ);
 
-    out << quint16(0) << msgType << view << taskName << username;
+    out << quint16(0) << msgType << view << *task;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

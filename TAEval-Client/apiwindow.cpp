@@ -239,8 +239,11 @@ void ApiWindow::mttaskCellClicked(int currentRow, int currentCol){
  * Returns: None
  */
 void ApiWindow::mtdeleteClicked() {
+    int taskRow = ui->mt_taskTable->currentRow();
+    Task* task = taskMap.value(taskRow);
     TaControl tc(this);
-    tc.deleteTaskForTA(QString(MANAGE_TASK_VIEW), ui->mt_taskTable->item(ui->mt_taskTable->currentRow(),0)->text(), ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    tc.deleteTask(QString(MANAGE_TASK_VIEW), task);
+    tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
 }
@@ -251,8 +254,7 @@ void ApiWindow::mtdeleteClicked() {
  * Returns: None
  */
 void ApiWindow::mtupdateClicked() {
-    int taskRow;
-    taskRow = ui->mt_taskTable->currentRow();
+    int taskRow = ui->mt_taskTable->currentRow();
     Task* task = taskMap.value(taskRow);
 
     task->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());

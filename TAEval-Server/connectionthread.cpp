@@ -236,39 +236,14 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
-    } else if (msgType.compare(QString(DELETE_TASK_FOR_TA_REQ)) == 0) {
+    } else if (msgType.compare(QString(DELETE_TASK_REQ)) == 0) {
         QString view;
-        QString taskName;
-        QString taUsername;
-        in >> view;
-        in >> taskName;
-        in >> taUsername;
-        qDebug() << "View: " << view << " [DELETE_TASK_FOR_TA_RSP] - Teaching Assistant: " << taUsername << " Task: " << taskName;
+        Task* task = new Task();
+        in >> view >> *task;
+        qDebug() << "View: " << view << " [DELETE_TASK_FOR_TA_RSP]";
 
         TaManager tm;
-        Task* task = new Task(this);
-        task->setName(taskName);
-        TeachingAssistant* ta = new TeachingAssistant(this);
-        ta->setUsername(taUsername);
-        QList<Task*> list = tm.deleteTaskForTa(task, ta);
-
-
-        QByteArray block;
-        QDataStream out(&block, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_4_8);
-
-        QString msgRspType(DELETE_TASK_FOR_TA_RSP);
-
-        out << quint16(0) << msgRspType << view << quint16(list.size());
-
-        foreach (Task* task, list) {
-            out << *task;
-        }
-
-        out.device()->seek(0);
-        out << quint16(block.size() - sizeof(quint16));
-
-        tcpSocket.write(block);
+        tm.deleteTask(task);
 
     } else if (msgType.compare(QString(NEW_TASK_REQ)) == 0) {
         QString view;

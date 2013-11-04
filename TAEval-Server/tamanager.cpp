@@ -108,47 +108,6 @@ Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
 }
 
 
-
-/**
- * @brief TaManager::deleteTaskForTa
- * @return
- */
-QList<Task *> TaManager::deleteTaskForTa(Task* task, TeachingAssistant* ta) {
-    QList<Task *> list;
-
-    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
-
-    int taId = idForUsername(ta->getUsername());
-
-    if (taId > 0) {
-        QSqlQuery taskQuery(db);
-        taskQuery.prepare("SELECT id, name, description, taId FROM task WHERE taId=? AND name=?");
-        taskQuery.addBindValue(taId);
-        taskQuery.addBindValue(task->getName());
-        if (taskQuery.exec()) {
-            while (taskQuery.next()) {
-                int index = 0;
-                Task* task = new Task();
-                task->setId(taskQuery.value(index++).toInt());
-                task->setName(taskQuery.value(index++).toString());
-                task->setDescription(taskQuery.value(index++).toString());
-                qDebug() << "Adding Task " << task->getName() << " to list.";
-                list << task;
-            }
-        }
-        QSqlQuery deleteTaskQuery(db);
-        deleteTaskQuery.prepare("DELETE FROM task where taId=? AND name=?");
-        deleteTaskQuery.addBindValue(taId);
-        deleteTaskQuery.addBindValue(task->getName());
-        if (deleteTaskQuery.exec()) {
-            qDebug() << "Deleted Task Successfully";
-        }
-    }
-
-    return list;
-}
-
-
 /**
  * @brief TaManager::deleteTask task object must have a valid id.
  * @param task

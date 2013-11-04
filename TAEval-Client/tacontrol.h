@@ -15,7 +15,7 @@ public:
     void getTas(QString view);
     void getTaskListForTa(QString view, QString uname);
     void getEvaluationListForTasks(QString view, QList<quint32> taskIds);
-    void deleteTaskForTA(QString view, QString taskName, QString username);
+    void deleteTask(QString view, Task* task);
     void addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear);
     void updateTaskAndEvaluation(QString view, Task* task);
 

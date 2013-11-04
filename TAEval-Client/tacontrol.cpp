@@ -42,9 +42,8 @@ void TaControl::getEvaluationListForTasks(QString view, QList<quint32> taskIds) 
   * Parameters: a string the represents the view that wants the information, the TA whose Task you want to delete
   * Returns: None
   */
-void TaControl::deleteTaskForTA(QString view, QString taskName, QString username) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedDeleteTaskForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendDeleteTaskForTa(view, taskName, username);
+void TaControl::deleteTask(QString view, Task *task) {
+    ConnectionClient::getInstance().sendDeleteTask(view, task);
 }
 
 /**

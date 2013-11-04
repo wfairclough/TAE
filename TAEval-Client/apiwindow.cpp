@@ -183,6 +183,9 @@ void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
  */
 void ApiWindow::handleManageTask() {
     ui->stackedWidget->setCurrentIndex(1);
+    ui->mt_taskTable->setRowCount(0);
+    ui->mt_taTable->setRowCount(0);
+    ui->mt_instructorTable->setRowCount(0);
     updateViewStyles(MANAGE_TASK_VIEW);
     InstructorControl ic(this);
     ic.getInstructors(QString(MANAGE_TASK_VIEW));

@@ -15,6 +15,10 @@
 
 #define TASK_NAME_COL 0
 #define TASK_DESCRIPTION_COL 1
+#define TASK_EVAL_RATING_COL 2
+#define TASK_EVAL_COMMENT_COL 3
+
+
 #define MANAGE_TASK_VIEW "manageTaskView"
 #define VIEW_COURSE_VIEW "viewCourseView"
 
@@ -39,7 +43,6 @@ public slots:
     void recievedTaskListForTa(QString view, QList<Task*> list);
     void recievedDeleteTaskForTa(QString view, QList<Task*> list);
     void recievedCourseListForInstructor(QString view, QList<Course*> list);
-    void recievedEvaluationListForTasks(QString view, QList<Evaluation*> evals);
 
 private slots:
     void handleManageTask();

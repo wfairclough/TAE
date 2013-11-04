@@ -78,6 +78,7 @@ QDataStream &operator >>(QDataStream &stream, Task &task)
     if (hasEval.compare(QString("true")) == 0) {
         Evaluation* eval = new Evaluation;
         stream >> *eval;
+        task.setEvaluation(eval);
     } else {
         qDebug() << "Task has no Evaluation";
     }

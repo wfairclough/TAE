@@ -142,7 +142,8 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
     if (view.compare(MANAGE_TASK_VIEW) == 0) {
         ui->mt_taskTable->setRowCount(0);
-        taskIds.clear();
+
+        taskMap.clear();
         foreach (Task* task, list) {
             qDebug() << "View: " << view << " Task name: " << task->getName() << " Task ID: " << task->getId();
             // Insert Task and Evaluation data into table
@@ -152,13 +153,16 @@ void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
             ui->mt_taskTable->insertRow(row);
             ui->mt_taskTable->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
             ui->mt_taskTable->setItem(row, TASK_DESCRIPTION_COL, new QTableWidgetItem(task->getDescription()));
-            // Get Evaluation Data
-            taskIds.append(task->getId());
-        }
-        TaControl tc(this);
-        tc.getEvaluationListForTasks(QString(MANAGE_TASK_VIEW), taskIds);
-    }
+            if (task->hasEvaluation()) {
+                ui->mt_taskTable->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(task->getEvaluation()->getRatingString()));
+                ui->mt_taskTable->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(task->getEvaluation()->getComment()));
+            } else {
+                ui->mt_taskTable->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(Evaluation::ratingForEnum(RATING::NONE)));
+                ui->mt_taskTable->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(QString("")));
+            }
 
+        }
+    }
 }
 
 void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
@@ -168,28 +172,6 @@ void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
     }
 }
 
-void ApiWindow::recievedEvaluationListForTasks(QString view, QList<Evaluation *> evals) {
-    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedEvaluationListForTasksResponse(QString,QList<Evaluation*>)), this, SLOT(recievedEvaluationListForTasks(QString,QList<Evaluation*>)));
-    if (view.compare(MANAGE_TASK_VIEW) == 0) {
-        foreach (Evaluation* eval, evals) {
-            int rows = ui->mt_taskTable->rowCount();
-            for(int i = 0; i < rows; i++) {
-                if(eval->getTask()->getName().compare(ui->mt_taskTable->item(i,0)->text()) == 0) {
-                    QTableWidgetItem* ratingItem = new QTableWidgetItem(eval->getRatingString());
-                    QTableWidgetItem* commentItem = new QTableWidgetItem(eval->getComment());
-                    ui->mt_taskTable->setItem(i,2,ratingItem);
-                    ui->mt_taskTable->setItem(i,3,commentItem);
-                } else {
-                    QTableWidgetItem* ratingItem = new QTableWidgetItem("None");
-                    QTableWidgetItem* commentItem = new QTableWidgetItem("");
-                    ui->mt_taskTable->setItem(i,2,ratingItem);
-                    ui->mt_taskTable->setItem(i,3,commentItem);
-                }
-            }
-
-        }
-    }
-}
 
 //PRIVATE SLOTS//
 /**

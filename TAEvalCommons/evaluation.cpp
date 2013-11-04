@@ -17,52 +17,9 @@ Evaluation::Evaluation(QObject *parent) :
  */
 QString Evaluation::getRatingString()
 {
-    return ratingForEnum(getRating());
+    return Evaluation::ratingForEnum(getRating());
 }
 
-/**
- * @brief Evaluation::ratingForEnum
- * @param rate the rating that will be converted to String
- * @return String value of the rating value
- */
-QString Evaluation::ratingForEnum(RATING::rating_t rate)
-{
-    switch (rate) {
-    case RATING::NONE:
-    {
-        return "None";
-        break;
-    }
-    case RATING::POOR:
-    {
-        return "Poor";
-        break;
-    }
-    case RATING::FAIR:
-    {
-        return "Fair";
-        break;
-    }
-    case RATING::GOOD:
-    {
-        return "Good";
-        break;
-    }
-    case RATING::VERY_GOOD:
-    {
-        return "Very Good";
-        break;
-    }
-    case RATING::EXCELLENT:
-    {
-        return "Excellent";
-        break;
-    }
-    default:
-        return "";
-        break;
-    }
-}
 
 
 

@@ -225,7 +225,6 @@ void ConnectionThread::readClient()
         out.setVersion(QDataStream::Qt_4_8);
 
         QString msgRspType(TASK_LIST_FOR_TA_RSP);
-
         out << quint16(0) << msgRspType << view << quint16(list.size());
 
         foreach (Task* task, list) {

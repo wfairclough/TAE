@@ -72,7 +72,6 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
                 task->setTeachingAssistant(teachingAssistant);
 
                 Evaluation* eval = fetchEvaluationForTask(task);
-
                 task->setEvaluation(eval);
 
                 qDebug() << "Adding Task " << task->getId() << " named - " << task->getName() << " to list.";
@@ -87,7 +86,7 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
 
 
 Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
-    Evaluation* evaluation;
+    Evaluation* evaluation = NULL;
 
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
@@ -97,6 +96,7 @@ Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
     taskQuery.addBindValue(task->getId());
     if (taskQuery.exec()) {
         while (taskQuery.next()) {
+            evaluation = new Evaluation;
             int index = 0;
             evaluation->setId(taskQuery.value(index++).toInt());
             evaluation->setRating(taskQuery.value(index++).toInt());

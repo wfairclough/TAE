@@ -1,11 +1,13 @@
 #include "task.h"
+#include "evaluation.h"
 #include <QDebug>
 
 Task::Task(QObject *parent) :
     QObject(parent),
     id(-1),
     teachingAssistant(NULL),
-    taSet(false)
+    taSet(false),
+    evaluation(NULL)
 {
 }
 
@@ -28,6 +30,14 @@ QDataStream &operator <<(QDataStream &stream, const Task &task)
         stream << QString("false");
     }
 
+    if (task.hasEvaluation()) {
+        stream << QString("true");
+        Evaluation* eval = task.getEvaluation();
+        stream << *eval;
+    } else {
+        stream << QString("false");
+    }
+
     qDebug() << "Task Oper<< ID" << task.getId() << task.getName() << task.getDescription();
     qDebug() << "Task Oper<< " << task.getIdString() << task.getName() << task.getDescription();
 
@@ -41,6 +51,7 @@ QDataStream &operator >>(QDataStream &stream, Task &task)
     QString description;
     QString aId;
     QString hasTa;
+    QString hasEval;
 
     stream >> aId;
     task.setId(aId.toUInt());
@@ -59,6 +70,17 @@ QDataStream &operator >>(QDataStream &stream, Task &task)
         qDebug() << "Task has TA: " << ta->getFirstName() << " " << ta->getLastName();
     } else {
         qDebug() << "Task has no TA";
+    }
+
+
+    stream >> hasEval;
+    qDebug() << "Has Eval: " << hasEval;
+    if (hasEval.compare(QString("true")) == 0) {
+        Evaluation* eval = new Evaluation;
+        stream >> *eval;
+        task.setEvaluation(eval);
+    } else {
+        qDebug() << "Task has no Evaluation";
     }
 
     qDebug() << "Task Oper>> Before " << aId << name << description;

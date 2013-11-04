@@ -1,5 +1,6 @@
 #include "tacontrol.h"
 #include "connectionclient.h"
+#include <QList>
 
 TaControl::TaControl(QObject *parent) :
     QObject(parent)
@@ -27,13 +28,22 @@ void TaControl::getTaskListForTa(QString view, QString uname) {
 }
 
 /**
+ * Description: Send request for an Evalution for a Task
+ * Paramters: a string the represents the view that wants the information, the id of the Task that owns the Evaluation
+ * Returns: None
+ */
+void TaControl::getEvaluationListForTasks(QString view, QList<quint32> taskIds) {
+    connect(&ConnectionClient::getInstance(), SIGNAL(recievedEvaluationListForTasksResponse(QString, QList<Evaluation*>)), this->parent(), SLOT(recievedEvaluationListForTasks(QString, QList<Evaluation*>)));
+    ConnectionClient::getInstance().sendEvaluationListForTasks(view, taskIds);
+}
+
+/**
   * Description: Send request to delete a Task from a TA
   * Parameters: a string the represents the view that wants the information, the TA whose Task you want to delete
   * Returns: None
   */
-void TaControl::deleteTaskForTA(QString view, QString taskName, QString username) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedDeleteTaskForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendDeleteTaskForTa(view, taskName, username);
+void TaControl::deleteTask(QString view, Task *task) {
+    ConnectionClient::getInstance().sendDeleteTask(view, task);
 }
 
 /**
@@ -47,11 +57,10 @@ void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QStr
 }
 
 /**
-  * Description: Send request to update a Task from a TA
-  * Parameters: The Task object with proper ID and TA attached
+  * Description: Send request to update a Task and Evaluation for a TA
+  * Parameters: view that requested info, TA username, task to update, evaluation to update
   * Returns: None
   */
-void TaControl::updateTask(Task* task) {
-//    connect(&ConnectionClient::getInstance(), SIGNAL(recievedDeleteTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedDeleteTaskForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendUpdateTask(task);
+void TaControl::updateTaskAndEvaluation(QString view, Task *task) {
+    ConnectionClient::getInstance().sendUpdateTaskAndEvaluation(view, task);
 }

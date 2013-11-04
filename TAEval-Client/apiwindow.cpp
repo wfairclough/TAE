@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "apiwindow.h"
 #include "ui_apiwindow.h"
 #include "connectionclient.h"
@@ -29,6 +30,7 @@ void ApiWindow::initManageTaskView() {
     connect(ui->mt_taTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaCellClicked(int, int)));
     connect(ui->mt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaskCellClicked(int, int)));
     connect(ui->mt_delete, SIGNAL(released()), this, SLOT(mtdeleteClicked()));
+    connect(ui->mt_update, SIGNAL(released()), this, SLOT(mtupdateClicked()));
     connect(ui->mt_taskTable, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(mtcellItemChanged(QTableWidgetItem*)));
     connect(ui->mt_taskTable, SIGNAL(cellChanged(int,int)), this, SLOT(mttaskTableCellChanged(int, int)) );
 
@@ -41,8 +43,10 @@ void ApiWindow::initManageTaskView() {
     ui->mt_instructorTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
     ui->mt_instructorTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
     ui->mt_taskTable->resizeColumnsToContents();
-    ui->mt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
     ui->mt_taskTable->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    ui->mt_taskTable->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
     ui->mt_taTable->setStyleSheet("color:#333");
     ui->mt_taskTable->setStyleSheet("color:#333");
     ui->mt_instructorTable->setStyleSheet("color: #333");
@@ -137,33 +141,28 @@ void ApiWindow::recievedTaList(QString view, QList<TeachingAssistant *> list) {
 void ApiWindow::recievedTaskListForTa(QString view, QList<Task *> list) {
     disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString,QList<Task*>)), this, SLOT(recievedTaskListForTa(QString,QList<Task*>)));
     if (view.compare(MANAGE_TASK_VIEW) == 0) {
-        qDebug() << "View 3";
         ui->mt_taskTable->setRowCount(0);
+
+        taskMap.clear();
         foreach (Task* task, list) {
-            qDebug() << "View: " << view << " Task name: " << task->getName();
+            qDebug() << "View: " << view << " Task name: " << task->getName() << " Task ID: " << task->getId();
+            // Insert Task and Evaluation data into table
             int row = ui->mt_taskTable->rowCount();
             taskMap.insert(row, task);
 
             ui->mt_taskTable->insertRow(row);
             ui->mt_taskTable->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
             ui->mt_taskTable->setItem(row, TASK_DESCRIPTION_COL, new QTableWidgetItem(task->getDescription()));
+            if (task->hasEvaluation()) {
+                ui->mt_taskTable->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(task->getEvaluation()->getRatingString()));
+                ui->mt_taskTable->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(task->getEvaluation()->getComment()));
+            } else {
+                ui->mt_taskTable->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(Evaluation::ratingForEnum(RATING::NONE)));
+                ui->mt_taskTable->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(QString("")));
+            }
+
         }
     }
-
-}
-
-void ApiWindow::mttaskTableCellChanged(int row, int column) {
-    Task* task = taskMap.value(row);
-
-    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
-    if (column == TASK_NAME_COL) {
-        task->setName(item->text());
-    } else if (column == TASK_DESCRIPTION_COL) {
-        task->setDescription(item->text());
-    }
-
-    TaControl tc(this);
-    tc.updateTask(task);
 }
 
 void ApiWindow::recievedDeleteTaskForTa(QString view, QList<Task *> list) {
@@ -235,13 +234,52 @@ void ApiWindow::mttaskCellClicked(int currentRow, int currentCol){
 }
 
 /**
- * Description: handles everytime mt_deleteButton is clicked
- * Paramters: the row and column that was clikced
+ * Description: handles everytime mt_delete is clicked
+ * Paramters: None
  * Returns: None
  */
 void ApiWindow::mtdeleteClicked() {
+    int taskRow = ui->mt_taskTable->currentRow();
+    Task* task = taskMap.value(taskRow);
     TaControl tc(this);
-    tc.deleteTaskForTA(QString(MANAGE_TASK_VIEW), ui->mt_taskTable->item(ui->mt_taskTable->currentRow(),0)->text(), ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    tc.deleteTask(QString(MANAGE_TASK_VIEW), task);
+    tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
+}
+
+/**
+ * Description: handles everytime mt_update is clicked
+ * Paramters: None
+ * Returns: None
+ */
+void ApiWindow::mtupdateClicked() {
+    int taskRow = ui->mt_taskTable->currentRow();
+    Task* task = taskMap.value(taskRow);
+
+    task->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
+    task->setDescription(ui->mt_taskTable->item(taskRow, TASK_DESCRIPTION_COL)->text());
+    if(checkEvaluationRating(ui->mt_taskTable->item(taskRow,TASK_EVAL_RATING_COL)->text())){
+        TaControl tc(this);
+        if (task->hasEvaluation()) {
+            task->getEvaluation()->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+            task->getEvaluation()->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+        } else {
+            Evaluation* eval = new Evaluation();
+            eval->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+            eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+            task->setEvaluation(eval);
+        }
+        tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task);
+    } else {
+        QMessageBox message(this);
+        message.setText("The Rating for the selected task is invalid. It must match one of the following:\n\n 0, 1, 2, 3, 4, 5, None, Poor, Fair, Good, Very Good or Excellent");
+        message.exec();
+    }
+
+
+
+
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
 }
@@ -253,6 +291,22 @@ void ApiWindow::mtdeleteClicked() {
  */
 void ApiWindow::mtcellItemChanged(QTableWidgetItem *item) {
     enableButton(ui->mt_update);
+
+}
+
+// I took this out because it gets called way too often
+void ApiWindow::mttaskTableCellChanged(int row, int column) {
+//    Task* task = taskMap.value(row);
+
+//    QTableWidgetItem* item = ui->mt_taskTable->item(row, column);
+//    if (column == TASK_NAME_COL) {
+//        task->setName(item->text());
+//    } else if (column == TASK_DESCRIPTION_COL) {
+//        task->setDescription(item->text());
+//    }
+
+//    TaControl tc(this);
+    //tc.updateTask(task);
 }
 
 // View Course Slots
@@ -290,6 +344,42 @@ void ApiWindow::disableButton(QPushButton *&button) {
                                   "font: Hevetica Neue;"
                                   "font-size: 14pt;"
                                   "font-style: bold;");
+}
+
+/**
+ * Description: Checks to see if the Evaluation Rating is valid
+ * Paramters: QString of the Evaluation Rating
+ * Returns: true if it matches a valid rating or false if it doesn't
+ */
+bool ApiWindow::checkEvaluationRating(QString evalRating) {
+    evalRating = evalRating.toLower();
+    if (evalRating.compare("0") == 0) {
+        return true;
+    } else if (evalRating.compare("1") == 0) {
+        return true;
+    } else if (evalRating.compare("2") == 0) {
+        return true;
+    } else if (evalRating.compare("3") == 0) {
+        return true;
+    } else if (evalRating.compare("4") == 0) {
+        return true;
+    } else if (evalRating.compare("5") == 0) {
+        return true;
+    } else if (evalRating.compare("none") == 0) {
+        return true;
+    } else if (evalRating.compare("poor") == 0) {
+        return true;
+    } else if (evalRating.compare("fair") == 0) {
+        return true;
+    } else if (evalRating.compare("good") == 0) {
+        return true;
+    } else if (evalRating.compare("very good") == 0) {
+        return true;
+    } else if (evalRating.compare("excellent") == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**

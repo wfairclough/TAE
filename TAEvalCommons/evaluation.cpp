@@ -1,4 +1,5 @@
 #include "evaluation.h"
+#include <QDebug>
 
 Evaluation::Evaluation(QObject *parent) :
     QObject(parent),
@@ -16,52 +17,9 @@ Evaluation::Evaluation(QObject *parent) :
  */
 QString Evaluation::getRatingString()
 {
-    return ratingForEnum(getRating());
+    return Evaluation::ratingForEnum(getRating());
 }
 
-/**
- * @brief Evaluation::ratingForEnum
- * @param rate the rating that will be converted to String
- * @return String value of the rating value
- */
-QString Evaluation::ratingForEnum(RATING::rating_t rate)
-{
-    switch (rate) {
-    case RATING::NONE:
-    {
-        return "None";
-        break;
-    }
-    case RATING::POOR:
-    {
-        return "Poor";
-        break;
-    }
-    case RATING::FAIR:
-    {
-        return "Fair";
-        break;
-    }
-    case RATING::GOOD:
-    {
-        return "Good";
-        break;
-    }
-    case RATING::VERY_GOOD:
-    {
-        return "Very Good";
-        break;
-    }
-    case RATING::EXECELLENT:
-    {
-        return "Execellent";
-        break;
-    }
-    default:
-        return "";
-        break;
-    }
-}
 
 
 
@@ -74,11 +32,29 @@ void Evaluation::setRating(quint8 rate) {
     rating = RATING::rating_t(rate);
 }
 
+void Evaluation::setRating(QString rate) {
+    if (rate.compare("None") == 0 || rate.compare("0") == 0) {
+        setRating(0);
+    } else if (rate.compare("Poor") == 0 || rate.compare("1") == 0) {
+        setRating(1);
+    } else if (rate.compare("Fair") == 0 || rate.compare("2") == 0) {
+        setRating(2);
+    } else if (rate.compare("Good") == 0 || rate.compare("3") == 0) {
+        setRating(3);
+    } else if (rate.compare("Very Good") == 0 || rate.compare("4") == 0) {
+        setRating(4);
+    } else if (rate.compare("Excellent") == 0 || rate.compare("5") == 0) {
+        setRating(5);
+    }
+}
 
-QDataStream &operator <<(QDataStream &stream, const Evaluation &evaluation) {
+
+QDataStream &operator <<(QDataStream &stream, Evaluation &evaluation) {
     stream << evaluation.getIdString();
-    stream << evaluation.getRating();
+    QString rateStr = evaluation.getRatingString();
+    stream << rateStr;
     stream << evaluation.getComment();
+    qDebug() << "IS THIS EVEN HAPPEENING " << evaluation.getIdString() << evaluation.getRating() << evaluation.getComment();
 
     if (evaluation.hasTask()) {
         Task* task = evaluation.getTask();
@@ -104,15 +80,19 @@ QDataStream &operator >>(QDataStream &stream, Evaluation &evaluation) {
     QString hasTask;
 
     stream >> aId;
+    qDebug() << aId;
     evaluation.setId(aId.toUInt());
 
     stream >> rate;
-    evaluation.setRating(rate.toUInt());
+    qDebug() << rate;
+    evaluation.setRating(rate);
 
     stream >> comment;
+    qDebug() << comment;
     evaluation.setComment(comment);
 
     stream >> hasTask;
+    qDebug() << hasTask;
     if (hasTask.compare(QString("true")) == 0) {
         Task* task = new Task();
         stream >> *task;

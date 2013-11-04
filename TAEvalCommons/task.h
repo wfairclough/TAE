@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QMap>
 
+class Evaluation;
+
 #include <persistable.h>
 #include <teachingassistant.h>
 
@@ -21,6 +23,7 @@ public:
     void setName(QString tName) { name = tName; }
     void setDescription(QString desc) { description = desc; }
     void setTeachingAssistant(TeachingAssistant* ta) { teachingAssistant = ta; taSet = true; }
+    void setEvaluation(Evaluation* eval) { evaluation = eval; }
 
 
     // Getters
@@ -29,8 +32,9 @@ public:
     QString getName() const { return name; }
     QString getDescription() const { return description; }
     TeachingAssistant* getTeachingAssistant() const { return teachingAssistant; }
+    Evaluation* getEvaluation() const { return evaluation; }
     bool hasTeachingAssistant() const { return taSet; }
-
+    bool hasEvaluation() const { return evaluation != NULL; }
 
     // Persistable
     QString getTableName() { return TASK_TABLE_NAME; }
@@ -48,6 +52,8 @@ private:
     QString name;
     QString description;
     TeachingAssistant* teachingAssistant;
+    Evaluation* evaluation;
+
 };
 
 // Operator Override

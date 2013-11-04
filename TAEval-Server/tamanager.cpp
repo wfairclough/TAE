@@ -71,6 +71,9 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
                 TeachingAssistant* teachingAssistant = teachingAssistantForId(taId);
                 task->setTeachingAssistant(teachingAssistant);
 
+                Evaluation* eval = fetchEvaluationForTask(task);
+                task->setEvaluation(eval);
+
                 qDebug() << "Adding Task " << task->getId() << " named - " << task->getName() << " to list.";
                 list << task;
             }
@@ -81,43 +84,27 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
     return list;
 }
 
-/**
- * @brief TaManager::deleteTaskForTa
- * @return
- */
-QList<Task *> TaManager::deleteTaskForTa(Task* task, TeachingAssistant* ta) {
-    QList<Task *> list;
+
+Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
+    Evaluation* evaluation = NULL;
 
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
-    int taId = idForUsername(ta->getUsername());
 
-    if (taId > 0) {
-        QSqlQuery taskQuery(db);
-        taskQuery.prepare("SELECT id, name, description, taId FROM task WHERE taId=? AND name=?");
-        taskQuery.addBindValue(taId);
-        taskQuery.addBindValue(task->getName());
-        if (taskQuery.exec()) {
-            while (taskQuery.next()) {
-                int index = 0;
-                Task* task = new Task();
-                task->setId(taskQuery.value(index++).toInt());
-                task->setName(taskQuery.value(index++).toString());
-                task->setDescription(taskQuery.value(index++).toString());
-                qDebug() << "Adding Task " << task->getName() << " to list.";
-                list << task;
-            }
-        }
-        QSqlQuery deleteTaskQuery(db);
-        deleteTaskQuery.prepare("DELETE FROM task where taId=? AND name=?");
-        deleteTaskQuery.addBindValue(taId);
-        deleteTaskQuery.addBindValue(task->getName());
-        if (deleteTaskQuery.exec()) {
-            qDebug() << "Deleted Task Successfully";
+    QSqlQuery taskQuery(db);
+    taskQuery.prepare("SELECT id, rating, comment  FROM evaluation WHERE taskId=?");
+    taskQuery.addBindValue(task->getId());
+    if (taskQuery.exec()) {
+        while (taskQuery.next()) {
+            evaluation = new Evaluation;
+            int index = 0;
+            evaluation->setId(taskQuery.value(index++).toInt());
+            evaluation->setRating(taskQuery.value(index++).toInt());
+            evaluation->setComment(taskQuery.value(index++).toString());
         }
     }
 
-    return list;
+    return evaluation;
 }
 
 
@@ -238,39 +225,54 @@ QList<Task *> TaManager::fetchAllTasksForCourse(Course* course) {
 
 
 /**
- * @brief TaManager::fetchEvaluationForTask
- * @param instructor
+ * @brief TaManager::fetchEvaluationsForTasks
+ * @param list of tasks
  * @return
  */
-Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
+QList<Evaluation*> TaManager::fetchEvaluationsForTasks(QList<Task*> tasks) {
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+    QList<Evaluation*> evaluationList;
+    DataAccessManager dam(this);
 
-    Evaluation* evaluation;
-    int taskId = idForTask(task);
+    // task is just a fake built task that only includes an id
+    // that is why we rebuild the task here.
+    foreach (Task* task, tasks) {
+        int taskId = task->getId();
 
-    if (taskId != -1) {
-        QSqlQuery evaluationQuery(db);
-        evaluationQuery.prepare("SELECT id, rating, comment FROM evaluation WHERE taskId=?");
-        evaluationQuery.addBindValue(taskId);
-        if (evaluationQuery.exec()) {
-            evaluationQuery.next();
-            int index = 0;
-            evaluation->setId(evaluationQuery.value(index++).toInt());
-            evaluation->setRating(evaluationQuery.value(index++).toInt());
-            evaluation->setComment(evaluationQuery.value(index++).toString());
+        if (taskId != -1) {
+            QSqlQuery evaluationQuery(db);
+            evaluationQuery.prepare("SELECT id, rating, comment FROM evaluation WHERE taskId=?");
+            evaluationQuery.addBindValue(taskId);
+            if (evaluationQuery.exec()) {
+                if (evaluationQuery.next()) {
+                    Evaluation* evaluation = new Evaluation(this);
+                    int index = 0;
+                    evaluation->setId(evaluationQuery.value(index++).toInt());
+                    evaluation->setRating(evaluationQuery.value(index++).toInt());
+                    evaluation->setComment(evaluationQuery.value(index++).toString());
 
-            int taId = evaluationQuery.value(index++).toInt();
-
-            TeachingAssistant* ta = teachingAssistantForId(taId);
-
-            task->setTeachingAssistant(ta);
-            qDebug() << "Adding Task " << task->getName() << " to list.";
-        } else {
-            qDebug() << "Could not find Task with id " << taskId;
+                    Task* evalTask = new Task(this);
+                    QSqlQuery taQuery(db);
+                    taQuery.prepare("SELECT id, name, description, taid FROM task WHERE id=?");
+                    taQuery.addBindValue(taskId);
+                    if (taQuery.exec()) {
+                        taQuery.next();
+                        int index = 0;
+                        evalTask->setId(taQuery.value(index++).toInt());
+                        evalTask->setName(taQuery.value(index++).toString());
+                        evalTask->setDescription(taQuery.value(index++).toString());
+                        evalTask->setTeachingAssistant(dam.teachingAssistantForId(taQuery.value(index++).toInt()));
+                    }
+                    evaluation->setTask(evalTask);
+                    evaluationList.append(evaluation);
+                }
+            } else {
+                qDebug() << "Could not find Task with id " << taskId;
+            }
         }
     }
-
-    return evaluation;
+    qDebug() << "Evaluation List Size: " << evaluationList.size();
+    return evaluationList;
 }
 
 
@@ -337,54 +339,16 @@ bool TaManager::deleteEvaluation(Evaluation* eval) {
 
 
 /**
- * @brief TaManager::addEvaluationToTask
- * @param eval
- * @param task
+ * @brief TaManager::updateTask Update a task and evaluation. The task must have a valid id.
+ * @param task to update, evaluation to update
  * @return
  */
-bool TaManager::addEvaluationToTask(Evaluation* eval, Task* task) {
+bool TaManager::updateTaskAndEvaluation(Task* task) {
     bool added = false;
-
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
-    int taskId = idForTask(task);
-
-    if (taskId != -1) {
-        QSqlQuery evaluationQuery(db);
-        evaluationQuery.prepare("INSERT INTO EVALUATION (rating, comment, taskId) VALUES (?, ?, ?)");
-        evaluationQuery.addBindValue(eval->getRating());
-        evaluationQuery.addBindValue(eval->getComment());
-        evaluationQuery.addBindValue(taskId);
-
-        qDebug() << "Adding Evaluation to DB";
-        added = evaluationQuery.exec();
-        if (added) {
-            qDebug() << "Evaluation Comment " << eval->getComment() << " Added";
-        } else {
-            qDebug() << "Error exec new Task SQL: " << evaluationQuery.lastError().text();
-        }
-
-
-    } else {
-        qDebug() << "The Task could not be found in the DB";
-    }
-
-    return added;
-}
-
-
-
-/**
- * @brief TaManager::updateTask Update a task. The task must have a valid id.
- * @param task to update
- * @return
- */
-bool TaManager::updateTask(Task* task) {
-    bool added = false;
-
-    if (task->getId() > 0) {
-        QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
-
+    int taskId = task->getId();
+    if (taskId > 0) {
         QSqlQuery taskQuery(db);
         taskQuery.prepare("UPDATE TASK SET name=?, description=? WHERE id=?");
         taskQuery.addBindValue(task->getName());
@@ -393,17 +357,30 @@ bool TaManager::updateTask(Task* task) {
 
         qDebug() << "Updating Task " << task->getIdString() << "in DB";
         added = taskQuery.exec();
-        if (added) {
-            qDebug() << "Updated Task" << task->getName();
+
+        QSqlQuery evalQuery1(db);
+        evalQuery1.prepare("SELECT id FROM evaluation WHERE taskid=?");
+        evalQuery1.addBindValue(task->getId());
+        evalQuery1.exec();
+
+        if (evalQuery1.next()) {
+            qDebug() << "Updated Evaluation for Task: " << task->getName();
+            QSqlQuery evalQuery(db);
+            evalQuery.prepare("UPDATE EVALUATION SET rating=?, comment=? WHERE taskid=?");
+            evalQuery.addBindValue(task->getEvaluation()->getRating());
+            evalQuery.addBindValue(task->getEvaluation()->getComment());
+            evalQuery.addBindValue(task->getId());
+            evalQuery.exec();
         } else {
-            qDebug() << "Error exec new Task SQL: " << taskQuery.lastError().text();
+            qDebug() << "Inserting Evaluation for Task: " << task->getName();
+            QSqlQuery evalQuery2(db);
+            evalQuery2.prepare("INSERT into EVALUATION (rating, comment, taskid) values (?, ?, ?)");
+            evalQuery2.addBindValue(task->getEvaluation()->getRating());
+            evalQuery2.addBindValue(task->getEvaluation()->getComment());
+            evalQuery2.addBindValue(task->getId());
+            evalQuery2.exec();
         }
-
-
-    } else {
-        qDebug() << "The task could not be found in the DB";
     }
-
     return added;
 }
 

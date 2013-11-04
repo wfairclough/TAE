@@ -8,6 +8,7 @@
 #include "instructor.h"
 #include "administrator.h"
 #include "task.h"
+#include "evaluation.h"
 #include "course.h"
 
 
@@ -29,9 +30,10 @@ public:
     void sendInstructorListMessage(QString view);
     void sendTaListMessage(QString view);
     void sendTaskForTa(QString view, QString uname);
-    void sendDeleteTaskForTa(QString view, QString taskName, QString username);
+    void sendDeleteTask(QString view, Task* task);
     void sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
-    void sendUpdateTask(Task* task);
+    void sendEvaluationListForTasks(QString view, QList<quint32> taskIds);
+    void sendUpdateTaskAndEvaluation(QString view, Task* task);
 
 signals:
     void recievedErrorResponse(QString errMsg);
@@ -41,8 +43,8 @@ signals:
     void recievedInstructorListResponse(QString view, QList<Instructor*> list);
     void recievedTaListResponse(QString view, QList<TeachingAssistant*> list);
     void recievedTaskListForTaResponse(QString view, QList<Task*> list);
-    void recievedDeleteTaskForTaResponse(QString view, QList<Task*> list);
     void recievedAddTaskForTaResponse(QString view, QList<Task*> list);
+    void recievedEvaluationListForTasksResponse(QString, QList<Evaluation*> list);
 
 
 private slots:

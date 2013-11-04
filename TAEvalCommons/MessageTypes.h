@@ -9,8 +9,7 @@
 #define NEW_TASK_RSP "newTaskRsp"
 #define EDIT_TASK_REQ "editTaskReq"
 #define EDIT_TASK_RSP "editTaskRsp"
-#define DELETE_TASK_FOR_TA_REQ "deleteTaskForTaReq"
-#define DELETE_TASK_FOR_TA_RSP "deleteTaskForTaRsp"
+#define DELETE_TASK_REQ "deleteTaskReq"
 #define ASSIGN_TASK_TO_TA_LIST_REQ "assignTaskToTaListReq"
 #define ASSIGN_TASK_TO_TA_LIST_RSP "assignTaskToTaListRsp"
 #define EVALUATE_TASK_FOR_TA_REQ "evaluateTaskForTaReq"
@@ -39,5 +38,8 @@
 #define INSTRUCTOR_LIST_RSP "instructorListRsp"
 #define TA_LIST_REQ "taListReq"
 #define TA_LIST_RSP "taListRsp"
+#define EVALUATION_LIST_FOR_TASKS_REQ "evaluationListForTasksReq"
+#define EVALUATION_LIST_FOR_TASKS_RSP "evaluationListForTasksRsp"
+#define UPDATE_TASK_AND_EVALUATION_REQ "updateTaskAndEvaluationReq"
 
 #endif // MESSAGETYPES_H

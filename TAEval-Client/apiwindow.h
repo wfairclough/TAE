@@ -11,9 +11,14 @@
 #include "instructor.h"
 #include "task.h"
 #include "course.h"
+#include "evaluation.h"
 
 #define TASK_NAME_COL 0
 #define TASK_DESCRIPTION_COL 1
+#define TASK_EVAL_RATING_COL 2
+#define TASK_EVAL_COMMENT_COL 3
+
+
 #define MANAGE_TASK_VIEW "manageTaskView"
 #define VIEW_COURSE_VIEW "viewCourseView"
 
@@ -47,6 +52,7 @@ private slots:
     void mttaCellClicked(int currentRow, int currentCol);
     void mttaskCellClicked(int currentRow, int currentCol);
     void mtdeleteClicked();
+    void mtupdateClicked();
     void mtcellItemChanged(QTableWidgetItem* item);
     void mttaskTableCellChanged(int row, int column);
     void vcinstructorComboBoxChanged(QString profInfo);
@@ -60,12 +66,14 @@ private:
     void updateViewStyles(QString selectedView);
     void enableButton(QPushButton*& button);
     void disableButton(QPushButton*& button);
+    bool checkEvaluationRating(QString evalRating);
 
     // Initialize the each of the Views
     void initManageTaskView();
     void initViewCourseView();
 
     QMap<quint32, Task*> taskMap;
+    QList<quint32> taskIds;
 
 };
 

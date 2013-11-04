@@ -4,6 +4,8 @@
 #include <QObject>
 #include <course.h>
 #include <task.h>
+#include <evaluation.h>
+#include <QList>
 
 class TaControl : public QObject
 {
@@ -12,9 +14,10 @@ public:
     explicit TaControl(QObject *parent = 0);
     void getTas(QString view);
     void getTaskListForTa(QString view, QString uname);
-    void deleteTaskForTA(QString view, QString taskName, QString username);
+    void getEvaluationListForTasks(QString view, QList<quint32> taskIds);
+    void deleteTask(QString view, Task* task);
     void addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear);
-    void updateTask(Task* task);
+    void updateTaskAndEvaluation(QString view, Task* task);
 
 signals:
     

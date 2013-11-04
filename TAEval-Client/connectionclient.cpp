@@ -190,22 +190,6 @@ void ConnectionClient::bytesReady()
         }
         emit recievedTaskListForTaResponse(view, list);
 
-    } else if (msgType.compare(QString(DELETE_TASK_FOR_TA_RSP)) == 0) {
-        QString view;
-        QList<Task*> list;
-        quint16 listSize = 0;
-        in >> view;
-        in >> listSize;
-        for(int i = 0; i < listSize; i++) {
-            // Find proper place to delete pointers later. Possibly in the view.
-            Task *task = new Task();
-            in >> *task;
-            list << task;
-
-            qDebug() << "[" << DELETE_TASK_FOR_TA_RSP << "] Recieved a Task with the ID == " << task->getId();
-        }
-        emit recievedDeleteTaskForTaResponse(view, list);
-
     } else if (msgType.compare(QString(NEW_TASK_RSP)) == 0) {
         QString view;
         QList<Task*> list;
@@ -222,8 +206,23 @@ void ConnectionClient::bytesReady()
         }
         emit recievedAddTaskForTaResponse(view, list);
 
-    }
+    } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_RSP)) == 0) {
+        QString view;
+        QList<Evaluation*> list;
+        quint16 listSize = 0;
+        in >> view;
+        in >> listSize;
 
+        for(int i = 0; i < listSize; i++) {
+            Evaluation* eval = new Evaluation();
+            in >> *eval;
+            list << eval;
+
+            qDebug() << "[" << EVALUATION_LIST_FOR_TASKS_RSP << "] Recieved an Evaluation with the ID == " << eval->getId() << " and rating: " << eval->getRating();
+        }
+        emit recievedEvaluationListForTasksResponse(view, list);
+
+    }
 
     if (clientSocket.bytesAvailable() > 0) {
         nextBlockSize = 0;
@@ -372,36 +371,19 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname) {
     qDebug() << "Wrote TASK_LIST_FOR_TA_REQ Data to server.";
 }
 
-void ConnectionClient::sendUpdateTask(Task* task) {
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_4_8);
-
-    QString msgType(EDIT_TASK_REQ);
-
-    out << quint16(0) << msgType << "1" << *task;
-
-    out.device()->seek(0);
-    out << quint16(block.size() - sizeof(quint16));
-
-    clientSocket.write(block);
-
-    qDebug() << "Wrote EDIT_TASK_REQ Data to server.";
-}
-
 /**
  * Description: Send a message to server asking to delete Task for a TA
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendDeleteTaskForTa(QString view, QString taskName, QString username) {
+void ConnectionClient::sendDeleteTask(QString view, Task *task) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
-    QString msgType(DELETE_TASK_FOR_TA_REQ);
+    QString msgType(DELETE_TASK_REQ);
 
-    out << quint16(0) << msgType << view << taskName << username;
+    out << quint16(0) << msgType << view << *task;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -436,6 +418,54 @@ void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString 
     clientSocket.write(block);
 
     qDebug() << "Wrote NEW_TASK_REQ Data to server.";
+}
+
+/**
+ * Description: Send a message to server asking for all Evaluations for Tasks
+ * Paramters: view that made the call, ids of Tasks
+ * Returns: Void
+ */
+void ConnectionClient::sendEvaluationListForTasks(QString view, QList<quint32> taskIds) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(EVALUATION_LIST_FOR_TASKS_REQ);
+
+    out << quint16(0) << msgType << view << quint16(taskIds.size());
+
+    foreach (quint32 i, taskIds) {
+        out << i;
+    }
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote " << EVALUATION_LIST_FOR_TASKS_REQ << " Data to server.";
+}
+
+/**
+ * Description: Send a message to server requesting an update for the supplied task and evaluation
+ * Paramters: view that made the call, username of ta that owns the task, the task to be updated, the evaluation to be updated
+ * Returns: Void
+ */
+void ConnectionClient::sendUpdateTaskAndEvaluation(QString view, Task *task) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(UPDATE_TASK_AND_EVALUATION_REQ);
+
+    out << quint16(0) << msgType << view << *task;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote " << UPDATE_TASK_AND_EVALUATION_REQ << " Data to server.";
 }
 
 

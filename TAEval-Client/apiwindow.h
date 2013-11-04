@@ -68,6 +68,7 @@ private:
     void enableButton(QPushButton*& button);
     void disableButton(QPushButton*& button);
     bool checkEvaluationRating(QString evalRating);
+    bool validateTaskFields(QString name, QString description);
 
     // Initialize the each of the Views
     void initManageTaskView();

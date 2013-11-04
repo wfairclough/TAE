@@ -71,6 +71,10 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
                 TeachingAssistant* teachingAssistant = teachingAssistantForId(taId);
                 task->setTeachingAssistant(teachingAssistant);
 
+                Evaluation* eval = fetchEvaluationForTask(task);
+
+                task->setEvaluation(eval);
+
                 qDebug() << "Adding Task " << task->getId() << " named - " << task->getName() << " to list.";
                 list << task;
             }
@@ -80,6 +84,30 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
     }
     return list;
 }
+
+
+Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
+    Evaluation* evaluation;
+
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+
+    QSqlQuery taskQuery(db);
+    taskQuery.prepare("SELECT id, rating, comment  FROM evaluation WHERE taskId=?");
+    taskQuery.addBindValue(task->getId());
+    if (taskQuery.exec()) {
+        while (taskQuery.next()) {
+            int index = 0;
+            evaluation->setId(taskQuery.value(index++).toInt());
+            evaluation->setRating(taskQuery.value(index++).toInt());
+            evaluation->setComment(taskQuery.value(index++).toString());
+        }
+    }
+
+    return evaluation;
+}
+
+
 
 /**
  * @brief TaManager::deleteTaskForTa

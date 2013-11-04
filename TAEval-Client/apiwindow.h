@@ -53,6 +53,7 @@ private slots:
     void mttaskCellClicked(int currentRow, int currentCol);
     void mtdeleteClicked();
     void mtupdateClicked();
+    void mtaddTaskClicked();
     void mtcellItemChanged(QTableWidgetItem* item);
     void mttaskTableCellChanged(int row, int column);
     void vcinstructorComboBoxChanged(QString profInfo);

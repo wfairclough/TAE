@@ -31,6 +31,7 @@ void ApiWindow::initManageTaskView() {
     connect(ui->mt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaskCellClicked(int, int)));
     connect(ui->mt_delete, SIGNAL(released()), this, SLOT(mtdeleteClicked()));
     connect(ui->mt_update, SIGNAL(released()), this, SLOT(mtupdateClicked()));
+    connect(ui->mt_addTask, SIGNAL(released()), this, SLOT(mtaddTaskClicked()));
     connect(ui->mt_taskTable, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(mtcellItemChanged(QTableWidgetItem*)));
     connect(ui->mt_taskTable, SIGNAL(cellChanged(int,int)), this, SLOT(mttaskTableCellChanged(int, int)) );
 
@@ -57,6 +58,7 @@ void ApiWindow::initManageTaskView() {
                                   "font-size: 14pt;"
                                   "font-style: bold;");
     disableButton(ui->mt_delete);
+    disableButton(ui->mt_addTask);
 }
 
 void ApiWindow::initViewCourseView() {
@@ -210,6 +212,7 @@ void ApiWindow::mtinstructorCellClicked(int currentRow, int currentCol){
     ui->mt_taskTable->setRowCount(0);
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    disableButton(ui->mt_addTask);
 }
 
 /**
@@ -222,6 +225,7 @@ void ApiWindow::mttaCellClicked(int currentRow, int currentCol){
     tc.getTaskListForTa(QString(MANAGE_TASK_VIEW),ui->mt_taTable->item(currentRow,2)->text());
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    enableButton(ui->mt_addTask);
 }
 
 /**
@@ -246,6 +250,7 @@ void ApiWindow::mtdeleteClicked() {
     tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    disableButton(ui->mt_addTask);
 }
 
 /**
@@ -277,11 +282,23 @@ void ApiWindow::mtupdateClicked() {
         message.exec();
     }
 
-
-
-
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    disableButton(ui->mt_addTask);
+}
+
+/**
+ * Description: handles everytime mt_addTask is clicked
+ * Paramters: None
+ * Returns: None
+ */
+void ApiWindow::mtaddTaskClicked() {
+    ui->mt_taskTable->insertRow(ui->mt_taskTable->rowCount());
+    int row = ui->mt_taskTable->rowCount()-1;
+    ui->mt_taskTable->setItem(row,TASK_NAME_COL, new QTableWidgetItem(""));
+    ui->mt_taskTable->setItem(row,TASK_DESCRIPTION_COL, new QTableWidgetItem(""));
+    ui->mt_taskTable->setItem(row,TASK_EVAL_RATING_COL, new QTableWidgetItem(""));
+    ui->mt_taskTable->setItem(row,TASK_EVAL_COMMENT_COL, new QTableWidgetItem(""));
 }
 
 /**

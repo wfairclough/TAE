@@ -481,9 +481,16 @@
               </spacer>
              </item>
              <item>
+              <widget class="QPushButton" name="mt_addTask">
+               <property name="text">
+                <string>Add Task</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="mt_update">
                <property name="text">
-                <string>Update Selected Task Info</string>
+                <string>Save Selected Task Info</string>
                </property>
               </widget>
              </item>

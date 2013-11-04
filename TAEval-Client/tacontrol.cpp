@@ -61,6 +61,6 @@ void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QStr
   * Parameters: view that requested info, TA username, task to update, evaluation to update
   * Returns: None
   */
-void TaControl::updateTaskAndEvaluation(QString view, Task *task) {
-    ConnectionClient::getInstance().sendUpdateTaskAndEvaluation(view, task);
+void TaControl::updateTaskAndEvaluation(QString view, Task *task, QString iName, QString taName) {
+    ConnectionClient::getInstance().sendUpdateTaskAndEvaluation(view, task, iName, taName);
 }

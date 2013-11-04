@@ -31,6 +31,7 @@ void ApiWindow::initManageTaskView() {
     connect(ui->mt_taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(mttaskCellClicked(int, int)));
     connect(ui->mt_delete, SIGNAL(released()), this, SLOT(mtdeleteClicked()));
     connect(ui->mt_update, SIGNAL(released()), this, SLOT(mtupdateClicked()));
+    connect(ui->mt_addTask, SIGNAL(released()), this, SLOT(mtaddTaskClicked()));
     connect(ui->mt_taskTable, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(mtcellItemChanged(QTableWidgetItem*)));
     connect(ui->mt_taskTable, SIGNAL(cellChanged(int,int)), this, SLOT(mttaskTableCellChanged(int, int)) );
 
@@ -57,6 +58,7 @@ void ApiWindow::initManageTaskView() {
                                   "font-size: 14pt;"
                                   "font-style: bold;");
     disableButton(ui->mt_delete);
+    disableButton(ui->mt_addTask);
 }
 
 void ApiWindow::initViewCourseView() {
@@ -210,6 +212,7 @@ void ApiWindow::mtinstructorCellClicked(int currentRow, int currentCol){
     ui->mt_taskTable->setRowCount(0);
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    disableButton(ui->mt_addTask);
 }
 
 /**
@@ -222,6 +225,7 @@ void ApiWindow::mttaCellClicked(int currentRow, int currentCol){
     tc.getTaskListForTa(QString(MANAGE_TASK_VIEW),ui->mt_taTable->item(currentRow,2)->text());
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    enableButton(ui->mt_addTask);
 }
 
 /**
@@ -242,10 +246,15 @@ void ApiWindow::mtdeleteClicked() {
     int taskRow = ui->mt_taskTable->currentRow();
     Task* task = taskMap.value(taskRow);
     TaControl tc(this);
-    tc.deleteTask(QString(MANAGE_TASK_VIEW), task);
-    tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    if (task != NULL) {
+        tc.deleteTask(QString(MANAGE_TASK_VIEW), task);
+        tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
+    } else {
+        ui->mt_taskTable->removeRow(ui->mt_taskTable->currentRow());
+    }
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+    enableButton(ui->mt_addTask);
 }
 
 /**
@@ -255,33 +264,70 @@ void ApiWindow::mtdeleteClicked() {
  */
 void ApiWindow::mtupdateClicked() {
     int taskRow = ui->mt_taskTable->currentRow();
-    Task* task = taskMap.value(taskRow);
+    QString iName = ui->mt_instructorTable->item(ui->mt_instructorTable->currentRow(),2)->text();
+    QString taName = ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text();
 
-    task->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
-    task->setDescription(ui->mt_taskTable->item(taskRow, TASK_DESCRIPTION_COL)->text());
-    if(checkEvaluationRating(ui->mt_taskTable->item(taskRow,TASK_EVAL_RATING_COL)->text())){
-        TaControl tc(this);
-        if (task->hasEvaluation()) {
-            task->getEvaluation()->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
-            task->getEvaluation()->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
-        } else {
-            Evaluation* eval = new Evaluation();
-            eval->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
-            eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
-            task->setEvaluation(eval);
-        }
-        tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task);
-    } else {
+    if(!(checkEvaluationRating(ui->mt_taskTable->item(taskRow,TASK_EVAL_RATING_COL)->text()))){
         QMessageBox message(this);
         message.setText("The Rating for the selected task is invalid. It must match one of the following:\n\n 0, 1, 2, 3, 4, 5, None, Poor, Fair, Good, Very Good or Excellent");
         message.exec();
+    } else if (!validateTaskFields(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text(), ui->mt_taskTable->item(taskRow, TASK_DESCRIPTION_COL)->text())) {
+        QMessageBox message(this);
+        message.setText("The Task Name and Description can't be empty");
+        message.exec();
+    } else {
+        enableButton(ui->mt_addTask);
+        Task* task = taskMap.value(taskRow);
+        if (!(task == NULL)) {
+            task->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
+            task->setDescription(ui->mt_taskTable->item(taskRow, TASK_DESCRIPTION_COL)->text());
+            if (task->hasEvaluation()) {
+                task->getEvaluation()->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+                task->getEvaluation()->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+                if (ui->mt_taskTable->item(taskRow,TASK_EVAL_RATING_COL)->text().compare("") == 0) {task->getEvaluation()->setRating("None");}
+            } else {
+                Evaluation* eval = new Evaluation();
+                eval->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+                eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+                task->setEvaluation(eval);
+            }
+            TaControl tc(this);
+            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task, iName, taName);
+        } else {
+            Task* addTask = new Task();
+            addTask->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
+            addTask->setDescription(ui->mt_taskTable->item(taskRow, TASK_DESCRIPTION_COL)->text());
+            if (!ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text().compare("") == 0) {
+                Evaluation* eval = new Evaluation();
+                eval->setRating(ui->mt_taskTable->item(taskRow, TASK_EVAL_RATING_COL)->text());
+                eval->setComment(ui->mt_taskTable->item(taskRow, TASK_EVAL_COMMENT_COL)->text());
+                addTask->setEvaluation(eval);
+            }
+            TaControl tc(this);
+            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, addTask, iName, taName);
+        }
+        TaControl tc(this);
+        tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
     }
-
-
-
 
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
+
+}
+
+/**
+ * Description: handles everytime mt_addTask is clicked
+ * Paramters: None
+ * Returns: None
+ */
+void ApiWindow::mtaddTaskClicked() {
+    ui->mt_taskTable->insertRow(ui->mt_taskTable->rowCount());
+    int row = ui->mt_taskTable->rowCount()-1;
+    ui->mt_taskTable->setItem(row,TASK_NAME_COL, new QTableWidgetItem(""));
+    ui->mt_taskTable->setItem(row,TASK_DESCRIPTION_COL, new QTableWidgetItem(""));
+    ui->mt_taskTable->setItem(row,TASK_EVAL_RATING_COL, new QTableWidgetItem(""));
+    ui->mt_taskTable->setItem(row,TASK_EVAL_COMMENT_COL, new QTableWidgetItem(""));
+    disableButton(ui->mt_addTask);
 }
 
 /**
@@ -352,7 +398,7 @@ void ApiWindow::disableButton(QPushButton *&button) {
  * Returns: true if it matches a valid rating or false if it doesn't
  */
 bool ApiWindow::checkEvaluationRating(QString evalRating) {
-    evalRating = evalRating.toLower();
+    evalRating = evalRating.toLower().trimmed();
     if (evalRating.compare("0") == 0) {
         return true;
     } else if (evalRating.compare("1") == 0) {
@@ -377,9 +423,27 @@ bool ApiWindow::checkEvaluationRating(QString evalRating) {
         return true;
     } else if (evalRating.compare("excellent") == 0) {
         return true;
+    } else if (evalRating.compare("") == 0) {
+        return true;
     } else {
         return false;
     }
+}
+
+/**
+ * Description: Checks to see if the Task Fields are valid
+ * Paramters: Task object to check
+ * Returns: true if fields are valid otherwise false
+ */
+bool ApiWindow::validateTaskFields(QString name, QString description) {
+    name=name.trimmed();
+    description = description.trimmed();
+    if (name.compare("") == 0 || description.compare("") == 0) {
+        return false;
+    } else {
+        return true;
+    }
+
 }
 
 /**

@@ -286,12 +286,14 @@ void ConnectionThread::readClient()
     } else if (msgType.compare(QString(UPDATE_TASK_AND_EVALUATION_REQ)) == 0) {
         QString view;
         Task* task = new Task(this);
-        in >> view >> *task;
+        QString iName;
+        QString taName;
+        in >> view >> *task >> iName >> taName;
 
         qDebug() << "[UPDATE_TASK_AND_EVALUATION_REQ]";
 
         TaManager tm;
-        tm.updateTaskAndEvaluation(task);
+        tm.updateTaskAndEvaluation(task, iName, taName);
 
     } else if (msgType.compare(QString("test")) == 0) {
         TeachingAssistant i;

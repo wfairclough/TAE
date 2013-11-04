@@ -20,7 +20,7 @@ public:
     bool deleteEvaluationForTask(int taskId, Evaluation* eval);
     bool deleteEvaluation(Evaluation* eval);
     bool deleteTask(Task* task);
-    bool updateTaskAndEvaluation(Task* task);
+    bool updateTaskAndEvaluation(Task* task, QString iName, QString taName);
 
 signals:
     

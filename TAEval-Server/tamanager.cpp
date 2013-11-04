@@ -343,11 +343,15 @@ bool TaManager::deleteEvaluation(Evaluation* eval) {
  * @param task to update, evaluation to update
  * @return
  */
-bool TaManager::updateTaskAndEvaluation(Task* task) {
+bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taName) {
     bool added = false;
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     int taskId = task->getId();
+    int iId = idForUsername(iName);
+    int cId = -1;
+    int taId = idForUsername(taName);
+
     if (taskId > 0) {
         QSqlQuery taskQuery(db);
         taskQuery.prepare("UPDATE TASK SET name=?, description=? WHERE id=?");
@@ -356,30 +360,58 @@ bool TaManager::updateTaskAndEvaluation(Task* task) {
         taskQuery.addBindValue(task->getId());
 
         qDebug() << "Updating Task " << task->getIdString() << "in DB";
-        added = taskQuery.exec();
-
-        QSqlQuery evalQuery1(db);
-        evalQuery1.prepare("SELECT id FROM evaluation WHERE taskid=?");
-        evalQuery1.addBindValue(task->getId());
-        evalQuery1.exec();
-
-        if (evalQuery1.next()) {
-            qDebug() << "Updated Evaluation for Task: " << task->getName();
-            QSqlQuery evalQuery(db);
-            evalQuery.prepare("UPDATE EVALUATION SET rating=?, comment=? WHERE taskid=?");
-            evalQuery.addBindValue(task->getEvaluation()->getRating());
-            evalQuery.addBindValue(task->getEvaluation()->getComment());
-            evalQuery.addBindValue(task->getId());
-            evalQuery.exec();
-        } else {
-            qDebug() << "Inserting Evaluation for Task: " << task->getName();
-            QSqlQuery evalQuery2(db);
-            evalQuery2.prepare("INSERT into EVALUATION (rating, comment, taskid) values (?, ?, ?)");
-            evalQuery2.addBindValue(task->getEvaluation()->getRating());
-            evalQuery2.addBindValue(task->getEvaluation()->getComment());
-            evalQuery2.addBindValue(task->getId());
-            evalQuery2.exec();
+        taskQuery.exec();
+    } else {
+        QSqlQuery courseQuery(db);
+        courseQuery.prepare("SELECT id FROM course WHERE instructorid=?");
+        courseQuery.addBindValue(iId);
+        courseQuery.exec();
+        if (courseQuery.next()) {
+            cId = courseQuery.value(0).toInt();
         }
+
+        QSqlQuery taskInQuery(db);
+        taskInQuery.prepare("INSERT into TASK (name, description, taid, courseid) VALUES (?, ?, ?, ?)");
+        taskInQuery.addBindValue(task->getName());
+        taskInQuery.addBindValue(task->getDescription());
+        taskInQuery.addBindValue(idForUsername(taName));
+        taskInQuery.addBindValue(cId);
+        taskInQuery.exec();
+
+    }
+
+    QSqlQuery evalQuery1(db);
+    evalQuery1.prepare("SELECT id FROM evaluation WHERE taskid=?");
+    evalQuery1.addBindValue(task->getId());
+    evalQuery1.exec();
+    if (evalQuery1.next()) {
+        qDebug() << "Updated Evaluation for Task: " << task->getName();
+        QSqlQuery evalQuery(db);
+        evalQuery.prepare("UPDATE EVALUATION SET rating=?, comment=? WHERE taskid=?");
+        evalQuery.addBindValue(task->getEvaluation()->getRating());
+        evalQuery.addBindValue(task->getEvaluation()->getComment());
+        evalQuery.addBindValue(task->getId());
+        evalQuery.exec();
+    }
+    if (task->hasEvaluation()) {
+        QSqlQuery refreshTaskQuery(db);
+        refreshTaskQuery.prepare("SELECT id FROM task WHERE name=? and description=? and taid=? and courseid=?");
+        refreshTaskQuery.addBindValue(task->getName());
+        refreshTaskQuery.addBindValue(task->getDescription());
+        refreshTaskQuery.addBindValue(taId);
+        refreshTaskQuery.addBindValue(cId);
+        refreshTaskQuery.exec();
+        if (refreshTaskQuery.next()) {
+            task->setId(refreshTaskQuery.value(0).toInt());
+        }
+
+        qDebug() << "Inserting Evaluation for Task: " << task->getName();
+        QSqlQuery evalQuery2(db);
+        evalQuery2.prepare("INSERT into EVALUATION (rating, comment, taskid) values (?, ?, ?)");
+        evalQuery2.addBindValue(task->getEvaluation()->getRating());
+        evalQuery2.addBindValue(task->getEvaluation()->getComment());
+        evalQuery2.addBindValue(task->getId());
+        evalQuery2.exec();
     }
     return added;
 }

@@ -250,7 +250,6 @@ void ApiWindow::mtdeleteClicked() {
     tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
-    disableButton(ui->mt_addTask);
 }
 
 /**
@@ -260,6 +259,8 @@ void ApiWindow::mtdeleteClicked() {
  */
 void ApiWindow::mtupdateClicked() {
     int taskRow = ui->mt_taskTable->currentRow();
+    QString iName = ui->mt_instructorTable->item(ui->mt_instructorTable->currentRow(),2)->text();
+    QString taName = ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text();
 
     if(!(checkEvaluationRating(ui->mt_taskTable->item(taskRow,TASK_EVAL_RATING_COL)->text()))){
         QMessageBox message(this);
@@ -270,6 +271,7 @@ void ApiWindow::mtupdateClicked() {
         message.setText("The Task Name and Description can't be empty");
         message.exec();
     } else {
+        enableButton(ui->mt_addTask);
         Task* task = taskMap.value(taskRow);
         if (!(task == NULL)) {
             task->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
@@ -285,7 +287,7 @@ void ApiWindow::mtupdateClicked() {
                 task->setEvaluation(eval);
             }
             TaControl tc(this);
-            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task);
+            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, task, iName, taName);
         } else {
             Task* addTask = new Task();
             addTask->setName(ui->mt_taskTable->item(taskRow, TASK_NAME_COL)->text());
@@ -297,7 +299,7 @@ void ApiWindow::mtupdateClicked() {
                 addTask->setEvaluation(eval);
             }
             TaControl tc(this);
-            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, addTask);
+            tc.updateTaskAndEvaluation(MANAGE_TASK_VIEW, addTask, iName, taName);
         }
         TaControl tc(this);
         tc.getTaskListForTa(MANAGE_TASK_VIEW, ui->mt_taTable->item(ui->mt_taTable->currentRow(),2)->text());
@@ -305,7 +307,7 @@ void ApiWindow::mtupdateClicked() {
 
     disableButton(ui->mt_delete);
     disableButton(ui->mt_update);
-    disableButton(ui->mt_addTask);
+
 }
 
 /**

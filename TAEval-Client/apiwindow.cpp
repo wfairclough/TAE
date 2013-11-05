@@ -189,6 +189,9 @@ void ApiWindow::handleManageTask() {
     updateViewStyles(MANAGE_TASK_VIEW);
     InstructorControl ic(this);
     ic.getInstructors(QString(MANAGE_TASK_VIEW));
+    disableButton(ui->mt_addTask);
+    disableButton(ui->mt_delete);
+    disableButton(ui->mt_update);
 }
 
 /**

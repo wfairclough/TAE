@@ -122,7 +122,7 @@ INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHY
 -- Add a TA to a Couse
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013));
-INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=0 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=2 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='ederavi'), (SELECT id from COURSE where name="COMP3005" and semester=0 and year=2013));
 
 -- Add a Task to a TA
@@ -130,12 +130,14 @@ INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark A
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Create Assignment 1", "Make an Assignment", (SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Create A2", "Work Hard", (SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=0 and year=2013) );
-INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Field Trip", "Organize a Trip to the Observatory", (SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=0 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Field Trip", "Organize a Trip to the Observatory", (SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=2 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Projects", "Mark the Projects from your Section", (SELECT id from USER where username='ederavi'), (SELECT id from COURSE where name="COMP3005" and semester=0 and year=2013) );
 
 -- Add Evaluation to Task
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (5, "You are doing very well", 4);
-INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (3, "Tokyo Drift", 2);
+INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (3, "Nicely Done", 2);
+INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (1, "Please Try HARDER", 5);
+
 
 
 end transaction;

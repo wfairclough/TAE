@@ -114,7 +114,9 @@ INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COM
 --Insert a test Course
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP3005", 0, 2013, (SELECT id from USER where username='ldnel') );
 --Insert a test Course
-INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1901", 0, 2013, (SELECT id from USER where username='dmaybury') );
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1901", 2, 2013, (SELECT id from USER where username='dmaybury') );
+--Insert a test Course
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1901", 1, 2012, (SELECT id from USER where username='dmaybury') );
 
 
 -- Add a TA to a Couse

@@ -34,7 +34,7 @@ public:
     int getSemesterTypeInt() const { return semester; }
     int getYear() const { return year; }
     QString getYearString() const { return QString::number(year); }
-    QString getName() const { return name;}
+    QString getName() const { return name; }
     Instructor* getInstructor() const { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() const { return taList; }
     bool hasInstructor() const { return instructorSet; }
@@ -48,6 +48,19 @@ public:
     void setSemesterType(int sem) { semester = static_cast<Semester::semester_t>(sem); }
     void setYear(int y) { year = y; }
 
+
+    static Semester::semester_t semesterTypeForString(QString value) {
+        value = value.toLower();
+
+        if (value.compare(QString("fall"))) {
+            return Semester::FALL;
+        } else if (value.compare(QString("winter"))) {
+            return Semester::WINTER;
+        } else if (value.compare(QString("summer"))) {
+            return Semester::SUMMER;
+        }
+        return Semester::FALL;
+    }
 
 
     // Persistable

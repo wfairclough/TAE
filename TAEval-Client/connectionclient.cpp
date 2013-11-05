@@ -137,7 +137,7 @@ void ConnectionClient::bytesReady()
             in >> *course;
             list << course;
 
-            qDebug() << "[" << COURSE_LIST_FOR_INSTRUCTOR_RSP << "] Recieved a Course with the Sem == " << course->getName() << course->getSemesterTypeString() << " " << course->getYear();
+            qDebug() << "[" << COURSE_LIST_FOR_INSTRUCTOR_RSP << "] Recieved a Course with the Sem == " << course->getName() << course->getSemesterTypeString() << " " << course->getYear() << "  " << course->getSemesterTypeInt();
         }
         emit recievedCourseListForInstructorResponse(view, list);
 

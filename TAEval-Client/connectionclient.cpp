@@ -124,7 +124,10 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << TA_LIST_FOR_INSTRUCTOR_RSP << "] Recieved a TA with the ID == " << ta->getId();
         }
-        emit recievedTaListForInstructorResponse(view, list);
+//        emit recievedTaListForInstructorResponse(view, list);
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateTaListForInstructor(list);
+        }
 
     } else if (msgType.compare(QString(COURSE_LIST_FOR_INSTRUCTOR_RSP)) == 0){
         QString view;
@@ -139,7 +142,10 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << COURSE_LIST_FOR_INSTRUCTOR_RSP << "] Recieved a Course with the Sem == " << course->getName() << course->getSemesterTypeString() << " " << course->getYear() << "  " << course->getSemesterTypeInt();
         }
-        emit recievedCourseListForInstructorResponse(view, list);
+//        emit recievedCourseListForInstructorResponse(view, list);
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateCourseListForInstructor(list);
+        }
 
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
@@ -156,7 +162,10 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << INSTRUCTOR_LIST_RSP << "] Recieved a Instructor with the ID == " << prof->getId();
         }
-        emit recievedInstructorListResponse(view, list);
+//        emit recievedInstructorListResponse(view, list);
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateInstructorList(list);
+        }
 
     } else if (msgType.compare(QString(TA_LIST_RSP)) == 0) {
         QString view;
@@ -172,7 +181,10 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << TA_LIST_RSP << "] Recieved a TA with the ID == " << ta->getId();
         }
-        emit recievedTaListResponse(view, list);
+//        emit recievedTaListResponse(view, list);
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateTaList(list);
+        }
 
     } else if (msgType.compare(QString(TASK_LIST_FOR_TA_RSP)) == 0) {
         QString view;
@@ -188,7 +200,10 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << TASK_LIST_FOR_TA_RSP << "] Recieved a Task with the ID == " << task->getId();
         }
-        emit recievedTaskListForTaResponse(view, list);
+//        emit recievedTaskListForTaResponse(view, list);
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateTaskListForTa(list);
+        }
 
     } else if (msgType.compare(QString(NEW_TASK_RSP)) == 0) {
         QString view;
@@ -204,7 +219,10 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << NEW_TASK_RSP << "] Recieved a Task with the ID == " << task->getId();
         }
-        emit recievedAddTaskForTaResponse(view, list);
+//        emit recievedAddTaskForTaResponse(view, list);
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateAddTaskForTa(list);
+        }
 
     } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_RSP)) == 0) {
         QString view;
@@ -220,8 +238,11 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << EVALUATION_LIST_FOR_TASKS_RSP << "] Recieved an Evaluation with the ID == " << eval->getId() << " and rating: " << eval->getRating();
         }
-        emit recievedEvaluationListForTasksResponse(view, list);
+//        emit recievedEvaluationListForTasksResponse(view, list);
 
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateEvaluationListForTasks(list);
+        }
     }
 
     if (clientSocket.bytesAvailable() > 0) {
@@ -493,6 +514,23 @@ void ConnectionClient::connectionClosedByServer()
 void ConnectionClient::closeConnection()
 {
     clientSocket.close();
+}
+
+/**
+ * @brief ConnectionClient::subscribe Add subscribers to be updated by events
+ * @param subscriber
+ */
+void ConnectionClient::subscribe(AbstractSubscriber* subscriber) {
+    subscriberList << subscriber;
+}
+
+/**
+ * @brief ConnectionClient::unsubscribe Remove subscriber from being updated
+ * @param subscriber
+ * @return
+ */
+bool ConnectionClient::unsubscribe(AbstractSubscriber* subscriber) {
+    subscriberList.remove(subscriber);
 }
 
 

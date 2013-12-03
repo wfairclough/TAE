@@ -12,6 +12,8 @@
 #include "task.h"
 #include "course.h"
 #include "evaluation.h"
+#include "abstractsubscriber.h"
+
 
 #define TASK_NAME_COL 0
 #define TASK_DESCRIPTION_COL 1
@@ -28,13 +30,22 @@ namespace Ui {
 class ApiWindow;
 }
 
-class ApiWindow : public QMainWindow
+class ApiWindow : public QMainWindow, public AbstractSubscriber
 {
     Q_OBJECT
 
 public:
     explicit ApiWindow(QWidget *parent = 0);
     ~ApiWindow();
+
+    void updateLogin(User* user);
+    void updateTaListForInstructor(QList<TeachingAssistant*> list);
+    void updateCourseListForInstructor(QList<Course*> list);
+    void updateInstructorList(QList<Instructor*> list);
+    void updateTaList(QList<TeachingAssistant*> list);
+    void updateTaskListForTa(QList<Task*> list);
+    void updateAddTaskForTa(QList<Task*> list);
+    void updateEvaluationListForTasks(QList<Evaluation*> list);
 
 public slots:
     void recievedTaListForInstructor(QString view, QList<TeachingAssistant*> list);

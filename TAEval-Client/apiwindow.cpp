@@ -513,3 +513,91 @@ ApiWindow::~ApiWindow()
 {
     delete ui;
 }
+
+
+
+void ApiWindow::updateLogin(User* user) {}
+
+void ApiWindow::updateTaListForInstructor(QList<TeachingAssistant*> list) {
+
+    ui->mt_taTable->setRowCount(0);
+    foreach (TeachingAssistant* ta, list) {
+        qDebug() << "TA Username: " << ta->getUsername();
+        int row = ui->mt_taTable->rowCount();
+        ui->mt_taTable->insertRow(row);
+        ui->mt_taTable->setItem(row, 0, new QTableWidgetItem(ta->getFirstName()));
+        ui->mt_taTable->setItem(row, 1, new QTableWidgetItem(ta->getLastName()));
+        ui->mt_taTable->setItem(row, 2, new QTableWidgetItem(ta->getUsername()));
+    }
+
+}
+
+void ApiWindow::updateCourseListForInstructor(QList<Course*> list) {
+    ui->vc_courseTable->setRowCount(0);
+    foreach (Course* course, list) {
+        qDebug() << "Course Name:" << course->getName();
+        int row = ui->vc_courseTable->rowCount();
+        ui->vc_courseTable->insertRow(row);
+        ui->vc_courseTable->setItem(row, 0, new QTableWidgetItem(course->getName()));
+        ui->vc_courseTable->setItem(row, 1, new QTableWidgetItem(course->getSemesterTypeString()));
+        ui->vc_courseTable->setItem(row, 2, new QTableWidgetItem(QString::number(course->getYear())));
+    }
+}
+
+void ApiWindow::updateInstructorList(QList<Instructor*> list) {
+
+    QStringList profList;
+
+    ui->mt_instructorTable->setRowCount(0);
+    foreach (Instructor* prof, list) {
+        qDebug() << "Instructor Username: " << prof->getUsername();
+        int row = ui->mt_instructorTable->rowCount();
+        ui->mt_instructorTable->insertRow(row);
+        ui->mt_instructorTable->setItem(row, 0, new QTableWidgetItem(prof->getFirstName()));
+        ui->mt_instructorTable->setItem(row, 1, new QTableWidgetItem(prof->getLastName()));
+        ui->mt_instructorTable->setItem(row, 2, new QTableWidgetItem(prof->getUsername()));
+
+        profList.append(prof->getUsername() + " - " + prof->getFirstName() + " " + prof->getLastName());
+    }
+
+    ui->vc_instructorComboBox->clear();
+    ui->vc_instructorComboBox->addItems(profList);
+
+}
+
+void ApiWindow::updateTaList(QList<TeachingAssistant*> list) {
+
+}
+
+void ApiWindow::updateTaskListForTa(QList<Task*> list) {
+    ui->mt_taskTable->setRowCount(0);
+
+    taskMap.clear();
+    foreach (Task* task, list) {
+//        qDebug() << "View: " << view << " Task name: " << task->getName() << " Task ID: " << task->getId();
+        // Insert Task and Evaluation data into table
+        int row = ui->mt_taskTable->rowCount();
+        taskMap.insert(row, task);
+
+        ui->mt_taskTable->insertRow(row);
+        ui->mt_taskTable->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
+        ui->mt_taskTable->setItem(row, TASK_DESCRIPTION_COL, new QTableWidgetItem(task->getDescription()));
+        if (task->hasEvaluation()) {
+            ui->mt_taskTable->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(task->getEvaluation()->getRatingString()));
+            ui->mt_taskTable->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(task->getEvaluation()->getComment()));
+        } else {
+            ui->mt_taskTable->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(Evaluation::ratingForEnum(RATING::NONE)));
+            ui->mt_taskTable->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(QString("")));
+        }
+
+    }
+}
+
+void ApiWindow::updateAddTaskForTa(QList<Task*> list) {
+
+}
+
+void ApiWindow::updateEvaluationListForTasks(QList<Evaluation*> list) {
+
+}
+

@@ -15,13 +15,17 @@ SOURCES += main.cpp\
     connectionclient.cpp \
     apiwindow.cpp \
     instructorcontrol.cpp \
-    tacontrol.cpp
+    tacontrol.cpp \
+    abstractpublisher.cpp \
+    abstractsubscriber.cpp
 
 HEADERS  += loginwindow.h \
     connectionclient.h \
     apiwindow.h \
     instructorcontrol.h \
-    tacontrol.h
+    tacontrol.h \
+    abstractpublisher.h \
+    abstractsubscriber.h
 
 FORMS    += loginwindow.ui \
     apiwindow.ui

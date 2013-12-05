@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QList>
+#include <QSet>
+#include <abstractpublisher.h>
+#include <abstractsubscriber.h>
 #include "teachingassistant.h"
 #include "instructor.h"
 #include "administrator.h"
@@ -12,7 +15,7 @@
 #include "course.h"
 
 
-class ConnectionClient : public QObject
+class ConnectionClient : public AbstractPublisher
 {
     Q_OBJECT
 public:
@@ -22,7 +25,11 @@ public:
         return instance;
     }
 
-    void connectToServer();
+    // Abstract Publisher Functions
+    void subscribe(AbstractSubscriber* subscriber);
+    bool unsubscribe(AbstractSubscriber* subscriber);
+
+    void connectToServer(QString host, quint16 port);
 
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString view, QString username);
@@ -61,6 +68,7 @@ private:
     quint16 nextBlockSize;
 
     void closeConnection();
+    QSet<AbstractSubscriber*> subscriberList;
     
 };
 

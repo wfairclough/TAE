@@ -1,5 +1,7 @@
 #include <QtGui/QApplication>
-#include "apiwindow.h"
+#include "loginwindow.h"
+#include <connectionclient.h>
+
 
 /**
  * Description: Main Entry point to the TAEval-Client Application
@@ -9,7 +11,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    ApiWindow w;
+    LoginWindow w;
+
+    ConnectionClient::getInstance().subscribe(&w);
+
     w.show();
     
 

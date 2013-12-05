@@ -27,6 +27,8 @@ private slots:
     void didRecieveLoginResponse(User* user);
     void sendLoginRequest();
     void saveSettings();
+    void quitTriggered();
+    void settingsTriggered();
     void on_usernameLineEdit_lostFocus();
 
 private:

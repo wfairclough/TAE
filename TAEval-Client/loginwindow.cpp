@@ -14,6 +14,8 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(sendLoginRequest()));
+    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quitTriggered()));
+    connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(settingsTriggered()));
 
     QRegExp emailRegExp(".*@.*\\..*");
 
@@ -115,6 +117,15 @@ void LoginWindow::saveSettings()
 
 }
 
+
+
+void LoginWindow::quitTriggered() {
+    QCoreApplication::exit();
+}
+
+void LoginWindow::settingsTriggered() {
+
+}
 
 
 

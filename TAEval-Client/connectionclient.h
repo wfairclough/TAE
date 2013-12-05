@@ -29,7 +29,7 @@ public:
     void subscribe(AbstractSubscriber* subscriber);
     bool unsubscribe(AbstractSubscriber* subscriber);
 
-    void connectToServer();
+    void connectToServer(QString host, quint16 port);
 
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString view, QString username);

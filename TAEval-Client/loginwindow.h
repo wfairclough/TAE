@@ -26,13 +26,15 @@ public:
 private slots:
     void didRecieveLoginResponse(User* user);
     void sendLoginRequest();
-    void saveSettings();
+    void loadSettings();
     void quitTriggered();
     void settingsTriggered();
     void on_usernameLineEdit_lostFocus();
 
 private:
     Ui::LoginWindow *ui;
+    QString host;
+    quint16 port;
 
 };
 

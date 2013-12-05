@@ -1,6 +1,8 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
 #include "connectionclient.h"
+#include "settingsdialog.h"
+#include "settings.h"
 
 /**
  * Description: Constructor for the LoginWindow UI
@@ -22,7 +24,12 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->usernameLineEdit->setValidator(new QRegExpValidator(emailRegExp, this));
     ui->logo->setStyleSheet("background-image: url(Resources/taeval.png)");
 
-    ConnectionClient::getInstance().connectToServer();
+    loadSettings();
+
+    if (host.compare("") == 0)
+        qDebug() << "No settings are set.";
+    else
+        ConnectionClient::getInstance().connectToServer(host, port);
 }
 
 /**
@@ -98,7 +105,7 @@ void LoginWindow::didRecieveLoginResponse(User* user) {
 
 }
 
-void LoginWindow::saveSettings()
+void LoginWindow::loadSettings()
 {
     QString settingFileName;
 
@@ -111,9 +118,17 @@ void LoginWindow::saveSettings()
 #endif
 
     QSettings s(settingFileName, QSettings::NativeFormat);
+    host = s.value("connection/host").toString();
 
-    s.setValue("connection/host", ui->usernameLineEdit->text());
-    s.setValue("connection/port", 7290);
+    qDebug() << "Host: " << host;
+
+//    s.setValue("connection/host", ui->usernameLineEdit->text());
+//    s.setValue("connection/port", 7290);
+
+    host = s.value(CONNECTION_HOST).toString();
+    port = s.value(CONNECTION_PORT).toInt();
+
+    qDebug() << "Host: " << host << "   Port: " << port;
 
 }
 
@@ -124,7 +139,9 @@ void LoginWindow::quitTriggered() {
 }
 
 void LoginWindow::settingsTriggered() {
+    SettingsDialog settingsDialog;
 
+    settingsDialog.exec();
 }
 
 

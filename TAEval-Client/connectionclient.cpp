@@ -21,10 +21,10 @@ ConnectionClient::ConnectionClient()
  * Paramters:
  * Returns: Void
  */
-void ConnectionClient::connectToServer()
+void ConnectionClient::connectToServer(QString host, quint16 port)
 {
     qDebug() << "Connecting to server";
-    clientSocket.connectToHost("localhost", 7290);
+    clientSocket.connectToHost(host, port);
 
     nextBlockSize = 0;
 }

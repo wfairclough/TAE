@@ -10,7 +10,7 @@ ApiWindow::ApiWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ConnectionClient::getInstance().connectToServer();
+//    ConnectionClient::getInstance().connectToServer(); // Moved to Login Window
 
     initManageTaskView();
     initViewCourseView();

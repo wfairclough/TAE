@@ -31,8 +31,7 @@ HEADERS  += loginwindow.h \
     abstractsubscriber.h \
     tawindow.h \
     instructorwindow.h \
-    settingsdialog.h \
-    settings.h
+    settingsdialog.h
 
 FORMS    += loginwindow.ui \
     apiwindow.ui \

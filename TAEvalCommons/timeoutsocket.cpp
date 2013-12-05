@@ -39,5 +39,6 @@ void TimeoutSocket::connectedToHost() {
 void TimeoutSocket::timeoutSlot() {
     emit networkTimeout();
     disconnect(mAuthTimeout, SIGNAL(timeout()), this, SLOT(timeoutSlot()));
+    this->disconnectFromHost();
     close();
 }

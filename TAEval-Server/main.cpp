@@ -16,13 +16,7 @@ int main(int argc, char *argv[])
 
     QString settingFileName;
 
-#if defined(Q_OS_DARWIN)
-    settingFileName.append("taeval-server.plist");
-#elif defined(Q_OS_UNIX)
-    settingFileName.append("taeval-server.cfg");
-#else
-#error "We don't support that version yet..."
-#endif
+    settingFileName.append(SERVER_SETTINGS_FILE_NAME);
 
     QSettings s(settingFileName, QSettings::NativeFormat);
 

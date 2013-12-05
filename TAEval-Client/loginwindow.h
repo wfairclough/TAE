@@ -26,10 +26,11 @@ public:
     void connectionNetworkTimeout();
     void connectionSuccess();
 
+    void loadSettings();
+
 private slots:
     void didRecieveLoginResponse(User* user);
     void sendLoginRequest();
-    void loadSettings();
     void quitTriggered();
     void settingsTriggered();
     void on_usernameLineEdit_lostFocus();

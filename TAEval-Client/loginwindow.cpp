@@ -25,10 +25,9 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->logo->setStyleSheet("background-image: url(Resources/taeval.png)");
     ui->loginButton->setEnabled(false);
 
-    // Load the settings before trying to connect to the server
+    // Load the settings to connect to the server
     loadSettings();
 
-    ConnectionClient::getInstance().connectToServer(host, port);
 }
 
 /**
@@ -119,19 +118,14 @@ void LoginWindow::connectionNetworkTimeout()
 void LoginWindow::connectionSuccess()
 {
     ui->loginButton->setEnabled(true);
+    qDebug() << "Login window connection successful";
 }
 
 void LoginWindow::loadSettings()
 {
     QString settingFileName;
 
-#if defined(Q_OS_DARWIN)
-    settingFileName.append("taeval.plist");
-#elif defined(Q_OS_UNIX)
-    settingFileName.append("taeval.cfg");
-#else
-#error "We don't support that version yet..."
-#endif
+    settingFileName.append(CLIENT_SETTINGS_FILE_NAME);
 
     QSettings s(settingFileName, QSettings::NativeFormat);
     if (s.contains(CONNECTION_HOST)) {
@@ -152,6 +146,9 @@ void LoginWindow::loadSettings()
         qDebug() << "No post configured using default " << port;
     }
 
+
+    ConnectionClient::getInstance().connectToServer(host, port);
+
 }
 
 
@@ -161,7 +158,7 @@ void LoginWindow::quitTriggered() {
 }
 
 void LoginWindow::settingsTriggered() {
-    SettingsDialog settingsDialog;
+    SettingsDialog settingsDialog(this);
 
     settingsDialog.exec();
 }

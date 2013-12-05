@@ -18,6 +18,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
     QRegExp emailRegExp(".*@.*\\..*");
 
     ui->usernameLineEdit->setValidator(new QRegExpValidator(emailRegExp, this));
+    ui->logo->setStyleSheet("background-image: url(Resources/dharma.png)");
 
     ConnectionClient::getInstance().connectToServer();
 }

@@ -13,14 +13,14 @@ class AbstractSubscriber
 public:
     AbstractSubscriber();
 
-    virtual void updateLogin(User* user) = 0;
-    virtual void updateTaListForInstructor(QList<TeachingAssistant*> list) = 0;
-    virtual void updateCourseListForInstructor(QList<Course*> list) = 0;
-    virtual void updateInstructorList(QList<Instructor*> list) = 0;
-    virtual void updateTaList(QList<TeachingAssistant*> list) = 0;
-    virtual void updateTaskListForTa(QList<Task*> list) = 0;
-    virtual void updateAddTaskForTa(QList<Task*> list) = 0;
-    virtual void updateEvaluationListForTasks(QList<Evaluation*> list) = 0;
+    virtual void updateLogin(User* user) {}
+    virtual void updateTaListForInstructor(QList<TeachingAssistant*> list) {}
+    virtual void updateCourseListForInstructor(QList<Course*> list) {}
+    virtual void updateInstructorList(QList<Instructor*> list) {}
+    virtual void updateTaList(QList<TeachingAssistant*> list) {}
+    virtual void updateTaskListForTa(QList<Task*> list) {}
+    virtual void updateAddTaskForTa(QList<Task*> list) {}
+    virtual void updateEvaluationListForTasks(QList<Evaluation*> list) {}
 
 };
 

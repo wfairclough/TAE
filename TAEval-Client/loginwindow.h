@@ -9,12 +9,13 @@
 #include "instructor.h"
 #include "teachingassistant.h"
 #include "administrator.h"
+#include "abstractsubscriber.h"
 
 namespace Ui {
 class LoginWindow;
 }
 
-class LoginWindow : public QMainWindow
+class LoginWindow : public QMainWindow, public AbstractSubscriber
 {
     Q_OBJECT
 

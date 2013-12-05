@@ -21,8 +21,7 @@ SOURCES += main.cpp \
     dbcoordinator.cpp \
     tamanager.cpp \
     instructormanager.cpp \
-    dataaccessmanager.cpp \
-    testtamanager.cpp
+    dataaccessmanager.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons
@@ -38,5 +37,4 @@ HEADERS += \
     dbcoordinator.h \
     tamanager.h \
     instructormanager.h \
-    dataaccessmanager.h \
-    testtamanager.h
+    dataaccessmanager.h

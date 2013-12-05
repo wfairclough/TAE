@@ -14,6 +14,8 @@ public:
     AbstractSubscriber();
 
     virtual void updateLogin(User* user) {}
+    virtual void connectionNetworkTimeout() {}
+    virtual void connectionSuccess() {}
     virtual void updateTaListForInstructor(QList<TeachingAssistant*> list) {}
     virtual void updateCourseListForInstructor(QList<Course*> list) {}
     virtual void updateInstructorList(QList<Instructor*> list) {}

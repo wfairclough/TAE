@@ -23,6 +23,9 @@ public:
     explicit LoginWindow(QWidget *parent = 0);
     ~LoginWindow();
 
+    void connectionNetworkTimeout();
+    void connectionSuccess();
+
 private slots:
     void didRecieveLoginResponse(User* user);
     void sendLoginRequest();

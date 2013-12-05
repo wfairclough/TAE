@@ -13,6 +13,7 @@
 #include "task.h"
 #include "evaluation.h"
 #include "course.h"
+#include "timeoutsocket.h"
 
 
 class ConnectionClient : public AbstractPublisher
@@ -58,13 +59,14 @@ private slots:
     void connectedToHost();
     void connectionClosedByServer();
     void bytesReady();
+    void recievedNetworkTimeout();
 
 private:
     ConnectionClient();
     ConnectionClient(ConnectionClient const&);
     void operator=(ConnectionClient const&);
 
-    QTcpSocket clientSocket;
+    TimeoutSocket clientSocket;
     quint16 nextBlockSize;
 
     void closeConnection();

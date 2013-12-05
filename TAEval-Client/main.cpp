@@ -16,8 +16,6 @@ int main(int argc, char *argv[])
     ConnectionClient::getInstance().subscribe(&w);
 
     w.show();
-    
-
 
     return a.exec();
 }

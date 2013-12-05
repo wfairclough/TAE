@@ -12,8 +12,7 @@ ConnectionClient::ConnectionClient()
     connect(&clientSocket, SIGNAL(connected()), this, SLOT(connectedToHost()));
     connect(&clientSocket, SIGNAL(disconnected()), this, SLOT(connectionClosedByServer()));
     connect(&clientSocket, SIGNAL(readyRead()), this, SLOT(bytesReady()));
-
-//    connectToServer();
+    connect(&clientSocket, SIGNAL(networkTimeout()), this, SLOT(recievedNetworkTimeout()));
 }
 
 /**
@@ -24,9 +23,20 @@ ConnectionClient::ConnectionClient()
 void ConnectionClient::connectToServer(QString host, quint16 port)
 {
     qDebug() << "Connecting to server";
-    clientSocket.connectToHost(host, port);
+    clientSocket.connectToHostWithTimeout(host, port, 5000);
 
     nextBlockSize = 0;
+}
+
+/**
+ * @brief ConnectionClient::recievedNetworkTimeout Triggered when a network timeout occured on the socket
+ */
+void ConnectionClient::recievedNetworkTimeout()
+{
+    // Update all the subscribers
+    foreach (AbstractSubscriber* subscriber , subscriberList) {
+        subscriber->connectionNetworkTimeout();
+    }
 }
 
 /**
@@ -36,6 +46,10 @@ void ConnectionClient::connectToServer(QString host, quint16 port)
  */
 void ConnectionClient::connectedToHost()
 {
+    // Update all the subscribers
+    foreach (AbstractSubscriber* subscriber , subscriberList) {
+        subscriber->connectionSuccess();
+    }
     qDebug() << "Successfully connected to Host";
 }
 

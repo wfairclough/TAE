@@ -3,6 +3,8 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include "timeoutsocket.h"
+
 
 class ConnectionThread : public QThread
 {
@@ -23,7 +25,7 @@ public:
 
     private:
         int socketDescriptor;
-        QTcpSocket tcpSocket;
+        TimeoutSocket tcpSocket;
         quint16 nextBlockSize;
         bool threadAlive;
     

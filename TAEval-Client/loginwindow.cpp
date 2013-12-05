@@ -23,13 +23,12 @@ LoginWindow::LoginWindow(QWidget *parent) :
 
     ui->usernameLineEdit->setValidator(new QRegExpValidator(emailRegExp, this));
     ui->logo->setStyleSheet("background-image: url(Resources/taeval.png)");
+    ui->loginButton->setEnabled(false);
 
+    // Load the settings before trying to connect to the server
     loadSettings();
 
-    if (host.compare("") == 0)
-        qDebug() << "No settings are set.";
-    else
-        ConnectionClient::getInstance().connectToServer(host, port);
+    ConnectionClient::getInstance().connectToServer(host, port);
 }
 
 /**
@@ -105,6 +104,23 @@ void LoginWindow::didRecieveLoginResponse(User* user) {
 
 }
 
+/**
+ * @brief LoginWindow::connectionNetworkTimeout Triggered when connection timesout on socket
+ */
+void LoginWindow::connectionNetworkTimeout()
+{
+    qDebug() << "Timeout occured on network...";
+    ui->loginButton->setEnabled(false);
+}
+
+/**
+ * @brief LoginWindow::connectionSuccess triggered when connection is made successfully
+ */
+void LoginWindow::connectionSuccess()
+{
+    ui->loginButton->setEnabled(true);
+}
+
 void LoginWindow::loadSettings()
 {
     QString settingFileName;
@@ -118,17 +134,23 @@ void LoginWindow::loadSettings()
 #endif
 
     QSettings s(settingFileName, QSettings::NativeFormat);
-    host = s.value("connection/host").toString();
+    if (s.contains(CONNECTION_HOST)) {
+        host = s.value(CONNECTION_HOST).toString();
+        qDebug() << "Using host " << host;
+    } else {
+        host = "localhost";
+        s.setValue(CONNECTION_HOST, host);
+        qDebug() << "No host configured using default " << host;
+    }
 
-    qDebug() << "Host: " << host;
-
-//    s.setValue("connection/host", ui->usernameLineEdit->text());
-//    s.setValue("connection/port", 7290);
-
-    host = s.value(CONNECTION_HOST).toString();
-    port = s.value(CONNECTION_PORT).toInt();
-
-    qDebug() << "Host: " << host << "   Port: " << port;
+    if (s.contains(CONNECTION_PORT)) {
+        port = s.value(CONNECTION_PORT).toInt();
+        qDebug() << "Using port " << port;
+    } else {
+        port = 60004;
+        s.setValue(CONNECTION_PORT, port);
+        qDebug() << "No post configured using default " << port;
+    }
 
 }
 

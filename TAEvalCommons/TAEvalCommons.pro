@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
+QT       += network
 
 TARGET = TAEvalCommons
 TEMPLATE = lib
@@ -12,26 +13,29 @@ TEMPLATE = lib
 DEFINES += TAEVALCOMMONS_LIBRARY
 
 SOURCES += taevalcommons.cpp \
-    instructor.cpp \
-    teachingassistant.cpp \
-    task.cpp \
-    evaluation.cpp \
-    administrator.cpp \
-    user.cpp \
-    course.cpp \
-    persistable.cpp
+            instructor.cpp \
+            teachingassistant.cpp \
+            task.cpp \
+            evaluation.cpp \
+            administrator.cpp \
+            user.cpp \
+            course.cpp \
+            persistable.cpp \
+            timeoutsocket.cpp
 
 HEADERS += taevalcommons.h\
-        TAEvalCommons_global.h \
-    instructor.h \
-    teachingassistant.h \
-    task.h \
-    evaluation.h \
-    administrator.h \
-    user.h \
-    course.h \
-    persistable.h \
-    MessageTypes.h
+            TAEvalCommons_global.h \
+            instructor.h \
+            teachingassistant.h \
+            task.h \
+            evaluation.h \
+            administrator.h \
+            user.h \
+            course.h \
+            persistable.h \
+            MessageTypes.h \
+            settings.h \
+            timeoutsocket.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

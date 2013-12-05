@@ -1,7 +1,7 @@
 #include <QtCore/QCoreApplication>
 #include "connectionserver.h"
 #include "dbcoordinator.h"
-//#include "testtamanager.h"
+#include "settings.h"
 
 
 /**
@@ -13,22 +13,60 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    ConnectionServer server(&a);
 
-    if (!server.listen(QHostAddress::Any, 7290)) {
-        qDebug() << "Error: Could not bind to port.";
-        return 1;
+    QString settingFileName;
+
+#if defined(Q_OS_DARWIN)
+    settingFileName.append("taeval-server.plist");
+#elif defined(Q_OS_UNIX)
+    settingFileName.append("taeval-server.cfg");
+#else
+#error "We don't support that version yet..."
+#endif
+
+    QSettings s(settingFileName, QSettings::NativeFormat);
+
+    QString dbPath;
+    QString dbName;
+    quint16 port;
+
+    if (s.contains(CONNECTION_PORT)) {
+        port = s.value(CONNECTION_PORT).toInt();
+        qDebug() << "Using connection port " << port;
+    } else {
+        port = 60004;
+        s.setValue(CONNECTION_PORT, port);
+        qDebug() << "No port configured. Using default " << port;
     }
 
-    DbCoordinator::getInstance().openDatabase(qApp->applicationDirPath() + "/db/", "TAEval.db");
 
+    ConnectionServer server(&a);
 
-//    Uncomment to do tests
-//    TestTaManager ttam(&a);
+    if (!server.listen(QHostAddress::Any, port)) {
+        qDebug() << "Error: Could not bind to port.";
+        a.exit();
+        return -1;
+    }
 
-//    ttam.testAddTaskForCourse();
-//    ttam.testAddEvaluationToTask();
-//    ttam.testFetchEvaluationForTask();
+    if (s.contains(DATABASE_PATH)) {
+        dbPath = s.value(DATABASE_PATH).toString();
+        qDebug() << "Using databse path " << dbPath;
+    } else {
+        dbPath = qApp->applicationDirPath() + "/db/";
+        s.setValue(DATABASE_PATH, dbPath);
+        qDebug() << "No database path configured. Using default " << dbPath;
+    }
+
+    if (s.contains(DATABASE_NAME)) {
+        dbName = s.value(DATABASE_NAME).toString();
+        qDebug() << "Using databse name " << dbName;
+    } else {
+        dbName = "TAEval.db";
+        s.setValue(DATABASE_NAME, dbName);
+        qDebug() << "No database name configured. Using default " << dbName;
+    }
+
+    DbCoordinator::getInstance().openDatabase(dbPath, dbName);
 
     return a.exec();
 }

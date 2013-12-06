@@ -35,7 +35,6 @@ private slots:
     void sendLoginRequest();
     void quitTriggered();
     void settingsTriggered();
-    void on_usernameLineEdit_lostFocus();
 
 private:
     Ui::LoginWindow *ui;

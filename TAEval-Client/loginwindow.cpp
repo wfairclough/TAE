@@ -42,36 +42,12 @@ LoginWindow::~LoginWindow()
 
 
 /**
- * Description: Slot triggered by username field when finished editing
- * Paramters: None
- * Returns: void
- */
-void LoginWindow::on_usernameLineEdit_lostFocus()
-{
-    qDebug() << "Username was edited";
-    if (ui->usernameLineEdit->hasAcceptableInput()) {
-        qDebug() << "Is valid email address";
-
-        QString lineEditStyle("QLineEdit {}");
-        ui->usernameLineEdit->setStyleSheet(lineEditStyle);
-    } else {
-        qDebug() << "invalid email";
-
-        QString lineEditStyle("QLineEdit {background: #FF8584; color: white;}");
-        ui->usernameLineEdit->setStyleSheet(lineEditStyle);
-    }
-}
-
-
-/**
  * Description:
  * Paramters: None
  * Returns: void
  */
 void LoginWindow::sendLoginRequest()
 {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedLoginResponse(User*)), this, SLOT(didRecieveLoginResponse(User*)));
-
     ConnectionClient::getInstance().sendLoginMessage(ui->usernameLineEdit->text());
 }
 
@@ -81,6 +57,9 @@ void LoginWindow::sendLoginRequest()
  */
 void LoginWindow::recievedLoginResponse(User* user) {
     qDebug() << "didRecieveLoginResponse";
+
+    QString lineEditStyle("QLineEdit {}");
+    ui->usernameLineEdit->setStyleSheet(lineEditStyle);
 
     switch (user->type()) {
     case User::ADMINISTRATOR:
@@ -109,6 +88,9 @@ void LoginWindow::recievedLoginResponse(User* user) {
  * @param error
  */
 void LoginWindow::recievedFailedLoginResponse(QString error) {
+    QString lineEditStyle("QLineEdit {background: #FF8584; color: white;}");
+    ui->usernameLineEdit->setStyleSheet(lineEditStyle);
+
 
 }
 

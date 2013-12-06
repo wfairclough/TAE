@@ -13,7 +13,8 @@ class AbstractSubscriber
 public:
     AbstractSubscriber();
 
-    virtual void updateLogin(User* user) {}
+    virtual void recievedLoginResponse(User* user) {}
+    virtual void recievedFailedLoginResponse(QString error) {}
     virtual void connectionNetworkTimeout() {}
     virtual void connectionSuccess() {}
     virtual void updateTaListForInstructor(QList<TeachingAssistant*> list) {}

@@ -26,10 +26,12 @@ public:
     void connectionNetworkTimeout();
     void connectionSuccess();
 
+    void recievedLoginResponse(User* user);
+    void recievedFailedLoginResponse(QString error);
+
     void loadSettings();
 
 private slots:
-    void didRecieveLoginResponse(User* user);
     void sendLoginRequest();
     void quitTriggered();
     void settingsTriggered();

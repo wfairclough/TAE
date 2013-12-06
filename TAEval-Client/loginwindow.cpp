@@ -75,9 +75,11 @@ void LoginWindow::sendLoginRequest()
     ConnectionClient::getInstance().sendLoginMessage(ui->usernameLineEdit->text());
 }
 
-void LoginWindow::didRecieveLoginResponse(User* user) {
-    disconnect(&ConnectionClient::getInstance(), SIGNAL(recievedLoginResponse(User*)), this, SLOT(didRecieveLoginResponse(User*)));
-
+/**
+ * @brief LoginWindow::recievedLoginResponse Triggered when login was successful
+ * @param user
+ */
+void LoginWindow::recievedLoginResponse(User* user) {
     qDebug() << "didRecieveLoginResponse";
 
     switch (user->type()) {
@@ -100,6 +102,13 @@ void LoginWindow::didRecieveLoginResponse(User* user) {
         qDebug() << "Did recieve a NONE";
         break;
     }
+}
+
+/**
+ * @brief LoginWindow::recievedFailedLoginResponse Triggered when there is a login error
+ * @param error
+ */
+void LoginWindow::recievedFailedLoginResponse(QString error) {
 
 }
 
@@ -121,6 +130,9 @@ void LoginWindow::connectionSuccess()
     qDebug() << "Login window connection successful";
 }
 
+/**
+ * @brief LoginWindow::loadSettings Load the Settings for the connection from the Settings File
+ */
 void LoginWindow::loadSettings()
 {
     QString settingFileName;
@@ -152,11 +164,16 @@ void LoginWindow::loadSettings()
 }
 
 
-
+/**
+ * @brief LoginWindow::quitTriggered Quit Menu Triggered
+ */
 void LoginWindow::quitTriggered() {
     QCoreApplication::exit();
 }
 
+/**
+ * @brief LoginWindow::settingsTriggered Settings Menu Triggered
+ */
 void LoginWindow::settingsTriggered() {
     SettingsDialog settingsDialog(this);
 

@@ -20,6 +20,9 @@ public:
 private slots:
     void accept();
 
+    void on_ipLineEdit_lostFocus();
+    void on_portLineEdit_lostFocus();
+
 private:
     Ui::SettingsDialog *ui;
     LoginWindow* loginWindow;

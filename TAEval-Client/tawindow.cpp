@@ -1,7 +1,8 @@
 #include "tawindow.h"
 #include "ui_tawindow.h"
 
-TaWindow::TaWindow(QWidget *parent) :
+TaWindow::TaWindow(TeachingAssistant* ta, QWidget *parent) :
+    teachingAssistant(ta),
     QMainWindow(parent),
     ui(new Ui::TaWindow)
 {

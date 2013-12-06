@@ -3,6 +3,8 @@
 #include "connectionclient.h"
 #include "settingsdialog.h"
 #include "settings.h"
+#include "instructorwindow.h"
+#include "tawindow.h"
 
 /**
  * Description: Constructor for the LoginWindow UI
@@ -72,11 +74,23 @@ void LoginWindow::recievedLoginResponse(User* user) {
     case User::INSTRUCTOR:
     {
         qDebug() << "Did recieve a Instructor";
+
+        InstructorWindow* window = new InstructorWindow((Instructor*)user);
+
+        window->show();
+        hide();
+
         break;
     }
     case User::TA:
     {
         qDebug() << "Did recieve a TA";
+
+        TaWindow* window = new TaWindow((TeachingAssistant*)user);
+
+        window->show();
+        hide();
+
         break;
     }
     default:

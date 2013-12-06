@@ -16,6 +16,9 @@ TimeoutSocket::TimeoutSocket(QObject *parent) :
  * @param port
  */
 void TimeoutSocket::connectToHostWithTimeout(QString host, quint16 port, quint16 timeout) {
+    this->disconnectFromHost();
+    close();
+
     connect(mAuthTimeout, SIGNAL(timeout()), this, SLOT(timeoutSlot()));
     connect(this, SIGNAL(connected()), this, SLOT(connectedToHost()));
     mAuthTimeout->start(timeout);

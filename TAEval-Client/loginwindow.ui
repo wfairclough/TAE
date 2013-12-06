@@ -103,6 +103,9 @@
       <height>26</height>
      </rect>
     </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter a username to login to the system.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="placeholderText">
      <string>username</string>
     </property>
@@ -122,8 +125,17 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click here once you entered a valid username in the Username field.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="text">
      <string>Login</string>
+    </property>
+    <property name="autoDefault">
+     <bool>true</bool>
+    </property>
+    <property name="default">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="usernameLabel">
@@ -149,7 +161,7 @@
      <x>0</x>
      <y>0</y>
      <width>420</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -159,7 +171,18 @@
     <addaction name="actionSettings"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Status bar lets you know whats going on between the client and server. The red text indicated a problem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
   </widget>
   <action name="actionSettings">
    <property name="text">

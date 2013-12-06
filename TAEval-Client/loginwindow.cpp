@@ -31,7 +31,10 @@ LoginWindow::LoginWindow(QWidget *parent) :
     // Load the settings to connect to the server
     loadSettings();
 
-    setStatusBar(new QStatusBar);
+    QAction* whatsThisAction = QWhatsThis::createAction(this);
+
+    ui->menuHelp->addAction(whatsThisAction);
+
 }
 
 /**

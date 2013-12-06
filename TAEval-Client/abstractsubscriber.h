@@ -7,6 +7,8 @@
 #include <evaluation.h>
 #include <task.h>
 #include <course.h>
+#include <QMap>
+#include <QList>
 
 class AbstractSubscriber
 {

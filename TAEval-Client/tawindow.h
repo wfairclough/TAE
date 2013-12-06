@@ -2,10 +2,19 @@
 #define TAWINDOW_H
 
 #include <QMainWindow>
-#include <teachingassistant.h>
-#include <task.h>
-#include <course.h>
+#include <QMessageBox>
+#include "teachingassistant.h"
+#include "task.h"
+#include "course.h"
 #include "abstractsubscriber.h"
+
+#define TASK_NAME_COL 0
+#define TASK_DESCRIPTION_COL 1
+#define TASK_EVAL_RATING_COL 2
+#define TASK_EVAL_COMMENT_COL 3
+
+#define MANAGE_TASK_VIEW "manageTaskView"
+#define VIEW_COURSE_VIEW "viewCourseView"
 
 namespace Ui {
 class TaWindow;
@@ -22,10 +31,18 @@ public:
     void updateTaskListForTa(QList<Task*> list);
     // ADD remaining calls to abstract subsciber here //
 
+public slots:
+    void recievedTaskListForTa(QString view, QList<Task*> list);
 
 private:
     Ui::TaWindow *ui;
     TeachingAssistant* teachingAssistant;
+
+
+    void initManageTaskView();
+
+    QMap<quint32, Task*> taskMap;
+    QList<quint32> taskId;
 };
 
 #endif // TAWINDOW_H

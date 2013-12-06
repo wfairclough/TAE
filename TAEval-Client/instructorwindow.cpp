@@ -7,6 +7,8 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     ui(new Ui::InstructorWindow)
 {
     ui->setupUi(this);
+
+    setWindowTitle("Instructor: " + user->getFullName());
 }
 
 InstructorWindow::~InstructorWindow()

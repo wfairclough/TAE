@@ -15,7 +15,7 @@ class TaWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit TaWindow(TeachingAssistant* ta, QWidget *parent = 0);
+    explicit TaWindow(TeachingAssistant* user, QWidget *parent = 0);
     ~TaWindow();
     
 private:

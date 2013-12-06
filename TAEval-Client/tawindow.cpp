@@ -1,12 +1,14 @@
 #include "tawindow.h"
 #include "ui_tawindow.h"
 
-TaWindow::TaWindow(TeachingAssistant* ta, QWidget *parent) :
-    teachingAssistant(ta),
+TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
+    teachingAssistant(user),
     QMainWindow(parent),
     ui(new Ui::TaWindow)
 {
     ui->setupUi(this);
+
+    setWindowTitle("Teaching Assistant: " + user->getFullName());
 }
 
 TaWindow::~TaWindow()

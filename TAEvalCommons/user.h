@@ -29,6 +29,7 @@ public:
     QString getFirstName() const { return firstName; }
     QString getLastName() const { return lastName; }
     QString getUsername() const { return username; }
+    QString getFullName() const { return QString(getFirstName() + " " + getLastName()); }
     
 protected:
     quint32 id;

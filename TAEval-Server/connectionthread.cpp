@@ -6,6 +6,8 @@
 #include "tamanager.h"
 #include "instructormanager.h"
 #include "MessageTypes.h"
+#include "systemerror.h"
+#include "authenticationmanager.h"
 
 
 #include <QDataStream>
@@ -78,6 +80,10 @@ void ConnectionThread::readClient()
 
         qDebug() << "Trying to login with username: " << username;
 
+
+
+
+
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_8);
@@ -85,9 +91,50 @@ void ConnectionThread::readClient()
         QString msgRspType(LOGIN_RSP);
         bool validLogin = true;
 
-        Administrator admin("Will", "Fairclough", username);
 
-        out << quint16(0) << msgRspType << validLogin << User::ADMINISTRATOR << admin;
+        AuthenticationManager authManager;
+
+        SystemError* error = NULL;
+        User* user = authManager.fetchUserForUsername(username, &error);
+
+        if (error != NULL) { // Error Case
+            validLogin = false;
+
+            out << quint16(0) << msgRspType << validLogin << User::NONE << error->getErrorMessage();
+
+        } else {
+
+            out << quint16(0) << msgRspType << validLogin;
+
+
+            switch (user->type()) {
+            case User::ADMINISTRATOR:
+            {
+                Administrator* admin = (Administrator*)user;
+                out << User::ADMINISTRATOR << *admin;
+                qDebug() << "Did recieve a ADMINISTRATOR";
+                break;
+            }
+            case User::INSTRUCTOR:
+            {
+                Instructor* instructor = (Instructor*)user;
+                out << User::INSTRUCTOR << *instructor;
+                qDebug() << "Did recieve a Instructor";
+                break;
+            }
+            case User::TA:
+            {
+                TeachingAssistant* ta = (TeachingAssistant*)user;
+                out << User::TA << *ta;
+                qDebug() << "Did recieve a TA";
+                break;
+            }
+            default:
+                qDebug() << "Did recieve a NONE";
+                break;
+            }
+        }
+
 
         out.device()->seek(0);
         out << quint16(block.size() - sizeof(quint16));

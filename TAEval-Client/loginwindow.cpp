@@ -23,11 +23,11 @@ LoginWindow::LoginWindow(QWidget *parent) :
 
     ui->usernameLineEdit->setValidator(new QRegExpValidator(emailRegExp, this));
     ui->logo->setStyleSheet("background-image: url(Resources/taeval.png)");
-    ui->loginButton->setEnabled(false);
 
     // Load the settings to connect to the server
     loadSettings();
 
+    setStatusBar(new QStatusBar);
 }
 
 /**
@@ -57,6 +57,8 @@ void LoginWindow::sendLoginRequest()
  */
 void LoginWindow::recievedLoginResponse(User* user) {
     qDebug() << "didRecieveLoginResponse";
+
+    statusBar()->clearMessage();
 
     QString lineEditStyle("QLineEdit {}");
     ui->usernameLineEdit->setStyleSheet(lineEditStyle);
@@ -91,7 +93,9 @@ void LoginWindow::recievedFailedLoginResponse(QString error) {
     QString lineEditStyle("QLineEdit {background: #FF8584; color: white;}");
     ui->usernameLineEdit->setStyleSheet(lineEditStyle);
 
-
+    QString statusBarStyle("QStatusBar {color: red;}");
+    statusBar()->setStyleSheet(statusBarStyle);
+    statusBar()->showMessage(error);
 }
 
 /**
@@ -117,6 +121,8 @@ void LoginWindow::connectionSuccess()
  */
 void LoginWindow::loadSettings()
 {
+    ui->loginButton->setEnabled(false);
+
     QString settingFileName;
 
     settingFileName.append(CLIENT_SETTINGS_FILE_NAME);

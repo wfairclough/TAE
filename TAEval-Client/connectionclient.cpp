@@ -97,31 +97,48 @@ void ConnectionClient::bytesReady()
             switch (userType) {
             case User::ADMINISTRATOR:
             {
-                Administrator admin;
-                in >> admin;
-                emit recievedLoginResponse(&admin);
+                Administrator* admin = new Administrator;
+                in >> *admin;
+
+                foreach (AbstractSubscriber* subscriber , subscriberList) {
+                    subscriber->recievedLoginResponse(admin);
+                }
+
                 break;
             }
             case User::INSTRUCTOR:
             {
-                Instructor instructor;
-                in >> instructor;
-                emit recievedLoginResponse(&instructor);
+                Instructor* instructor = new Instructor;
+                in >> *instructor;
+
+                foreach (AbstractSubscriber* subscriber , subscriberList) {
+                    subscriber->recievedLoginResponse(instructor);
+                }
+
                 break;
             }
             case User::TA:
             {
                 qDebug() << "emit recievedLoginResponse";
-                TeachingAssistant ta;
-                in >> ta;
-                emit recievedLoginResponse(&ta);
+                TeachingAssistant* ta = new TeachingAssistant;
+                in >> *ta;
+
+                foreach (AbstractSubscriber* subscriber , subscriberList) {
+                    subscriber->recievedLoginResponse(ta);
+                }
+
                 break;
             }
             default:
                 break;
             }
         } else {
-            emit recievedErrorResponse(QString("Not a valid username in the system."));
+            QString errorMessage;
+            in >> errorMessage;
+
+            foreach (AbstractSubscriber* subscriber , subscriberList) {
+                subscriber->recievedFailedLoginResponse(QString("Not a valid username in the system."));
+            }
         }
 
     } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_RSP)) == 0) {

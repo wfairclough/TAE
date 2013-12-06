@@ -21,7 +21,8 @@ SOURCES += taevalcommons.cpp \
             user.cpp \
             course.cpp \
             persistable.cpp \
-            timeoutsocket.cpp
+            timeoutsocket.cpp \
+    systemerror.cpp
 
 HEADERS += taevalcommons.h\
             TAEvalCommons_global.h \
@@ -35,7 +36,8 @@ HEADERS += taevalcommons.h\
             persistable.h \
             MessageTypes.h \
             settings.h \
-            timeoutsocket.h
+            timeoutsocket.h \
+    systemerror.h
 
 symbian {
     MMP_RULES += EXPORTUNFROZEN

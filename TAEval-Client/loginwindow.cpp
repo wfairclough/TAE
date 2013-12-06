@@ -119,6 +119,10 @@ void LoginWindow::connectionNetworkTimeout()
 {
     qDebug() << "Timeout occured on network...";
     ui->loginButton->setEnabled(false);
+
+    QString statusBarStyle("QStatusBar {color: red;}");
+    statusBar()->setStyleSheet(statusBarStyle);
+    statusBar()->showMessage(host + " unreachable. Got to File -> Settings to edit address.");
 }
 
 /**
@@ -128,6 +132,10 @@ void LoginWindow::connectionSuccess()
 {
     ui->loginButton->setEnabled(true);
     qDebug() << "Login window connection successful";
+
+    QString statusBarStyle("QStatusBar {color: black;}");
+    statusBar()->setStyleSheet(statusBarStyle);
+    statusBar()->showMessage("Connected to " + host + " successfully.");
 }
 
 /**

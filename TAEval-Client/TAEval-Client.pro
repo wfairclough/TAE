@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     abstractsubscriber.cpp \
     tawindow.cpp \
     instructorwindow.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    adminwindow.cpp
 
 HEADERS  += loginwindow.h \
     connectionclient.h \
@@ -31,13 +32,15 @@ HEADERS  += loginwindow.h \
     abstractsubscriber.h \
     tawindow.h \
     instructorwindow.h \
-    settingsdialog.h
+    settingsdialog.h \
+    adminwindow.h
 
 FORMS    += loginwindow.ui \
     apiwindow.ui \
     tawindow.ui \
     instructorwindow.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    adminwindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons

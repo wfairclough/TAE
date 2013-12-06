@@ -5,6 +5,8 @@
 #include "settings.h"
 #include "instructorwindow.h"
 #include "tawindow.h"
+#include "adminwindow.h"
+
 
 /**
  * Description: Constructor for the LoginWindow UI
@@ -69,6 +71,12 @@ void LoginWindow::recievedLoginResponse(User* user) {
     case User::ADMINISTRATOR:
     {
         qDebug() << "Did recieve a ADMINISTRATOR";
+
+        AdminWindow* window = new AdminWindow((Administrator*)user);
+
+        window->show();
+        hide();
+
         break;
     }
     case User::INSTRUCTOR:

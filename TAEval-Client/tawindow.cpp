@@ -15,3 +15,12 @@ TaWindow::~TaWindow()
 {
     delete ui;
 }
+
+
+/**
+ * @brief TaWindow::updateTaskListForTa Subscriber method to get the updated task list
+ * @param list
+ */
+void TaWindow::updateTaskListForTa(QList<Task*> list) {
+
+}

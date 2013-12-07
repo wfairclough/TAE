@@ -178,6 +178,25 @@ void ConnectionClient::bytesReady()
             subscriber->updateCourseListForInstructor(list);
         }
 
+    } else if (msgType.compare(QString(COURSE_LIST_FOR_TA_RSP)) == 0){
+        qDebug() << "Parsing Message: " << COURSE_LIST_FOR_TA_RSP;
+
+        QList<Course*> list;
+        quint16 listSize = 0;
+
+        in >> listSize;
+        for(int i = 0; i < listSize; i++){
+            Course *course = new Course();
+            in >> *course;
+            list << course;
+
+            qDebug() << "[" << COURSE_LIST_FOR_TA_RSP << "] Recieved a Course with the Sem == " << course->getName() << course->getSemesterTypeString() << " " << course->getYear() << "  " << course->getSemesterTypeInt();
+        }
+
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateCourseListForTa(list);
+        }
+
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
 
@@ -352,6 +371,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString username) {
 
     qDebug() << "Wrote TA_LIST_FOR_INSTRUCTOR_REQ Data to server.";
 }
+
 /**
  * Description: Send a message to the server asking for a list of Course's for a particular Instructor
  * Paramters: the Instructors username
@@ -372,6 +392,28 @@ void ConnectionClient::sendCourseForInstructorMessage(QString username){
     clientSocket.write(block);
 
     qDebug() << "wrote Data to Server";
+}
+
+/**
+ * Description: Send a message to the server asking for a list of Course's for a particular Instructor
+ * Paramters: the Instructors username
+ * Returns: Void
+ */
+void ConnectionClient::sendCourseForTeachingAssistantMessage(TeachingAssistant* ta) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(COURSE_LIST_FOR_TA_REQ);
+
+    out << quint16(0) << msgType << *ta;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));;
+
+    clientSocket.write(block);
+
+    qDebug() << "wrote [" << COURSE_LIST_FOR_TA_REQ << "]: Data to Server";
 }
 
 /**

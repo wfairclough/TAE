@@ -35,6 +35,7 @@ public:
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString username);
     void sendCourseForInstructorMessage(QString username);
+    void sendCourseForTeachingAssistantMessage(TeachingAssistant* ta);
     void sendInstructorListMessage();
     void sendTaListMessage();
     void sendTaskForTa(QString uname);

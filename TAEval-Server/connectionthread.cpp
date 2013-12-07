@@ -202,6 +202,35 @@ void ConnectionThread::readClient()
 
         tcpSocket.write(block);
 
+    } else if (msgType.compare(QString(COURSE_LIST_FOR_TA_REQ)) == 0) {
+
+        TeachingAssistant* ta = new TeachingAssistant;
+        Course* course = new Course;
+
+        in >> *ta >> *course;
+        qDebug() << " [" << COURSE_LIST_FOR_TA_REQ << "] - TA: " << ta->getUsername();
+
+        TaManager tm;
+        QList<Course*> list = tm.fetchAllCoursesforTeachingAssistant(ta, course);
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(COURSE_LIST_FOR_TA_RSP);
+
+        out << quint16(0) << msgRspType << quint16(list.size());
+
+        foreach (Course* course, list) {
+            out << *course;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
+
+
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_REQ)) == 0) {
 
         qDebug() << "[InstructorReq] - All Instructors";

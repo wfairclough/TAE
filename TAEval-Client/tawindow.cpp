@@ -14,10 +14,14 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
 
     initManageTaskView();
     setWindowTitle("Teaching Assistant: " + user->getFullName());
+
+    ConnectionClient::getInstance().subscribe(this);
+
+    TaControl tc;
+    tc.getCoursesForTeachingAssistant(getCurrentTa());
 }
 
 void TaWindow::initManageTaskView(){
-
     ui->TW_TaskSelect->resizeColumnsToContents();
     ui->TW_TaskSelect->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
     ui->TW_TaskSelect->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
@@ -31,34 +35,16 @@ TaWindow::~TaWindow()
     delete ui;
 }
 
-
-/**
- * @brief TaWindow::updateTaskListForTa Subscriber method to get the updated task list
- * @param list
- */
-void TaWindow::updateTaskListForTa(QList<Task*> list) {
-    ui->TW_TaskSelect->setRowCount(0); // TW_TaskSelect is the widget in ta ui to view / select task
-
-    taskMap.clear();
-    foreach(Task* task, list){
-        int row = ui->TW_TaskSelect->rowCount();
-        taskMap.insert(row, task);
-
-        ui->TW_TaskSelect->insertRow(row);
-        ui->TW_TaskSelect->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
-        ui->TW_TaskSelect->setItem(row, TASK_DESCRIPTION_COL, new QTableWidgetItem(task->getDescription()));
-        if (task->hasEvaluation()) {
-            ui->TW_TaskSelect->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(task->getEvaluation()->getRatingString()));
-            ui->TW_TaskSelect->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(task->getEvaluation()->getComment()));
-        } else {
-            ui->TW_TaskSelect->setItem(row, TASK_EVAL_RATING_COL, new QTableWidgetItem(Evaluation::ratingForEnum(RATING::NONE)));
-            ui->TW_TaskSelect->setItem(row, TASK_EVAL_COMMENT_COL, new QTableWidgetItem(QString("")));
-        }
-
+void TaWindow::updateCourseListForTa(QList<Course*> list) {
+    foreach(Course* course, list) {
+        ui->courseComboBox->addItem(course->getFullCourseName());
     }
-
 }
 
+/**
+ * @brief TaWindow::updateTaskListForTaAndCourse
+ * @param list
+ */
 void TaWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
     ui->TW_TaskSelect->setRowCount(0); // TW_TaskSelect is the widget in ta ui to view / select task
 

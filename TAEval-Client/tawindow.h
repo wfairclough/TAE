@@ -28,9 +28,11 @@ public:
     explicit TaWindow(TeachingAssistant* user, QWidget *parent = 0);
     ~TaWindow();
     
-    void updateTaskListForTa(QList<Task*> list);
+    TeachingAssistant* getCurrentTa() const { return teachingAssistant; }
+
+    // Subscriber Implementations
     void updateTaskListForTaAndCourse(QList<Task*> list);
-    // ADD remaining calls to abstract subsciber here //
+    void updateCourseListForTa(QList<Course*> list);
 
 public slots:
     void currentCourseComboIndexChanged();

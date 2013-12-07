@@ -461,6 +461,41 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
 }
 
 
+/**
+ * @brief TaManager::fetchAllCoursesforTeachingAssistant
+ * @param ta
+ * @return
+ */
+QList<Course *> TaManager::fetchAllCoursesforTeachingAssistant(TeachingAssistant* ta, Course* course) {
+    QList<Course *> list;
+
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+    QSqlQuery courseQuery(db);
+
+    courseQuery.prepare("select name, semester, year, instructorid from course, TA_Courses where courseId=id and taId=(SELECT id FROM user WHERE username=?)");
+    courseQuery.addBindValue(ta->getUsername());
+    if (courseQuery.exec()){
+        while (courseQuery.next()) {
+        int index = 0;
+        Course* course = new Course();
+        course->setName(courseQuery.value(index++).toString());
+        course->setSemesterType(courseQuery.value(index++).toInt());
+        course->setYear(courseQuery.value(index++).toInt());
+
+        Instructor* i = instructorForId(courseQuery.value(index++).toInt());
+        course->setInstructor(i);
+
+        qDebug() << "Adding Course" << course->getName() << ", " << course->getSemesterTypeString() << ", " << course->getYear() << " to list";
+        list << course;
+        }
+    }else {
+        qDebug() << "Could not find courses";
+    }
+
+    return list;
+
+}
 
 
 

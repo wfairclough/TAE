@@ -78,7 +78,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QComboBox" name="selectacourse_comboBox">
+   <widget class="QComboBox" name="courseComboBox">
     <property name="geometry">
      <rect>
       <x>60</x>

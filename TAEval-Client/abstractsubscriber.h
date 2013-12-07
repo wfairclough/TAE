@@ -24,6 +24,8 @@ public:
     virtual void updateInstructorList(QList<Instructor*> list) {}
     virtual void updateTaList(QList<TeachingAssistant*> list) {}
     virtual void updateTaskListForTa(QList<Task*> list) {}
+    virtual void updateTaskMapForTa(QMap<Course*, Task*> courseTaskMap) {}
+    virtual void updateTaskListForTaAndCourse(QList<Task*> list) {}
     virtual void updateAddTaskForTa(QList<Task*> list) {}
     virtual void updateEvaluationListForTasks(QList<Evaluation*> list) {}
 

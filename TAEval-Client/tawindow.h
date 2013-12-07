@@ -29,12 +29,16 @@ public:
     ~TaWindow();
     
     void updateTaskListForTa(QList<Task*> list);
+    void updateTaskMapForTa(QMap<Course*, Task*> courseTaskMap);
     // ADD remaining calls to abstract subsciber here //
 
 public slots:
+    void currentCourseComboIndexChanged();
     void recievedTaskListForTa(QString view, QList<Task*> list);
 
 private:
+    void selectCourse(Course* course);
+
     Ui::TaWindow *ui;
     TeachingAssistant* teachingAssistant;
 

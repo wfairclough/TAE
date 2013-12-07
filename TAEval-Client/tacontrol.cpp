@@ -12,9 +12,8 @@ TaControl::TaControl(QObject *parent) :
  * Paramters: a string the represents the view that wants the information
  * Returns: None
  */
-void TaControl::getTas(QString view) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaListResponse(QString, QList<TeachingAssistant*>)), this->parent(), SLOT(recievedTaList(QString, QList<TeachingAssistant*>)));
-    ConnectionClient::getInstance().sendTaListMessage(view);
+void TaControl::getTas() {
+    ConnectionClient::getInstance().sendTaListMessage();
 }
 
 /**
@@ -22,9 +21,8 @@ void TaControl::getTas(QString view) {
  * Paramters: a string the represents the view that wants the information, the TA whose Tasks you want to see
  * Returns: None
  */
-void TaControl::getTaskListForTa(QString view, QString uname) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedTaskListForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(recievedTaskListForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendTaskForTa(view, uname);
+void TaControl::getTaskListForTa(QString uname) {
+    ConnectionClient::getInstance().sendTaskForTa(uname);
 }
 
 /**
@@ -32,9 +30,8 @@ void TaControl::getTaskListForTa(QString view, QString uname) {
  * Paramters: a string the represents the view that wants the information, the id of the Task that owns the Evaluation
  * Returns: None
  */
-void TaControl::getEvaluationListForTasks(QString view, QList<quint32> taskIds) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedEvaluationListForTasksResponse(QString, QList<Evaluation*>)), this->parent(), SLOT(recievedEvaluationListForTasks(QString, QList<Evaluation*>)));
-    ConnectionClient::getInstance().sendEvaluationListForTasks(view, taskIds);
+void TaControl::getEvaluationListForTasks(QList<quint32> taskIds) {
+    ConnectionClient::getInstance().sendEvaluationListForTasks(taskIds);
 }
 
 /**
@@ -42,8 +39,8 @@ void TaControl::getEvaluationListForTasks(QString view, QList<quint32> taskIds) 
   * Parameters: a string the represents the view that wants the information, the TA whose Task you want to delete
   * Returns: None
   */
-void TaControl::deleteTask(QString view, Task *task) {
-    ConnectionClient::getInstance().sendDeleteTask(view, task);
+void TaControl::deleteTask(Task *task) {
+    ConnectionClient::getInstance().sendDeleteTask(task);
 }
 
 /**
@@ -51,9 +48,8 @@ void TaControl::deleteTask(QString view, Task *task) {
   * Parameters: a string the represents the view that wants the information, the TA whose Task you want to add and Task info
   * Returns: None
   */
-void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear) {
-    connect(&ConnectionClient::getInstance(), SIGNAL(recievedAddTaskForTaResponse(QString, QList<Task*>)), this->parent(), SLOT(addTaskForTa(QString, QList<Task*>)));
-    ConnectionClient::getInstance().sendAddTaskForTa(view, taskName, taskDescription, uname, courseName, sem, courseYear);
+void TaControl::addTaskForTa(QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear) {
+    ConnectionClient::getInstance().sendAddTaskForTa(taskName, taskDescription, uname, courseName, sem, courseYear);
 }
 
 /**
@@ -61,6 +57,6 @@ void TaControl::addTaskForTa(QString view, QString uname, QString taskName, QStr
   * Parameters: view that requested info, TA username, task to update, evaluation to update
   * Returns: None
   */
-void TaControl::updateTaskAndEvaluation(QString view, Task *task, QString iName, QString taName) {
-    ConnectionClient::getInstance().sendUpdateTaskAndEvaluation(view, task, iName, taName);
+void TaControl::updateTaskAndEvaluation(Task *task, QString iName, QString taName) {
+    ConnectionClient::getInstance().sendUpdateTaskAndEvaluation(task, iName, taName);
 }

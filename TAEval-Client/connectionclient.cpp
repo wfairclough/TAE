@@ -142,10 +142,10 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_RSP)) == 0) {
-        QString view;
+
         QList<TeachingAssistant*> list;
         quint16 listSize = 0;
-        in >> view;
+
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -161,10 +161,10 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(COURSE_LIST_FOR_INSTRUCTOR_RSP)) == 0){
-        QString view;
+
         QList<Course*> list;
         quint16 listSize = 0;
-        in >> view;
+
         in >> listSize;
         for(int i = 0; i < listSize; i++){
             Course *course = new Course();
@@ -180,11 +180,11 @@ void ConnectionClient::bytesReady()
 
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_RSP)) == 0) {
-        QString view;
+
         QList<Instructor*> list;
         quint16 listSize = 0;
-        in >>view;
         in >> listSize;
+
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
             Instructor *prof = new Instructor();
@@ -199,10 +199,10 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(TA_LIST_RSP)) == 0) {
-        QString view;
+
         QList<TeachingAssistant*> list;
         quint16 listSize = 0;
-        in >> view;
+
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -218,10 +218,10 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(TASK_LIST_FOR_TA_RSP)) == 0) {
-        QString view;
+
         QList<Task*> list;
         quint16 listSize = 0;
-        in >> view;
+
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -237,10 +237,10 @@ void ConnectionClient::bytesReady()
         }
 
     } else if (msgType.compare(QString(NEW_TASK_RSP)) == 0) {
-        QString view;
+
         QList<Task*> list;
         quint16 listSize = 0;
-        in >> view;
+
         in >> listSize;
         for(int i = 0; i < listSize; i++) {
             // Find proper place to delete pointers later. Possibly in the view.
@@ -250,16 +250,16 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << NEW_TASK_RSP << "] Recieved a Task with the ID == " << task->getId();
         }
-//        emit recievedAddTaskForTaResponse(view, list);
+
         foreach (AbstractSubscriber* subscriber , subscriberList) {
             subscriber->updateAddTaskForTa(list);
         }
 
     } else if (msgType.compare(QString(EVALUATION_LIST_FOR_TASKS_RSP)) == 0) {
-        QString view;
+
         QList<Evaluation*> list;
         quint16 listSize = 0;
-        in >> view;
+
         in >> listSize;
 
         for(int i = 0; i < listSize; i++) {
@@ -269,10 +269,27 @@ void ConnectionClient::bytesReady()
 
             qDebug() << "[" << EVALUATION_LIST_FOR_TASKS_RSP << "] Recieved an Evaluation with the ID == " << eval->getId() << " and rating: " << eval->getRating();
         }
-//        emit recievedEvaluationListForTasksResponse(view, list);
 
         foreach (AbstractSubscriber* subscriber , subscriberList) {
             subscriber->updateEvaluationListForTasks(list);
+        }
+    } else if (msgType.compare(QString(TASK_LIST_FOR_TA_AND_COURSE_RSP)) == 0) {
+
+        QList<Task*> list;
+        quint16 listSize = 0;
+
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            Task *task = new Task();
+            in >> *task;
+            list << task;
+
+            qDebug() << "[" << TASK_LIST_FOR_TA_AND_COURSE_RSP << "] Recieved a Task with the ID == " << task->getId();
+        }
+
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateTaskListForTaAndCourse(list);
         }
     }
 
@@ -319,14 +336,14 @@ void ConnectionClient::sendLoginMessage(QString username)
  * Paramters: the Instructors username
  * Returns: Void
  */
-void ConnectionClient::sendTaForInstructorMessage(QString view, QString username) {
+void ConnectionClient::sendTaForInstructorMessage(QString username) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(TA_LIST_FOR_INSTRUCTOR_REQ);
 
-    out << quint16(0) << msgType << view << username;
+    out << quint16(0) << msgType << username;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -340,14 +357,14 @@ void ConnectionClient::sendTaForInstructorMessage(QString view, QString username
  * Paramters: the Instructors username
  * Returns: Void
  */
-void ConnectionClient::sendCourseForInstructorMessage(QString view, QString username){
+void ConnectionClient::sendCourseForInstructorMessage(QString username){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(COURSE_LIST_FOR_INSTRUCTOR_REQ);
 
-    out << quint16(0) << msgType << view << username;
+    out << quint16(0) << msgType << username;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));;
@@ -362,14 +379,14 @@ void ConnectionClient::sendCourseForInstructorMessage(QString view, QString user
  * Paramters: None
  * Returns: Void
  */
-void ConnectionClient::sendInstructorListMessage(QString view) {
+void ConnectionClient::sendInstructorListMessage() {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(INSTRUCTOR_LIST_REQ);
 
-    out << quint16(0) << msgType << view;
+    out << quint16(0) << msgType;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -384,14 +401,14 @@ void ConnectionClient::sendInstructorListMessage(QString view) {
  * Paramters: None
  * Returns: Void
  */
-void ConnectionClient::sendTaListMessage(QString view) {
+void ConnectionClient::sendTaListMessage() {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(TA_LIST_REQ);
 
-    out << quint16(0) << msgType << view;
+    out << quint16(0) << msgType;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -406,14 +423,14 @@ void ConnectionClient::sendTaListMessage(QString view) {
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendTaskForTa(QString view, QString uname) {
+void ConnectionClient::sendTaskForTa(QString uname) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(TASK_LIST_FOR_TA_REQ);
 
-    out << quint16(0) << msgType << view << uname;
+    out << quint16(0) << msgType << uname;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -424,18 +441,60 @@ void ConnectionClient::sendTaskForTa(QString view, QString uname) {
 }
 
 /**
+ * @brief sendGetTaskMapForTa Send a message to get a Map of Courses and Tasks
+ * @param uname
+ */
+void ConnectionClient::sendGetTaskMapForTa(QString uname) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TASK_MAP_FOR_TA_REQ);
+
+    out << quint16(0) << msgType << uname;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote " << TASK_MAP_FOR_TA_REQ << "Data to server.";
+}
+
+/**
+ * @brief sendTaskForTaAndCourse send message to get list of Tasks for a TA and Course
+ * @param uname
+ */
+void ConnectionClient::sendTaskForTaAndCourse(TeachingAssistant* ta, Course* course) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TASK_LIST_FOR_TA_AND_COURSE_REQ);
+
+    out << quint16(0) << msgType << *ta << *course;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote " << TASK_LIST_FOR_TA_AND_COURSE_REQ << "Data to server.";
+}
+
+/**
  * Description: Send a message to server asking to delete Task for a TA
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendDeleteTask(QString view, Task *task) {
+void ConnectionClient::sendDeleteTask(Task *task) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(DELETE_TASK_REQ);
 
-    out << quint16(0) << msgType << view << *task;
+    out << quint16(0) << msgType << *task;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -450,7 +509,7 @@ void ConnectionClient::sendDeleteTask(QString view, Task *task) {
  * Paramters: view that made the call, username of TA
  * Returns: Void
  */
-void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear) {
+void ConnectionClient::sendAddTaskForTa(QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -462,7 +521,7 @@ void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString 
     course.setSemesterType(sem);
     course.setYear(courseYear);
 
-    out << quint16(0) << msgType << view << username << course << taskName << taskDescription;
+    out << quint16(0) << msgType << username << course << taskName << taskDescription;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
@@ -477,14 +536,14 @@ void ConnectionClient::sendAddTaskForTa(QString view, QString taskName, QString 
  * Paramters: view that made the call, ids of Tasks
  * Returns: Void
  */
-void ConnectionClient::sendEvaluationListForTasks(QString view, QList<quint32> taskIds) {
+void ConnectionClient::sendEvaluationListForTasks(QList<quint32> taskIds) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(EVALUATION_LIST_FOR_TASKS_REQ);
 
-    out << quint16(0) << msgType << view << quint16(taskIds.size());
+    out << quint16(0) << msgType << quint16(taskIds.size());
 
     foreach (quint32 i, taskIds) {
         out << i;
@@ -503,14 +562,14 @@ void ConnectionClient::sendEvaluationListForTasks(QString view, QList<quint32> t
  * Paramters: view that made the call, username of ta that owns the task, the task to be updated, the evaluation to be updated
  * Returns: Void
  */
-void ConnectionClient::sendUpdateTaskAndEvaluation(QString view, Task *task, QString iName, QString taName) {
+void ConnectionClient::sendUpdateTaskAndEvaluation(Task *task, QString iName, QString taName) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
 
     QString msgType(UPDATE_TASK_AND_EVALUATION_REQ);
 
-    out << quint16(0) << msgType << view << *task << iName << taName;
+    out << quint16(0) << msgType << *task << iName << taName;
 
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));

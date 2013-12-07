@@ -10,9 +10,9 @@ class InstructorControl : public QObject
     Q_OBJECT
 public:
     explicit InstructorControl(QObject *parent = 0);
-    void getTaForInstructor(QString view, QString uname);
-    void getInstructors(QString view);
-    void getCoursesForInstructor(QString view, QString uname);
+    void getTaForInstructor(QString uname);
+    void getInstructors();
+    void getCoursesForInstructor(QString uname);
     
 signals:
     

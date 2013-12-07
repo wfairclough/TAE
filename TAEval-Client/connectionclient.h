@@ -33,26 +33,19 @@ public:
     void connectToServer(QString host, quint16 port);
 
     void sendLoginMessage(QString username);
-    void sendTaForInstructorMessage(QString view, QString username);
-    void sendCourseForInstructorMessage(QString view, QString username);
-    void sendInstructorListMessage(QString view);
-    void sendTaListMessage(QString view);
-    void sendTaskForTa(QString view, QString uname);
-    void sendDeleteTask(QString view, Task* task);
-    void sendAddTaskForTa(QString view, QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
-    void sendEvaluationListForTasks(QString view, QList<quint32> taskIds);
-    void sendUpdateTaskAndEvaluation(QString view, Task* task, QString iName, QString taName);
+    void sendTaForInstructorMessage(QString username);
+    void sendCourseForInstructorMessage(QString username);
+    void sendInstructorListMessage();
+    void sendTaListMessage();
+    void sendTaskForTa(QString uname);
+    void sendGetTaskMapForTa(QString uname);
+    void sendTaskForTaAndCourse(TeachingAssistant *ta, Course *courseCourse);
+    void sendDeleteTask(Task* task);
+    void sendAddTaskForTa(QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
+    void sendEvaluationListForTasks(QList<quint32> taskIds);
+    void sendUpdateTaskAndEvaluation(Task* task, QString iName, QString taName);
 
 signals:
-    void recievedErrorResponse(QString errMsg);
-    void recievedLoginResponse(User* user);
-    void recievedTaListForInstructorResponse(QString, QList<TeachingAssistant*> list);
-    void recievedCourseListForInstructorResponse(QString,QList<Course*> list);
-    void recievedInstructorListResponse(QString view, QList<Instructor*> list);
-    void recievedTaListResponse(QString view, QList<TeachingAssistant*> list);
-    void recievedTaskListForTaResponse(QString view, QList<Task*> list);
-    void recievedAddTaskForTaResponse(QString view, QList<Task*> list);
-    void recievedEvaluationListForTasksResponse(QString, QList<Evaluation*> list);
 
 
 private slots:

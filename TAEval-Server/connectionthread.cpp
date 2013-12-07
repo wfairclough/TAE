@@ -11,6 +11,7 @@
 
 
 #include <QDataStream>
+#include <QMap>
 
 
 ConnectionThread::ConnectionThread(int sd, QObject *parent) :
@@ -142,11 +143,11 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(TA_LIST_FOR_INSTRUCTOR_REQ)) == 0) {
-        QString view;
+
         QString instructorUsername;
-        in >> view;
+
         in >> instructorUsername;
-        qDebug() << "View: " << view << " [TaListForInstructorReq] - Instructor: " << instructorUsername;
+        qDebug() << " [TaListForInstructorReq] - Instructor: " << instructorUsername;
 
         InstructorManager im;
         Instructor* i = new Instructor(this);
@@ -160,7 +161,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(TA_LIST_FOR_INSTRUCTOR_RSP);
 
-        out << quint16(0) << msgRspType << view << quint16(list.size());
+        out << quint16(0) << msgRspType << quint16(list.size());
 
         foreach (TeachingAssistant* ta, list) {
             out << *ta;
@@ -172,11 +173,11 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(COURSE_LIST_FOR_INSTRUCTOR_REQ)) == 0) {
-        QString view;
+
         QString instructorUsername;
-        in >> view;
+
         in >> instructorUsername;
-        qDebug() << "View: " << view << " [CourseListForInstructorReq] - Instructor: " << instructorUsername;
+        qDebug() << " [CourseListForInstructorReq] - Instructor: " << instructorUsername;
 
         InstructorManager im;
         Instructor* i = new Instructor(this);
@@ -189,7 +190,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(COURSE_LIST_FOR_INSTRUCTOR_RSP);
 
-        out << quint16(0) << msgRspType << view << quint16(list.size());
+        out << quint16(0) << msgRspType << quint16(list.size());
         qDebug() << "|1|";
         foreach (Course* course, list) {
             out << *course;
@@ -202,9 +203,9 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(INSTRUCTOR_LIST_REQ)) == 0) {
-        QString view;
+
         qDebug() << "[InstructorReq] - All Instructors";
-        in >> view;
+
 
         InstructorManager im;
         QList<Instructor*> list = im.fetchAllInstructors();
@@ -216,7 +217,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(INSTRUCTOR_LIST_RSP);
 
-        out << quint16(0) << msgRspType << view << quint16(list.size());
+        out << quint16(0) << msgRspType << quint16(list.size());
 
         foreach (Instructor* prof, list) {
             out << *prof;
@@ -228,9 +229,9 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(TA_LIST_REQ)) == 0) {
-        QString view;
+
         qDebug() << "[TeachingAssistantReq] - All TAs";
-        in >> view;
+
 
         TaManager tm;
         TeachingAssistant* i = new TeachingAssistant(this);
@@ -243,7 +244,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(TA_LIST_RSP);
 
-        out << quint16(0) << msgRspType << view << quint16(list.size());
+        out << quint16(0) << msgRspType << quint16(list.size());
 
         foreach (TeachingAssistant* ta, list) {
             out << *ta;
@@ -255,11 +256,11 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(TASK_LIST_FOR_TA_REQ)) == 0) {
-        QString view;
+
         QString taUsername;
-        in >> view;
+
         in >> taUsername;
-        qDebug() << "View: " << view << " [TaskListForTA] - Teaching Assistant: " << taUsername;
+        qDebug() << " [TaskListForTA] - Teaching Assistant: " << taUsername;
 
         TaManager tm;
         TeachingAssistant* ta = new TeachingAssistant(this);
@@ -272,7 +273,7 @@ void ConnectionThread::readClient()
         out.setVersion(QDataStream::Qt_4_8);
 
         QString msgRspType(TASK_LIST_FOR_TA_RSP);
-        out << quint16(0) << msgRspType << view << quint16(list.size());
+        out << quint16(0) << msgRspType << quint16(list.size());
 
         foreach (Task* task, list) {
             out << *task;
@@ -284,24 +285,24 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(DELETE_TASK_REQ)) == 0) {
-        QString view;
+
         Task* task = new Task();
-        in >> view >> *task;
-        qDebug() << "View: " << view << " [DELETE_TASK_FOR_TA_RSP]";
+        in >> *task;
+        qDebug() << " [DELETE_TASK_FOR_TA_RSP]";
 
         TaManager tm;
         tm.deleteTask(task);
 
     } else if (msgType.compare(QString(NEW_TASK_REQ)) == 0) {
-        QString view;
+
         QString taUsername;
         QString taskName;
         QString description;
         Course* course = new Course(this);
 
-        in >> view >> taUsername >> *course >> taskName >> description;
+        in >> taUsername >> *course >> taskName >> description;
 
-        qDebug() << "View: " << view << " [NEW_TASK_REQ] - Teaching Assistant: " << taUsername << " Task: " << taskName << " " << description << "  cOurse " << course->getName() << course->getSemesterTypeString() << course->getYear();
+        qDebug() << " [NEW_TASK_REQ] - Teaching Assistant: " << taUsername << " Task: " << taskName << " " << description << "  cOurse " << course->getName() << course->getSemesterTypeString() << course->getYear();
 
         TaManager tm;
         Task* task = new Task(this);
@@ -318,7 +319,7 @@ void ConnectionThread::readClient()
 
         QString msgRspType(NEW_TASK_RSP);
 
-        out << quint16(0) << msgRspType << view << quint16(list.size());
+        out << quint16(0) << msgRspType << quint16(list.size());
 
         foreach (Task* task, list) {
             qDebug() << "[" << NEW_TASK_RSP << "] task with name " << task->getName() << "   " <<  task->getId();
@@ -331,21 +332,44 @@ void ConnectionThread::readClient()
         tcpSocket.write(block);
 
     } else if (msgType.compare(QString(UPDATE_TASK_AND_EVALUATION_REQ)) == 0) {
-        QString view;
+
         Task* task = new Task(this);
         QString iName;
         QString taName;
-        in >> view >> *task >> iName >> taName;
+        in >> *task >> iName >> taName;
 
         qDebug() << "[UPDATE_TASK_AND_EVALUATION_REQ]";
 
         TaManager tm;
         tm.updateTaskAndEvaluation(task, iName, taName);
 
-    } else if (msgType.compare(QString("test")) == 0) {
-        TeachingAssistant i;
-        in >> i;
-        qDebug() << "TA: " << i.getFirstName() << " " << i.getLastName() << " " << i.getUsername();
+    } else if (msgType.compare(QString(TASK_LIST_FOR_TA_AND_COURSE_REQ)) == 0) {
+        TeachingAssistant* teachingAssistant;
+        Course* course = new Course;
+        in >> *teachingAssistant >> *course;
+
+        qDebug() << "[" << TASK_LIST_FOR_TA_AND_COURSE_REQ << "]: " << teachingAssistant->getUsername() << " Course: " << course->getFullCourseName();
+
+        TaManager tm;
+        QList<Task*> taskList = tm.fetchTasksForTaAndCourse(teachingAssistant, course);
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(TASK_LIST_FOR_TA_AND_COURSE_RSP);
+
+        out << quint16(0) << msgRspType << quint16(taskList.size());
+
+        foreach (Task* task, taskList) {
+            qDebug() << "[" << TASK_LIST_FOR_TA_AND_COURSE_RSP << "] task with name " << task->getName() << "   " <<  task->getId();
+            out << *task;
+        }
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
     }
 
     if (tcpSocket.bytesAvailable() > 0) {

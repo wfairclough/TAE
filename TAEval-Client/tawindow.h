@@ -29,7 +29,7 @@ public:
     ~TaWindow();
     
     void updateTaskListForTa(QList<Task*> list);
-    void updateTaskMapForTa(QMap<Course*, Task*> courseTaskMap);
+    void updateTaskListForTaAndCourse(QList<Task*> list);
     // ADD remaining calls to abstract subsciber here //
 
 public slots:

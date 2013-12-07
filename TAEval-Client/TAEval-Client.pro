@@ -10,37 +10,34 @@ TARGET = TAEval-Client
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        loginwindow.cpp \
-    connectionclient.cpp \
-    apiwindow.cpp \
-    instructorcontrol.cpp \
-    tacontrol.cpp \
-    abstractpublisher.cpp \
-    abstractsubscriber.cpp \
-    tawindow.cpp \
-    instructorwindow.cpp \
-    settingsdialog.cpp \
-    adminwindow.cpp
+SOURCES +=  main.cpp \
+            loginwindow.cpp \
+            connectionclient.cpp \
+            instructorcontrol.cpp \
+            tacontrol.cpp \
+            abstractpublisher.cpp \
+            abstractsubscriber.cpp \
+            tawindow.cpp \
+            instructorwindow.cpp \
+            settingsdialog.cpp \
+            adminwindow.cpp
 
 HEADERS  += loginwindow.h \
-    connectionclient.h \
-    apiwindow.h \
-    instructorcontrol.h \
-    tacontrol.h \
-    abstractpublisher.h \
-    abstractsubscriber.h \
-    tawindow.h \
-    instructorwindow.h \
-    settingsdialog.h \
-    adminwindow.h
+            connectionclient.h \
+            instructorcontrol.h \
+            tacontrol.h \
+            abstractpublisher.h \
+            abstractsubscriber.h \
+            tawindow.h \
+            instructorwindow.h \
+            settingsdialog.h \
+            adminwindow.h
 
 FORMS    += loginwindow.ui \
-    apiwindow.ui \
-    tawindow.ui \
-    instructorwindow.ui \
-    settingsdialog.ui \
-    adminwindow.ui
+            tawindow.ui \
+            instructorwindow.ui \
+            settingsdialog.ui \
+            adminwindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../TAEvalCommons/release/ -lTAEvalCommons
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../TAEvalCommons/debug/ -lTAEvalCommons

@@ -84,6 +84,50 @@ QList<Task *> TaManager::fetchAllTasksForTeachingAssistance(TeachingAssistant* t
     return list;
 }
 
+/**
+ * @brief TaManager::fetchTasksForTaAndCourse
+ * @param teachingAssistant
+ * @param course
+ * @return
+ */
+QList<Task *> TaManager::fetchTasksForTaAndCourse(TeachingAssistant* ta, Course* course) {
+    QList<Task *> list;
+
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+    int taId = idForUsername(ta->getUsername());
+    int courseId = idForCourse(course->getName(), course->getSemesterType(), course->getYear());
+
+    if (taId > 0) {
+        QSqlQuery taskQuery(db);
+        taskQuery.prepare("SELECT id, name, description, taid, courseid FROM task WHERE taid=? and courseid=?");
+        taskQuery.addBindValue(taId);
+        taskQuery.addBindValue(courseId);
+
+        if (taskQuery.exec()) {
+            while (taskQuery.next()) {
+                int index = 0;
+                Task* task = new Task();
+                task->setId(taskQuery.value(index++).toInt());
+                task->setName(taskQuery.value(index++).toString());
+                task->setDescription(taskQuery.value(index++).toString());
+
+                TeachingAssistant* teachingAssistant = teachingAssistantForId(taId);
+                task->setTeachingAssistant(teachingAssistant);
+
+                Evaluation* eval = fetchEvaluationForTask(task);
+                task->setEvaluation(eval);
+
+                qDebug() << "Adding Task " << task->getId() << " named - " << task->getName() << " to list.";
+                list << task;
+            }
+        } else {
+            qDebug() << "Could not find Task with id " << taId;
+        }
+    }
+    return list;
+}
+
 
 Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
     Evaluation* evaluation = NULL;

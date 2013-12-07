@@ -38,7 +38,7 @@ public:
     Instructor* getInstructor() const { return instructor; }
     QList<TeachingAssistant*> getTeachingAssistants() const { return taList; }
     bool hasInstructor() const { return instructorSet; }
-
+    QString getFullCourseName() const { return getName() + " " + getSemesterTypeString() + getYearString(); }
 
     // Setter
     void setInstructor(Instructor* i) { instructor = i; instructorSet = true; }

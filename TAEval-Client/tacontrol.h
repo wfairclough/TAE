@@ -19,6 +19,7 @@ public:
     void addTaskForTa(QString uname, QString taskName, QString taskDescription, QString courseName, Semester::semester_t sem, int courseYear);
     void updateTaskAndEvaluation(Task* task, QString iName, QString taName);
     void getCoursesForTeachingAssistant(TeachingAssistant* ta);
+    void getTaskListForTaAndCourse(TeachingAssistant* ta, Course* course);
 
 signals:
     

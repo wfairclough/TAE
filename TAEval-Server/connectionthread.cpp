@@ -205,13 +205,12 @@ void ConnectionThread::readClient()
     } else if (msgType.compare(QString(COURSE_LIST_FOR_TA_REQ)) == 0) {
 
         TeachingAssistant* ta = new TeachingAssistant;
-        Course* course = new Course;
 
-        in >> *ta >> *course;
+        in >> *ta;
         qDebug() << " [" << COURSE_LIST_FOR_TA_REQ << "] - TA: " << ta->getUsername();
 
         TaManager tm;
-        QList<Course*> list = tm.fetchAllCoursesforTeachingAssistant(ta, course);
+        QList<Course*> list = tm.fetchAllCoursesforTeachingAssistant(ta);
 
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
@@ -373,7 +372,7 @@ void ConnectionThread::readClient()
         tm.updateTaskAndEvaluation(task, iName, taName);
 
     } else if (msgType.compare(QString(TASK_LIST_FOR_TA_AND_COURSE_REQ)) == 0) {
-        TeachingAssistant* teachingAssistant;
+        TeachingAssistant* teachingAssistant = new TeachingAssistant;
         Course* course = new Course;
         in >> *teachingAssistant >> *course;
 

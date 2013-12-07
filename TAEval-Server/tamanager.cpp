@@ -466,14 +466,14 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
  * @param ta
  * @return
  */
-QList<Course *> TaManager::fetchAllCoursesforTeachingAssistant(TeachingAssistant* ta, Course* course) {
+QList<Course *> TaManager::fetchAllCoursesforTeachingAssistant(TeachingAssistant* ta) {
     QList<Course *> list;
 
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     QSqlQuery courseQuery(db);
 
-    courseQuery.prepare("select name, semester, year, instructorid from course, TA_Courses where courseId=id and taId=(SELECT id FROM user WHERE username=?)");
+    courseQuery.prepare("select name, semester, year, instructorid from (select * from course, TA_Courses where courseId=id and taId=(SELECT id FROM user WHERE username=?) order by year) course order by semester desc");
     courseQuery.addBindValue(ta->getUsername());
     if (courseQuery.exec()){
         while (courseQuery.next()) {

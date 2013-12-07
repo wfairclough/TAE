@@ -69,3 +69,12 @@ void TaControl::updateTaskAndEvaluation(Task *task, QString iName, QString taNam
 void TaControl::getCoursesForTeachingAssistant(TeachingAssistant* ta) {
     ConnectionClient::getInstance().sendCourseForTeachingAssistantMessage(ta);
 }
+
+/**
+  * Description: Send request to get all Tasks for a TA and a specific course
+  * Parameters: TeachingAssistant and Course that you want the tasks for.
+  * Returns: None
+  */
+void TaControl::getTaskListForTaAndCourse(TeachingAssistant* ta, Course* course) {
+    ConnectionClient::getInstance().sendTaskForTaAndCourse(ta, course);
+}

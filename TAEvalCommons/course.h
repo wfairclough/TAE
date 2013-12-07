@@ -13,9 +13,9 @@
 
 namespace Semester {
     enum semester_t {
-        FALL = 0,
-        WINTER,
-        SUMMER
+        WINTER = 0,
+        SUMMER,
+        FALL
     };
 }
 

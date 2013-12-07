@@ -9,9 +9,7 @@
 #include "abstractsubscriber.h"
 
 #define TASK_NAME_COL 0
-#define TASK_DESCRIPTION_COL 1
-#define TASK_EVAL_RATING_COL 2
-#define TASK_EVAL_COMMENT_COL 3
+#define TASK_EVALUATED_COL 1
 
 #define MANAGE_TASK_VIEW "manageTaskView"
 #define VIEW_COURSE_VIEW "viewCourseView"
@@ -35,8 +33,7 @@ public:
     void updateCourseListForTa(QList<Course*> list);
 
 public slots:
-    void currentCourseComboIndexChanged();
-    void recievedTaskListForTa(QString view, QList<Task*> list);
+    void currentCourseComboIndexChanged(int index);
 
 private:
     void selectCourse(Course* course);
@@ -48,7 +45,8 @@ private:
     void initManageTaskView();
 
     QMap<quint32, Task*> taskMap;
-    QList<quint32> taskId;
+    QMap<quint32, Course*> courseMap;
+
 };
 
 #endif // TAWINDOW_H

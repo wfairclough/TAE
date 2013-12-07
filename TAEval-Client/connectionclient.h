@@ -40,7 +40,7 @@ public:
     void sendTaListMessage();
     void sendTaskForTa(QString uname);
     void sendGetTaskMapForTa(QString uname);
-    void sendTaskForTaAndCourse(TeachingAssistant *ta, Course *courseCourse);
+    void sendTaskForTaAndCourse(TeachingAssistant *ta, Course *course);
     void sendDeleteTask(Task* task);
     void sendAddTaskForTa(QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
     void sendEvaluationListForTasks(QList<quint32> taskIds);

@@ -204,7 +204,7 @@
     <item>
      <widget class="QStackedWidget" name="rightWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="taskHelp">
        <layout class="QVBoxLayout" name="verticalLayout_4">

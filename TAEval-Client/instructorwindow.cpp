@@ -4,6 +4,7 @@
 #include "tacontrol.h"
 #include "connectionclient.h"
 #include <QDebug>
+#include <QMessageBox>
 
 InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     instructor(user),
@@ -75,14 +76,6 @@ void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
     }
 }
 
-void InstructorWindow::updateAddTaskForTa(QList<Task*> list) {
-
-}
-
-void InstructorWindow::updateEvaluationListForTasks(QList<Evaluation*> list) {
-
-}
-
 // Public Slots
 void InstructorWindow::currentCourseComboIndexChanged(int index) {
     selectCourse(courseMap.value(index));
@@ -120,6 +113,10 @@ void InstructorWindow::switchToEditView() {
         ui->editRating->setCurrentIndex(0);
         ui->editComment->setText("");
     }
+    ui->editRating->setVisible(true);
+    ui->ratingLabel3->setVisible(true);
+    ui->editComment->setVisible(true);
+    ui->commentLabel3->setVisible(true);
 }
 
 void InstructorWindow::switchToNewView() {
@@ -127,8 +124,10 @@ void InstructorWindow::switchToNewView() {
     int row = ui->taskTable->currentRow();
     ui->editName->setText(QString(""));
     ui->editDescription->setText(QString(""));
-    ui->editRating->setCurrentIndex(0);
-    ui->editComment->setText(QString(""));
+    ui->editRating->setVisible(false);
+    ui->ratingLabel3->setVisible(false);
+    ui->editComment->setVisible(false);
+    ui->commentLabel3->setVisible(false);
 }
 
 void InstructorWindow::cancelEdit() {
@@ -146,7 +145,41 @@ void InstructorWindow::deleteTask() {
 }
 
 void InstructorWindow::saveTask() {
+    TaControl tc;
+    Task *origTask = taskMap.value(ui->taskTable->currentRow());
+    Task *task = new Task();
+    Evaluation *eval = new Evaluation();
+    TeachingAssistant *ta = taMap.value(ui->taTable->currentRow());
+    Course *course = courseMap.value(ui->courseComboBox->currentIndex());
 
+    if (origTask != 0) {
+        task->setId(origTask->getId());
+        qDebug() << "TOAST - " + origTask->getId();
+    } else {
+        task->setId(-10);
+    }
+    task->setName(ui->editName->text());
+    task->setDescription(ui->editDescription->toPlainText());
+    if (ui->editRating->isVisible()) {
+        if(ui->editComment->toPlainText().trimmed().compare("") != 0) {
+            QMessageBox message(this);
+            message.setText("Select a rating or remove the comment and try saving again");
+            message.exec();
+        } else {
+            if (ui->editRating->currentIndex() != 0) {
+                eval->setRating(ui->editRating->currentIndex());
+                eval->setComment(ui->editComment->toPlainText());
+                task->setEvaluation(eval);
+            }
+            tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), ta->getUsername());
+            tc.getTaskListForTaAndCourse(ta, course);
+            ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+        }
+    } else {
+        tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), ta->getUsername());
+        tc.getTaskListForTaAndCourse(ta, course);
+        ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+    }
 }
 
 // Private Functions

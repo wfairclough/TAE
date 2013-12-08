@@ -37,8 +37,6 @@ public:
     void updateTaskListForTaAndCourse(QList<Task*> list);
     void updateTaListForInstructor(QList<TeachingAssistant*> list);
     void updateCourseListForInstructor(QList<Course*> list);
-    void updateAddTaskForTa(QList<Task*> list);
-    void updateEvaluationListForTasks(QList<Evaluation*> list);
 
 public slots:
     void currentCourseComboIndexChanged(int index);

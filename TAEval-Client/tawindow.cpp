@@ -12,6 +12,7 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
+    connect(ui->taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(taskCellClicked(int, int)));
 
     initManageTaskView();
     setWindowTitle("Teaching Assistant: " + user->getFullName());
@@ -23,10 +24,10 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
 }
 
 void TaWindow::initManageTaskView(){
-    ui->TW_TaskSelect->resizeColumnsToContents();
-    ui->TW_TaskSelect->horizontalHeader()->setResizeMode(TASK_NAME_COL, QHeaderView::Stretch);
-    ui->TW_TaskSelect->horizontalHeader()->setResizeMode(TASK_EVALUATED_COL, QHeaderView::ResizeToContents);
-    ui->TW_TaskSelect->setStyleSheet("color:#333");
+    ui->taskTable->resizeColumnsToContents();
+    ui->taskTable->horizontalHeader()->setResizeMode(TASK_NAME_COL, QHeaderView::Stretch);
+    ui->taskTable->horizontalHeader()->setResizeMode(TASK_EVALUATED_COL, QHeaderView::ResizeToContents);
+    ui->taskTable->setStyleSheet("color:#333");
 }
 
 TaWindow::~TaWindow()
@@ -49,23 +50,18 @@ void TaWindow::updateCourseListForTa(QList<Course*> list) {
  * @param list
  */
 void TaWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
-    ui->TW_TaskSelect->setRowCount(0); // TW_TaskSelect is the widget in ta ui to view / select task
-
-    qDebug() << "Task List size: " << list.size();
+    ui->taskTable->setRowCount(0);
 
     taskMap.clear();
     foreach(Task* task, list){
-        int row = ui->TW_TaskSelect->rowCount();
+        int row = ui->taskTable->rowCount();
         taskMap.insert(row, task);
-
-        qDebug() << "Adding Task to Table: " << task->getName();
-
-        ui->TW_TaskSelect->insertRow(row);
-        ui->TW_TaskSelect->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
+        ui->taskTable->insertRow(row);
+        ui->taskTable->setItem(row, TASK_NAME_COL, new QTableWidgetItem(task->getName()));
         if (task->hasEvaluation()) {
-            ui->TW_TaskSelect->setItem(row, TASK_EVALUATED_COL, new QTableWidgetItem("Evaluated"));
+            ui->taskTable->setItem(row, TASK_EVALUATED_COL, new QTableWidgetItem("Evaluated"));
         } else {
-            ui->TW_TaskSelect->setItem(row, TASK_EVALUATED_COL, new QTableWidgetItem(QString("No Evaluation")));
+            ui->taskTable->setItem(row, TASK_EVALUATED_COL, new QTableWidgetItem(QString("No Evaluation")));
         }
 
     }
@@ -81,8 +77,26 @@ void TaWindow::selectCourse(Course* course) {
 
 }
 
+void TaWindow::selectTask(Task *task) {
+    ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
+    ui->name->setText(task->getName());
+    ui->description->setText(task->getDescription());
+    if (task->hasEvaluation()) {
+        ui->rating->setText(task->getEvaluation()->getRatingString());
+        ui->comment->setText(task->getEvaluation()->getComment());
+    } else {
+        ui->rating->setText(QString("None"));
+        ui->comment->setText(QString("None"));
+    }
+    setCurrentTask(task);
+}
+
 
 void TaWindow::currentCourseComboIndexChanged(int index) {
     selectCourse(courseMap.value(index));
+}
+
+void TaWindow::taskCellClicked(int row, int col) {
+    selectTask(taskMap.value(row));
 }
 

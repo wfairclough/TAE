@@ -123,6 +123,11 @@ void InstructorWindow::switchToEditView() {
 
 void InstructorWindow::switchToNewView() {
     ui->rightWidget->setCurrentIndex(TASK_INFO_EDIT_INDEX);
+    int row = ui->taskTable->currentRow();
+    ui->editName->setText(QString(""));
+    ui->editDescription->setText(QString(""));
+    ui->editRating->setCurrentIndex(0);
+    ui->editComment->setText(QString(""));
 }
 
 void InstructorWindow::switchToInfoView() {

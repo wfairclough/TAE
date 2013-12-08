@@ -10,6 +10,70 @@
     <height>251</height>
    </rect>
   </property>
+  <property name="palette">
+   <palette>
+    <active>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>71</red>
+        <green>71</green>
+        <blue>71</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>71</red>
+        <green>71</green>
+        <blue>71</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>71</red>
+        <green>71</green>
+        <blue>71</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>71</red>
+        <green>71</green>
+        <blue>71</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
   <property name="windowTitle">
    <string>TAEval Settings</string>
   </property>
@@ -25,6 +89,9 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="label_2">
+      <property name="styleSheet">
+       <string notr="true">color:#eee;</string>
+      </property>
       <property name="text">
        <string>The TAEval Client must connect to a TAEval Server. Please enter the IP address of the server below to connect to.</string>
       </property>
@@ -48,6 +115,9 @@
     </item>
     <item>
      <widget class="QLabel" name="ipLabel">
+      <property name="styleSheet">
+       <string notr="true">color:#eee;</string>
+      </property>
       <property name="text">
        <string>Server IP Address:</string>
       </property>
@@ -62,6 +132,9 @@
     </item>
     <item>
      <widget class="QLabel" name="portLabel">
+      <property name="styleSheet">
+       <string notr="true">color:#eee;</string>
+      </property>
       <property name="text">
        <string>Server Port:</string>
       </property>
@@ -87,6 +160,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:#eee;</string>
    </property>
    <property name="text">
     <string>TAEval Settings</string>

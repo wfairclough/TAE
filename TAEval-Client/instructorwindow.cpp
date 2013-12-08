@@ -15,6 +15,11 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
     connect(ui->taTable, SIGNAL(cellClicked(int,int)), this, SLOT(taCellClicked(int, int)));
     connect(ui->taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(taskCellClicked(int, int)));
+    connect(ui->editButton, SIGNAL(released()), this, SLOT(switchToEditView()));
+    connect(ui->newButton, SIGNAL(released()), this, SLOT(switchToNewView()));
+    connect(ui->newButton4, SIGNAL(released()), this, SLOT(switchToNewView()));
+    connect(ui->cancelButton, SIGNAL(released()), this, SLOT(switchToInfoView()));
+    connect(ui->deleteButton, SIGNAL(released()), this, SLOT(deleteTask()));
 
     setWindowTitle("Instructor: " + user->getFullName());
     initInstructorView();
@@ -100,6 +105,21 @@ void InstructorWindow::taskCellClicked(int row, int col) {
         ui->rating->setText(QString("None"));
         ui->comment->setText(QString("None"));
     }
+}
+
+void InstructorWindow::switchToEditView() {
+    ui->rightWidget->setCurrentIndex(TASK_INFO_EDIT_INDEX);
+}
+
+void InstructorWindow::switchToNewView() {
+    ui->rightWidget->setCurrentIndex(TASK_INFO_EDIT_INDEX);
+}
+
+void InstructorWindow::switchToInfoView() {
+    ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
+}
+
+void InstructorWindow::deleteTask() {
 
 }
 

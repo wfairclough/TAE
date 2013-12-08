@@ -44,6 +44,10 @@ public slots:
     void currentCourseComboIndexChanged(int index);
     void taCellClicked(int row, int col);
     void taskCellClicked(int row, int col);
+    void switchToEditView();
+    void switchToNewView();
+    void switchToInfoView();
+    void deleteTask();
     
 private:
     Ui::InstructorWindow *ui;

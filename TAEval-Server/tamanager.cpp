@@ -429,13 +429,21 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
     evalQuery1.addBindValue(task->getId());
     evalQuery1.exec();
     if (evalQuery1.next()) {
-        qDebug() << "Updated Evaluation for Task: " << task->getName();
-        QSqlQuery evalQuery(db);
-        evalQuery.prepare("UPDATE EVALUATION SET rating=?, comment=? WHERE taskid=?");
-        evalQuery.addBindValue(task->getEvaluation()->getRating());
-        evalQuery.addBindValue(task->getEvaluation()->getComment());
-        evalQuery.addBindValue(task->getId());
-        evalQuery.exec();
+        if (task->hasEvaluation()) {
+            qDebug() << "Updated Evaluation for Task: " << task->getName();
+            QSqlQuery evalQuery(db);
+            evalQuery.prepare("UPDATE EVALUATION SET rating=?, comment=? WHERE taskid=?");
+            evalQuery.addBindValue(task->getEvaluation()->getRating());
+            evalQuery.addBindValue(task->getEvaluation()->getComment());
+            evalQuery.addBindValue(task->getId());
+            evalQuery.exec();
+        } else {
+            Evaluation* eval = new Evaluation;
+            int index = 0;
+            int evalId = evalQuery1.value(index++).toInt();
+            eval->setId(evalId);
+            deleteEvaluationForTask(task->getId(), eval);
+        }
     }
     if (task->hasEvaluation()) {
         QSqlQuery refreshTaskQuery(db);

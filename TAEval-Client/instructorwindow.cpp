@@ -14,6 +14,7 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
+    connect(ui->editRating, SIGNAL(currentIndexChanged(int)), this, SLOT(editRatingComboIndexChanged(int)));
     connect(ui->taTable, SIGNAL(cellClicked(int,int)), this, SLOT(taCellClicked(int, int)));
     connect(ui->taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(taskCellClicked(int, int)));
     connect(ui->editButton, SIGNAL(released()), this, SLOT(switchToEditView()));
@@ -82,6 +83,14 @@ void InstructorWindow::currentCourseComboIndexChanged(int index) {
 
 }
 
+void InstructorWindow::editRatingComboIndexChanged(int index) {
+    if (index == 0) {
+        ui->editComment->setEnabled(false);
+    } else {
+        ui->editComment->setEnabled(true);
+    }
+}
+
 void InstructorWindow::taCellClicked(int row, int col) {
     TaControl tc;
     tc.getTaskListForTaAndCourse(taMap.value(row), courseMap.value(ui->courseComboBox->currentIndex()));
@@ -146,40 +155,26 @@ void InstructorWindow::deleteTask() {
 
 void InstructorWindow::saveTask() {
     TaControl tc;
-    Task *origTask = taskMap.value(ui->taskTable->currentRow());
-    Task *task = new Task();
+    Task *task = taskMap.value(ui->taskTable->currentRow());
     Evaluation *eval = new Evaluation();
     TeachingAssistant *ta = taMap.value(ui->taTable->currentRow());
     Course *course = courseMap.value(ui->courseComboBox->currentIndex());
 
-    if (origTask != 0) {
-        task->setId(origTask->getId());
-        qDebug() << "TOAST - " + origTask->getId();
-    } else {
-        task->setId(-10);
+    if (task == NULL) {
+        task = new Task;
     }
     task->setName(ui->editName->text());
     task->setDescription(ui->editDescription->toPlainText());
-    if (ui->editRating->isVisible()) {
-        if(ui->editComment->toPlainText().trimmed().compare("") != 0) {
-            QMessageBox message(this);
-            message.setText("Select a rating or remove the comment and try saving again");
-            message.exec();
-        } else {
-            if (ui->editRating->currentIndex() != 0) {
-                eval->setRating(ui->editRating->currentIndex());
-                eval->setComment(ui->editComment->toPlainText());
-                task->setEvaluation(eval);
-            }
-            tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), ta->getUsername());
-            tc.getTaskListForTaAndCourse(ta, course);
-            ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
-        }
+    if (ui->editRating->isVisible() && ui->editRating->currentIndex() != 0) {
+        eval->setRating(ui->editRating->currentIndex());
+        eval->setComment(ui->editComment->toPlainText());
+        task->setEvaluation(eval);
     } else {
-        tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), ta->getUsername());
-        tc.getTaskListForTaAndCourse(ta, course);
-        ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+        task->setEvaluation(NULL);
     }
+    tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), ta->getUsername());
+    tc.getTaskListForTaAndCourse(ta, course);
+    ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
 }
 
 // Private Functions

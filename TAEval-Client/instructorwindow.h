@@ -40,6 +40,7 @@ public:
 
 public slots:
     void currentCourseComboIndexChanged(int index);
+    void editRatingComboIndexChanged(int index);
     void taCellClicked(int row, int col);
     void taskCellClicked(int row, int col);
     void switchToEditView();

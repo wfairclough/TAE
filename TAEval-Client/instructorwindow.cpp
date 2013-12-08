@@ -18,8 +18,9 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     connect(ui->editButton, SIGNAL(released()), this, SLOT(switchToEditView()));
     connect(ui->newButton, SIGNAL(released()), this, SLOT(switchToNewView()));
     connect(ui->newButton4, SIGNAL(released()), this, SLOT(switchToNewView()));
-    connect(ui->cancelButton, SIGNAL(released()), this, SLOT(switchToInfoView()));
+    connect(ui->cancelButton, SIGNAL(released()), this, SLOT(cancelEdit()));
     connect(ui->deleteButton, SIGNAL(released()), this, SLOT(deleteTask()));
+    connect(ui->saveButton, SIGNAL(released()), this, SLOT(saveTask()));
 
     setWindowTitle("Instructor: " + user->getFullName());
     initInstructorView();
@@ -130,11 +131,21 @@ void InstructorWindow::switchToNewView() {
     ui->editComment->setText(QString(""));
 }
 
-void InstructorWindow::switchToInfoView() {
-    ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
+void InstructorWindow::cancelEdit() {
+    ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
 }
 
 void InstructorWindow::deleteTask() {
+    TaControl tc;
+    Task *task = taskMap.value(ui->taskTable->currentRow());
+    tc.deleteTask(task);
+    TeachingAssistant *ta = taMap.value(ui->taTable->currentRow());
+    Course *course = courseMap.value(ui->courseComboBox->currentIndex());
+    tc.getTaskListForTaAndCourse(ta, course);
+    ui->rightWidget->setCurrentIndex(TASK_INFO_HELP_INDEX);
+}
+
+void InstructorWindow::saveTask() {
 
 }
 

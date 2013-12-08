@@ -46,8 +46,9 @@ public slots:
     void taskCellClicked(int row, int col);
     void switchToEditView();
     void switchToNewView();
-    void switchToInfoView();
+    void cancelEdit();
     void deleteTask();
+    void saveTask();
     
 private:
     Ui::InstructorWindow *ui;

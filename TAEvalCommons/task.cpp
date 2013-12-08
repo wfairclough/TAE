@@ -54,7 +54,7 @@ QDataStream &operator >>(QDataStream &stream, Task &task)
     QString hasEval;
 
     stream >> aId;
-    task.setId(aId.toUInt());
+    task.setId(aId.toInt());
 
     stream >> name;
     task.setName(name);

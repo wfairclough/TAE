@@ -334,7 +334,7 @@ bool TaManager::deleteEvaluationForTask(int taskId) {
         QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
         QSqlQuery evaluationQuery(db);
-        evaluationQuery.prepare("DELETE FROM evaluation taskId=?");
+        evaluationQuery.prepare("DELETE FROM evaluation where taskid=?");
         evaluationQuery.addBindValue(taskId);
 
         if (evaluationQuery.exec()) {
@@ -355,8 +355,7 @@ bool TaManager::deleteEvaluationForTask(int taskId) {
  * @param task to update, evaluation to update
  * @return
  */
-bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taName) {
-    bool added = false;
+Task* TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taName) {
     QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
     int taskId = task->getId();
@@ -389,10 +388,17 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
         taskInQuery.addBindValue(idForUsername(taName));
         taskInQuery.addBindValue(cId);
         taskInQuery.exec();
+
+        QSqlQuery taskIdQuery(db);
+        taskIdQuery.prepare("SELECT id from TASK ORDER BY id DESC LIMIT 1");
+        taskIdQuery.exec();
+        if (taskIdQuery.next()) {
+            task->setId(taskIdQuery.value(0).toInt());
+        }
     }
 
     QSqlQuery evalQuery1(db);
-    evalQuery1.prepare("SELECT id FROM evaluation WHERE taskid=?");
+    evalQuery1.prepare("SELECT taskid FROM evaluation WHERE taskid=?");
     evalQuery1.addBindValue(task->getId());
     evalQuery1.exec();
     if (evalQuery1.next()) {
@@ -428,7 +434,7 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
         evalQuery2.addBindValue(task->getId());
         evalQuery2.exec();
     }
-    return added;
+    return task;
 }
 
 

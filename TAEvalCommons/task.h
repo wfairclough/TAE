@@ -19,7 +19,7 @@ public:
     explicit Task(QObject *parent = 0);
 
     // Setters
-    void setId(quint32 aId) { id = aId; }
+    void setId(qint32 aId) { id = aId; }
     void setName(QString tName) { name = tName; }
     void setDescription(QString desc) { description = desc; }
     void setTeachingAssistant(TeachingAssistant* ta) { teachingAssistant = ta; taSet = true; }
@@ -27,7 +27,7 @@ public:
 
 
     // Getters
-    quint32 getId() const { return id; }
+    qint32 getId() const { return id; }
     QString getIdString() const { return QString::number(id); }
     QString getName() const { return name; }
     QString getDescription() const { return description; }
@@ -48,7 +48,7 @@ public slots:
     
 private:
     bool taSet;
-    quint32 id;
+    qint32 id;
     QString name;
     QString description;
     TeachingAssistant* teachingAssistant;

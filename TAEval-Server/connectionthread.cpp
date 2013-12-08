@@ -369,7 +369,20 @@ void ConnectionThread::readClient()
         qDebug() << "[UPDATE_TASK_AND_EVALUATION_REQ]";
 
         TaManager tm;
-        tm.updateTaskAndEvaluation(task, iName, taName);
+        task = tm.updateTaskAndEvaluation(task, iName, taName);
+
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_8);
+
+        QString msgRspType(UPDATE_TASK_AND_EVALUATION_RSP);
+
+        out << quint16(0) << msgRspType << *task;
+
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+
+        tcpSocket.write(block);
 
     } else if (msgType.compare(QString(TASK_LIST_FOR_TA_AND_COURSE_REQ)) == 0) {
         TeachingAssistant* teachingAssistant = new TeachingAssistant;

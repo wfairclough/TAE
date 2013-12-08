@@ -31,12 +31,22 @@ public:
     explicit InstructorWindow(Instructor* user, QWidget *parent = 0);
     ~InstructorWindow();
 
+    // Getters
     Instructor* getCurrentInstructor() const { return instructor; }
+    TeachingAssistant* getCurrentTa() const { return currentTa; }
+    Task* getCurrentTask() const { return currentTask; }
+    Course* getCurrentCourse() const { return currentCourse; }
+
+    // Setters
+    void setCurrentTa(TeachingAssistant* ta) {currentTa = ta;}
+    void setCurrentTask(Task* task) {currentTask = task;}
+    void setCurrentCourse(Course* course) { currentCourse = course; }
 
     // Subscriber Implementations
     void updateTaskListForTaAndCourse(QList<Task*> list);
     void updateTaListForInstructor(QList<TeachingAssistant*> list);
     void updateCourseListForInstructor(QList<Course*> list);
+    void updateTask(Task *task);
 
 public slots:
     void currentCourseComboIndexChanged(int index);
@@ -52,9 +62,14 @@ public slots:
 private:
     Ui::InstructorWindow *ui;
     Instructor* instructor;
+    TeachingAssistant* currentTa;
+    Task* currentTask;
+    Course* currentCourse;
 
     void initInstructorView();
     void selectCourse(Course* course);
+    void selectTa(TeachingAssistant* ta);
+    void selectTask(Task* task);
 
     QMap<quint32, Task*> taskMap;
     QMap<quint32, Course*> courseMap;

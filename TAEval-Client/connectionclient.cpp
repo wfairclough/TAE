@@ -310,6 +310,14 @@ void ConnectionClient::bytesReady()
         foreach (AbstractSubscriber* subscriber , subscriberList) {
             subscriber->updateTaskListForTaAndCourse(list);
         }
+    } else if (msgType.compare(QString(UPDATE_TASK_AND_EVALUATION_RSP)) == 0) {
+
+        Task* task = new Task;
+        in >> *task;
+
+        foreach (AbstractSubscriber* subscriber , subscriberList) {
+            subscriber->updateTask(task);
+        }
     }
 
     if (clientSocket.bytesAvailable() > 0) {

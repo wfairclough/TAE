@@ -28,6 +28,7 @@ public:
     virtual void updateTaskListForTaAndCourse(QList<Task*> list) {}
     virtual void updateAddTaskForTa(QList<Task*> list) {}
     virtual void updateEvaluationListForTasks(QList<Evaluation*> list) {}
+    virtual void updateTask(Task* task) {}
 
 };
 

@@ -21,7 +21,7 @@ public:
     Evaluation* fetchEvaluationForTask(Task* task);
     bool deleteEvaluationForTask(int taskId);
     bool deleteTask(Task* task);
-    bool updateTaskAndEvaluation(Task* task, QString iName, QString taName);
+    Task* updateTaskAndEvaluation(Task* task, QString iName, QString taName);
 
 signals:
     

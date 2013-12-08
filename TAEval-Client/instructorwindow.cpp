@@ -31,6 +31,8 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
 
     InstructorControl ic;
     ic.getCoursesForInstructor(user->getUsername());
+    setCurrentTa(NULL);
+    setCurrentTask(NULL);
 
 }
 // Public Functions
@@ -61,7 +63,7 @@ void InstructorWindow::updateTaListForInstructor(QList<TeachingAssistant*> list)
     foreach(TeachingAssistant* ta, list) {
         row = ui->taTable->rowCount();
         ui->taTable->insertRow(row);
-        ui->taTable->setItem(row,TA_COL_NAME, new QTableWidgetItem(ta->getFirstName()));
+        ui->taTable->setItem(row,TA_COL_NAME, new QTableWidgetItem(ta->getFullName()));
         taMap.insert(row++, ta);
     }
 }
@@ -75,6 +77,13 @@ void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
         courseMap.insert(index++, course);
         ui->courseComboBox->addItem(course->getFullCourseName());
     }
+}
+
+void InstructorWindow::updateTask(Task* task) {
+    setCurrentTask(task);
+    TaControl tc;
+    tc.getTaskListForTaAndCourse(getCurrentTa(), getCurrentCourse());
+    selectTask(getCurrentTask());
 }
 
 // Public Slots
@@ -92,73 +101,67 @@ void InstructorWindow::editRatingComboIndexChanged(int index) {
 }
 
 void InstructorWindow::taCellClicked(int row, int col) {
-    TaControl tc;
-    tc.getTaskListForTaAndCourse(taMap.value(row), courseMap.value(ui->courseComboBox->currentIndex()));
-    ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+    selectTa(taMap.value(row));
 }
 
 void InstructorWindow::taskCellClicked(int row, int col) {
-    ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
-    ui->name->setText(taskMap.value(row)->getName());
-    ui->description->setText(taskMap.value(row)->getDescription());
-    if (taskMap.value(row)->hasEvaluation()) {
-        ui->rating->setText(taskMap.value(row)->getEvaluation()->getRatingString());
-        ui->comment->setText(taskMap.value(row)->getEvaluation()->getComment());
-    } else {
-        ui->rating->setText(QString("None"));
-        ui->comment->setText(QString("None"));
-    }
+    selectTask(taskMap.value(row));
 }
 
 void InstructorWindow::switchToEditView() {
+    if (getCurrentTask() == NULL) {
+        setCurrentTask(new Task());
+        ui->editRating->setVisible(false);
+        ui->ratingLabel3->setVisible(false);
+        ui->editComment->setVisible(false);
+        ui->commentLabel3->setVisible(false);
+    } else {
+        ui->editRating->setVisible(true);
+        ui->ratingLabel3->setVisible(true);
+        ui->editComment->setVisible(true);
+        ui->commentLabel3->setVisible(true);
+    }
     ui->rightWidget->setCurrentIndex(TASK_INFO_EDIT_INDEX);
-    int row = ui->taskTable->currentRow();
-    ui->editName->setText(taskMap.value(row)->getName());
-    ui->editDescription->setText(taskMap.value(row)->getDescription());
-    if (taskMap.value(row)->hasEvaluation()) {
-        ui->editRating->setCurrentIndex(taskMap.value(row)->getEvaluation()->getRating());
-        ui->editComment->setText(taskMap.value(row)->getEvaluation()->getComment());
+    ui->editName->setText(getCurrentTask()->getName());
+    ui->editDescription->setText(getCurrentTask()->getDescription());
+    if (getCurrentTask()->hasEvaluation()) {
+        ui->editRating->setCurrentIndex(getCurrentTask()->getEvaluation()->getRating());
+        ui->editComment->setText(getCurrentTask()->getEvaluation()->getComment());
     } else {
         ui->editRating->setCurrentIndex(0);
         ui->editComment->setText("");
     }
-    ui->editRating->setVisible(true);
-    ui->ratingLabel3->setVisible(true);
-    ui->editComment->setVisible(true);
-    ui->commentLabel3->setVisible(true);
 }
 
 void InstructorWindow::switchToNewView() {
-    ui->rightWidget->setCurrentIndex(TASK_INFO_EDIT_INDEX);
-    int row = ui->taskTable->currentRow();
-    ui->editName->setText(QString(""));
-    ui->editDescription->setText(QString(""));
-    ui->editRating->setVisible(false);
-    ui->ratingLabel3->setVisible(false);
-    ui->editComment->setVisible(false);
-    ui->commentLabel3->setVisible(false);
+    setCurrentTask(NULL);
+    switchToEditView();
 }
 
 void InstructorWindow::cancelEdit() {
-    ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+    if (getCurrentTask() == NULL || getCurrentTask()->getId() < 0) {
+        selectTa(getCurrentTa());
+    } else {
+        selectTask(getCurrentTask());
+    }
 }
 
 void InstructorWindow::deleteTask() {
     TaControl tc;
-    Task *task = taskMap.value(ui->taskTable->currentRow());
-    tc.deleteTask(task);
-    TeachingAssistant *ta = taMap.value(ui->taTable->currentRow());
-    Course *course = courseMap.value(ui->courseComboBox->currentIndex());
-    tc.getTaskListForTaAndCourse(ta, course);
-    ui->rightWidget->setCurrentIndex(TASK_INFO_HELP_INDEX);
+    tc.deleteTask(getCurrentTask());
+    tc.getTaskListForTaAndCourse(getCurrentTa(), getCurrentCourse());
+    if (taskMap.isEmpty()) {
+        ui->rightWidget->setCurrentIndex(TASK_INFO_HELP_INDEX);
+        setCurrentTask(NULL);
+    } else {
+        selectTa(getCurrentTa());
+    }
 }
 
 void InstructorWindow::saveTask() {
     TaControl tc;
-    Task *task = taskMap.value(ui->taskTable->currentRow());
+    Task *task = getCurrentTask();
     Evaluation *eval = new Evaluation();
-    TeachingAssistant *ta = taMap.value(ui->taTable->currentRow());
-    Course *course = courseMap.value(ui->courseComboBox->currentIndex());
 
     if (task == NULL) {
         task = new Task;
@@ -172,9 +175,8 @@ void InstructorWindow::saveTask() {
     } else {
         task->setEvaluation(NULL);
     }
-    tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), ta->getUsername());
-    tc.getTaskListForTaAndCourse(ta, course);
-    ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+    setCurrentTask(task);
+    tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), getCurrentTa()->getUsername());
 }
 
 // Private Functions
@@ -199,7 +201,32 @@ void InstructorWindow::selectCourse(Course *course) {
     if (course != NULL) {
         InstructorControl ic;
         ic.getTaForInstructor(getCurrentInstructor()->getUsername());
+        setCurrentCourse(course);
     }
+}
+
+void InstructorWindow::selectTa(TeachingAssistant *ta) {
+    if (ta != NULL) {
+        TaControl tc;
+        tc.getTaskListForTaAndCourse(ta, getCurrentCourse());
+        ui->rightWidget->setCurrentIndex(TASK_INFO_NEW_INDEX);
+        setCurrentTa(ta);
+        setCurrentTask(NULL);
+    }
+}
+
+void InstructorWindow::selectTask(Task* task) {
+    ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
+    ui->name->setText(task->getName());
+    ui->description->setText(task->getDescription());
+    if (task->hasEvaluation()) {
+        ui->rating->setText(task->getEvaluation()->getRatingString());
+        ui->comment->setText(task->getEvaluation()->getComment());
+    } else {
+        ui->rating->setText(QString("None"));
+        ui->comment->setText(QString("None"));
+    }
+    setCurrentTask(task);
 }
 
 InstructorWindow::~InstructorWindow()

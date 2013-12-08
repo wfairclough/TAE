@@ -93,7 +93,7 @@
        <string notr="true">color:#eee;</string>
       </property>
       <property name="text">
-       <string>The TAEval Client must connect to a TAEval Server. Please enter the IP address of the server below to connect to.</string>
+       <string>The TAEval Client must connect to a TAEval Server. Please enter the IP address of the server below</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>

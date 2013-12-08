@@ -67,6 +67,7 @@ private:
     Course* currentCourse;
 
     void initInstructorView();
+    void setupEditRatingText(QString firstItem);
     void selectCourse(Course* course);
     void selectTa(TeachingAssistant* ta);
     void selectTask(Task* task);

@@ -188,8 +188,12 @@ void InstructorWindow::initInstructorView() {
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_COL_NAME, QHeaderView::Stretch);
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_COL_EVALUATED, QHeaderView::ResizeToContents);
     ui->taskTable->setStyleSheet("color:#333");
+    setupEditRatingText(QString("No Evaluation"));
+}
 
-    ui->editRating->addItem("Select a Rating");
+void InstructorWindow::setupEditRatingText(QString firstItem) {
+    ui->editRating->clear();
+    ui->editRating->addItem(firstItem);
     ui->editRating->addItem("Poor - 1");
     ui->editRating->addItem("Fair - 2");
     ui->editRating->addItem("Good - 3");

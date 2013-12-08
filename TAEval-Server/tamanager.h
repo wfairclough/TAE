@@ -19,8 +19,7 @@ public:
     QList<Task *> fetchTasksForTaAndCourse(TeachingAssistant* teachingAssistant, Course* course);
     QList<Course *> fetchAllCoursesforTeachingAssistant(TeachingAssistant* ta);
     Evaluation* fetchEvaluationForTask(Task* task);
-    bool deleteEvaluationForTask(int taskId, Evaluation* eval);
-    bool deleteEvaluation(Evaluation* eval);
+    bool deleteEvaluationForTask(int taskId);
     bool deleteTask(Task* task);
     bool updateTaskAndEvaluation(Task* task, QString iName, QString taName);
 

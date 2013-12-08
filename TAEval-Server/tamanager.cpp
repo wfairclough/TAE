@@ -136,7 +136,7 @@ Evaluation* TaManager::fetchEvaluationForTask(Task* task) {
 
 
     QSqlQuery taskQuery(db);
-    taskQuery.prepare("SELECT id, rating, comment  FROM evaluation WHERE taskId=?");
+    taskQuery.prepare("SELECT taskid, rating, comment  FROM evaluation WHERE taskid=?");
     taskQuery.addBindValue(task->getId());
     if (taskQuery.exec()) {
         while (taskQuery.next()) {
@@ -326,7 +326,7 @@ QList<Evaluation*> TaManager::fetchEvaluationsForTasks(QList<Task*> tasks) {
  * @param eval
  * @return
  */
-bool TaManager::deleteEvaluationForTask(int taskId, Evaluation* eval) {
+bool TaManager::deleteEvaluationForTask(int taskId) {
     bool rc = false;
 
     if (taskId >= 0) {
@@ -334,8 +334,7 @@ bool TaManager::deleteEvaluationForTask(int taskId, Evaluation* eval) {
         QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
 
         QSqlQuery evaluationQuery(db);
-        evaluationQuery.prepare("DELETE FROM evaluation WHERE id=? and taskId=?");
-        evaluationQuery.addBindValue(eval->getId());
+        evaluationQuery.prepare("DELETE FROM evaluation taskId=?");
         evaluationQuery.addBindValue(taskId);
 
         if (evaluationQuery.exec()) {
@@ -344,37 +343,6 @@ bool TaManager::deleteEvaluationForTask(int taskId, Evaluation* eval) {
         } else {
             qDebug() << "Error exec new Task SQL: " << evaluationQuery.lastError().text();
         }
-    }
-
-    return rc;
-}
-
-
-/**
- * @brief TaManager::deleteEvaluation Evaluation must have a valid Task set with an Id
- * @param eval
- * @return
- */
-bool TaManager::deleteEvaluation(Evaluation* eval) {
-    bool rc = false;
-
-    if (eval->hasTask()) {
-
-        QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
-
-        QSqlQuery evaluationQuery(db);
-        evaluationQuery.prepare("DELETE FROM evaluation WHERE id=? and taskId=?");
-        evaluationQuery.addBindValue(eval->getId());
-        evaluationQuery.addBindValue(eval->getTask()->getId());
-
-        if (evaluationQuery.exec()) {
-            qDebug() << "Successfully delete evaluation.";
-            rc = true;
-        } else {
-            qDebug() << "Error exec new Task SQL: " << evaluationQuery.lastError().text();
-        }
-    } else {
-        qDebug() << "This evaluation does not have a valid Task in its properties";
     }
 
     return rc;
@@ -421,7 +389,6 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
         taskInQuery.addBindValue(idForUsername(taName));
         taskInQuery.addBindValue(cId);
         taskInQuery.exec();
-
     }
 
     QSqlQuery evalQuery1(db);
@@ -438,11 +405,7 @@ bool TaManager::updateTaskAndEvaluation(Task* task, QString iName, QString taNam
             evalQuery.addBindValue(task->getId());
             evalQuery.exec();
         } else {
-            Evaluation* eval = new Evaluation;
-            int index = 0;
-            int evalId = evalQuery1.value(index++).toInt();
-            eval->setId(evalId);
-            deleteEvaluationForTask(task->getId(), eval);
+            deleteEvaluationForTask(task->getId());
         }
     }
     if (task->hasEvaluation()) {

@@ -31,8 +31,7 @@ CREATE TABLE IF NOT EXISTS TA_Courses (
 
 
 CREATE TABLE IF NOT EXISTS Evaluation (
-  id INTEGER PRIMARY KEY NOT NULL,
-  taskid INTEGER NOT NULL,
+  taskid INTEGER PRIMARY KEY NOT NULL,
   rating int NOT NULL,
   comment varchar(255),
   FOREIGN KEY(taskId) REFERENCES Task(id)

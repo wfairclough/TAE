@@ -109,6 +109,16 @@ void InstructorWindow::taskCellClicked(int row, int col) {
 
 void InstructorWindow::switchToEditView() {
     ui->rightWidget->setCurrentIndex(TASK_INFO_EDIT_INDEX);
+    int row = ui->taskTable->currentRow();
+    ui->editName->setText(taskMap.value(row)->getName());
+    ui->editDescription->setText(taskMap.value(row)->getDescription());
+    if (taskMap.value(row)->hasEvaluation()) {
+        ui->editRating->setCurrentIndex(taskMap.value(row)->getEvaluation()->getRating());
+        ui->editComment->setText(taskMap.value(row)->getEvaluation()->getComment());
+    } else {
+        ui->editRating->setCurrentIndex(0);
+        ui->editComment->setText("");
+    }
 }
 
 void InstructorWindow::switchToNewView() {
@@ -128,9 +138,17 @@ void InstructorWindow::initInstructorView() {
     ui->taTable->horizontalHeader()->setResizeMode(TA_COL_NAME, QHeaderView::Stretch);
     ui->taTable->horizontalHeader()->setResizeMode(TA_COL_RATING, QHeaderView::ResizeToContents);
     ui->taTable->setStyleSheet("color:#333");
+
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_COL_NAME, QHeaderView::Stretch);
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_COL_EVALUATED, QHeaderView::ResizeToContents);
     ui->taskTable->setStyleSheet("color:#333");
+
+    ui->editRating->addItem("Select a Rating");
+    ui->editRating->addItem("Poor - 1");
+    ui->editRating->addItem("Fair - 2");
+    ui->editRating->addItem("Good - 3");
+    ui->editRating->addItem("Very Good - 4");
+    ui->editRating->addItem("Excellent - 5");
 }
 
 void InstructorWindow::selectCourse(Course *course) {

@@ -125,7 +125,11 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QComboBox" name="courseComboBox"/>
+           <widget class="QComboBox" name="courseComboBox">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;Couses assigned to TA user: select to view associated Tasks&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="refreshButton">
@@ -140,6 +144,9 @@
               <width>26</width>
               <height>26</height>
              </size>
+            </property>
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;'Refresh' click to update any infomation that may have been added or changed by other users while loged in.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string/>
@@ -175,6 +182,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="whatsThis">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;This table displays all tasks assigned to the TA user. Task name and it current evaluation status will be displayed. Click a taks to view additonal information.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <column>
           <property name="text">
            <string>Task Name</string>
@@ -206,7 +216,7 @@
     <item>
      <widget class="QStackedWidget" name="rightWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="taskHelp">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -244,6 +254,9 @@
         </item>
         <item>
          <widget class="QLabel" name="taskHelpLabel">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;Additional task information displayed here.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">color:#bbb</string>
           </property>
@@ -322,6 +335,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;Name of the task&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">color:#eee;</string>
           </property>
@@ -383,6 +399,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;Brief description of the task&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">color:#eee;</string>
           </property>
@@ -427,6 +446,9 @@
             <weight>75</weight>
             <bold>true</bold>
            </font>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;Rating for task out of 5&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">color:#eee;</string>
@@ -499,6 +521,9 @@
         </item>
         <item>
          <widget class="QLabel" name="comment">
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;Comments left by instructor for a completed task&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">color:#eee;</string>
           </property>

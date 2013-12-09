@@ -1,0 +1,114 @@
+////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+/////////			  WELCOME TO TAEval                       /////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+............................................________
+....................................,.-'"...................``~.,
+.............................,.-"..................................."-.,
+.........................,/...............................................":,
+.....................,?......................................................,
+.................../...........................................................,}
+................./......................................................,:`^`..}
+.............../...................................................,:"........./
+..............?.....__.........................................:`.........../
+............./__.(....."~-,_..............................,:`........../
+.........../(_...."~,_........"~,_....................,:`........_/
+..........{.._$;_......"=,_......."-,_.......,.-~-,},.~";/....}
+...........((.....*~_......."=-._......";,,./`..../"............../
+...,,,___.`~,......"~.,....................`.....}............../
+............(....`=-,,.......`........................(......;_,,-"
+............/.`~,......`-...................................../
+.............`~.*-,.....................................|,./.....,__
+,,_..........}.>-._...................................|..............`=~-,
+.....`=~-,__......`,.................................
+...................`=~-,,.,...............................
+................................`:,,...........................`..............__
+.....................................`=-,...................,%`>--==``
+........................................_..........._,-%.......`
+..................................., 
+
+				Developed by: Not_A_Virus
+
+Contributors:
+	Will Fairclough
+	Ben Fairclough
+	Sean Malcolmson
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+TAEval is a system for managing TAs for courses and allowing the Instructor to assign TAs tasks and evaluate them on these task.
+
+View full [System Description](http://people.scs.carleton.ca/~claurend/Courses/COMP3004/F13/Project/TAEval.pdf)
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SetUp Instructions:
+	- Open the TAEval folder
+	- double click on "TAEval.pro"
+		- this should start up QT Creator 
+	- In QT creator disable shadow-building when option appears
+	- In the QT menu bar select -> tools -> options
+		- under "terminal" change the path to /usr/bin/xterm -e
+			-> "OK"  
+	- Click the computer monitor icon the left hand side of QT creator
+		- Select "taeval-server" then click the "play" button to run / build
+	
+	IF Using single host machine for client and server:	
+		- Select "taeval-client" then click the "play" button to run/ build client
+		- TAEval should automatically establish connection to localhosted server
+
+	IF Using multiple host machines:
+		- Select "taeval-client" then click the "play" button to run/ build client
+		- In option bar  select "file" -> "settings" 
+		  (NOTE: you may have to expand the window to see options bar)
+			- In the "Server IP Address:" field enter the IP of the machine hosting the server
+			- click "OK" and the connection should be established 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Usage/Testing:
+
+	- Now that TAEval is up and running you may enter an existing user name to login
+		- Depending on the user type (Instructor or TA) you will be brought to a corrisponding User-Interface
+	
+	Here are a few userIds to test with:
+		"jsnow"    ->TA		
+		"hsolo"    ->TA
+		"shurtado" ->TA
+		"ederavin" ->TA
+		
+		"zoidberg"    ->instructor
+		"claurendeau" ->Instructor
+		"ldnel"	      ->Instructor
+		"dmaybury"    ->Insturctor		
+		(Many more in the DB, check sql file if you want more names) 
+
+
+	
+	Logged in as TA user:
+		- From the Drop down "Select a Course:"  -> choose a course you wish to view
+		- From "Select a Task:" -> click to select a task 
+			- Task information will now be displayed on the right
+		- Refresh can be clicked to see if any information has been added or changed by on of the instructor users wile the TA was logged in
+		- At any point log out may be clicked to logout the TA users
+		- At any point user may select "help" ->"whats this?" from menu bar -> click a window element and view additional information 
+
+	Logged in as Instructor user:
+		-From the drop down "Select a Course:"  -> choose a course you wish to view
+		-From "Teaching Assistants" select a taching assistant
+		- a "New" button should appear on the right under task information where the user may add a new taks  to the currently selected TA
+		- Or the user may select a task under the task list
+			- on the right hand side avalable task information will appear
+			- in addition the options of "new" "edit" and "delete" 
+			- by selecting "edit" an evalution can be created with a rating and comment
+				- "save" -> to submit
+		
+		- At any point "log out" may be clicked to logout the TA users		
+		- At any point user may select "help" -> "whats this?" from menu bar -> click a window element and view additional information
+
+		
+
+
+
+
+
+

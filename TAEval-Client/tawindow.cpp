@@ -31,6 +31,11 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
     ui->menuHelp->addAction(whatsThisAction);
 }
 
+/**
+ * Description: Sets the default styling when the TA Window is loaded
+ * Paramters: None
+ * Returns: Void
+ */
 void TaWindow::initManageTaskView(){
     ui->taskTable->resizeColumnsToContents();
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_NAME_COL, QHeaderView::Stretch);
@@ -46,11 +51,20 @@ TaWindow::~TaWindow()
     delete ui;
 }
 
-
+/**
+ * Description: Handles the client being disconnected from the server
+ * Paramters: None
+ * Returns: Void
+ */
 void TaWindow::connectionDisconnected() {
     logout();
 }
 
+/**
+ * Description: Creates a new login window and dismisses the TA Window
+ * Paramters: PARAMETERS
+ * Returns: RETURN
+ */
 void TaWindow::logout() {
 
     LoginWindow* loginWindow = new LoginWindow;
@@ -59,16 +73,30 @@ void TaWindow::logout() {
     closeWindow();
 }
 
+/**
+ * Description: Quits TAEval
+ * Paramters: None
+ * Returns: Void
+ */
 void TaWindow::quit() {
     QCoreApplication::exit();
 }
 
+/**
+ * Description: Unsubscribes TA Window from all updates and closes TA Window
+ * Paramters: None
+ * Returns: Void
+ */
 void TaWindow::closeWindow() {
     ConnectionClient::getInstance().unsubscribe(this);
     close();
 }
 
-
+/**
+ * Description: Loads course list for a specific TA
+ * Paramters: List of courses returned from server
+ * Returns: Void
+ */
 void TaWindow::updateCourseListForTa(QList<Course*> list) {
     courseMap.clear();
 
@@ -104,7 +132,11 @@ void TaWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
     }
 }
 
-
+/**
+ * Description: Makes request for a list of tasks associated with the selected course
+ * Paramters: Currently selected course
+ * Returns: Void
+ */
 void TaWindow::selectCourse(Course* course) {
 
     if (course != NULL) {
@@ -115,6 +147,11 @@ void TaWindow::selectCourse(Course* course) {
 
 }
 
+/**
+ * Description: Displays currently selected task into the task information view
+ * Paramters: Currently selected task
+ * Returns: Void
+ */
 void TaWindow::selectTask(Task *task) {
     ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
     ui->name->setText(task->getName());
@@ -138,15 +175,29 @@ void TaWindow::selectTask(Task *task) {
     setCurrentTask(task);
 }
 
-
+/**
+ * Description: Handles a new selection from the course combobox
+ * Paramters: Selected index from course combobox
+ * Returns: Void
+ */
 void TaWindow::currentCourseComboIndexChanged(int index) {
     selectCourse(courseMap.value(index));
 }
 
+/**
+ * Description: Makes a request for new information from the server
+ * Paramters: None
+ * Returns: Void
+ */
 void TaWindow::refreshButtonReleased() {
     selectCourse(courseMap.value(ui->courseComboBox->currentIndex()));
 }
 
+/**
+ * Description: Loads the task information view with information based off of the currently selected task
+ * Paramters: Selected row number, selected col number
+ * Returns: Void
+ */
 void TaWindow::taskCellClicked(int row, int col) {
     selectTask(taskMap.value(row));
 }

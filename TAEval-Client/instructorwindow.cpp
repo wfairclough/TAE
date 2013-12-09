@@ -3,6 +3,7 @@
 #include "instructorcontrol.h"
 #include "tacontrol.h"
 #include "connectionclient.h"
+#include "loginwindow.h"
 #include <QDebug>
 #include <QMessageBox>
 
@@ -13,6 +14,8 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->actionLogout, SIGNAL(triggered()), this, SLOT(logout()));
+    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
     connect(ui->refreshButton, SIGNAL(released()), this, SLOT(refreshButtonReleased()));
     connect(ui->editRating, SIGNAL(currentIndexChanged(int)), this, SLOT(editRatingComboIndexChanged(int)));
@@ -37,6 +40,30 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
 
 
 }
+
+void InstructorWindow::closeWindow() {
+    ConnectionClient::getInstance().unsubscribe(this);
+    close();
+}
+
+void InstructorWindow::connectionDisconnected() {
+    logout();
+}
+
+void InstructorWindow::logout() {
+
+    LoginWindow* loginWindow = new LoginWindow;
+    loginWindow->show();
+
+    closeWindow();
+}
+
+void InstructorWindow::quit() {
+    QCoreApplication::exit();
+}
+
+
+
 // Public Functions
 void InstructorWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
     taskMap.clear();

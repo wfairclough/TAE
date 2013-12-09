@@ -32,6 +32,11 @@ public:
 
     void connectToServer(QString host, quint16 port);
 
+    bool isConnected() const { return isConnectedVal; }
+    void setIsConnected(bool val) { isConnectedVal = val; }
+
+
+    // Messages
     void sendLoginMessage(QString username);
     void sendTaForInstructorMessage(QString username);
     void sendCourseForInstructorMessage(QString username);
@@ -45,6 +50,8 @@ public:
     void sendAddTaskForTa(QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
     void sendEvaluationListForTasks(QList<quint32> taskIds);
     void sendUpdateTaskAndEvaluation(Task* task, QString iName, QString taName);
+
+    void logout();
 
 signals:
 
@@ -62,6 +69,7 @@ private:
 
     TimeoutSocket clientSocket;
     quint16 nextBlockSize;
+    bool isConnectedVal;
 
     void closeConnection();
     QSet<AbstractSubscriber*> subscriberList;

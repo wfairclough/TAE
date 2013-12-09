@@ -33,21 +33,27 @@ public:
     Task* getCurrentTask() const { return currentTask; }
 
 
-    // Settiers
+    // Setters
     void setCurrentTask(Task* task) {currentTask = task;}
 
     // Subscriber Implementations
     void updateTaskListForTaAndCourse(QList<Task*> list);
     void updateCourseListForTa(QList<Course*> list);
+    void connectionDisconnected();
 
 private slots:
     void currentCourseComboIndexChanged(int index);
     void refreshButtonReleased();
     void taskCellClicked(int row, int col);
 
+    void logout();
+    void quit();
+
 private:
     void selectCourse(Course* course);
     void selectTask(Task* task);
+
+    void closeWindow();
 
     Ui::TaWindow *ui;
     TeachingAssistant* teachingAssistant;

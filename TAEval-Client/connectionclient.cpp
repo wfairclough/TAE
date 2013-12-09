@@ -7,7 +7,8 @@
  * Paramters: Partent Widget
  * Returns:
  */
-ConnectionClient::ConnectionClient()
+ConnectionClient::ConnectionClient() :
+    isConnectedVal(false)
 {
     connect(&clientSocket, SIGNAL(connected()), this, SLOT(connectedToHost()));
     connect(&clientSocket, SIGNAL(disconnected()), this, SLOT(connectionClosedByServer()));
@@ -37,6 +38,7 @@ void ConnectionClient::recievedNetworkTimeout()
     foreach (AbstractSubscriber* subscriber , subscriberList) {
         subscriber->connectionNetworkTimeout();
     }
+    closeConnection();
 }
 
 /**
@@ -46,6 +48,7 @@ void ConnectionClient::recievedNetworkTimeout()
  */
 void ConnectionClient::connectedToHost()
 {
+    setIsConnected(true);
     // Update all the subscribers
     foreach (AbstractSubscriber* subscriber , subscriberList) {
         subscriber->connectionSuccess();
@@ -653,6 +656,21 @@ void ConnectionClient::connectionClosedByServer()
  */
 void ConnectionClient::closeConnection()
 {
+    setIsConnected(false);
+    clientSocket.close();
+
+    foreach (AbstractSubscriber* subscriber, subscriberList) {
+        subscriber->connectionDisconnected();
+    }
+}
+
+/**
+ * Description: Public wrapper for close connection.
+ *
+ */
+void ConnectionClient::logout() {
+    setIsConnected(false);
+    clientSocket.disconnect();
     clientSocket.close();
 }
 

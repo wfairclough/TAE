@@ -546,8 +546,27 @@
      <string>Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionLogout"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
+  <action name="actionLogout">
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

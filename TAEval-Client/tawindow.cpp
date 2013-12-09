@@ -2,7 +2,7 @@
 #include "ui_tawindow.h"
 #include "connectionclient.h"
 #include "tacontrol.h"
-
+#include "loginwindow.h"
 
 
 TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
@@ -11,6 +11,9 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
     ui(new Ui::TaWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->actionLogout, SIGNAL(triggered()), this, SLOT(logout()));
+    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
     connect(ui->refreshButton, SIGNAL(released()), this, SLOT(refreshButtonReleased()));
     connect(ui->taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(taskCellClicked(int, int)));
@@ -36,6 +39,29 @@ TaWindow::~TaWindow()
 {
     delete ui;
 }
+
+
+void TaWindow::connectionDisconnected() {
+    logout();
+}
+
+void TaWindow::logout() {
+
+    LoginWindow* loginWindow = new LoginWindow;
+    loginWindow->show();
+
+    closeWindow();
+}
+
+void TaWindow::quit() {
+    QCoreApplication::exit();
+}
+
+void TaWindow::closeWindow() {
+    ConnectionClient::getInstance().unsubscribe(this);
+    close();
+}
+
 
 void TaWindow::updateCourseListForTa(QList<Course*> list) {
     courseMap.clear();

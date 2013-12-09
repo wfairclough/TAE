@@ -216,7 +216,7 @@
     <item>
      <widget class="QStackedWidget" name="rightWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="taskHelp">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -261,7 +261,7 @@
            <string notr="true">color:#bbb</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select a Task from the Tasks table&lt;br/&gt;to see detailed information about it&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select a task from the tasks table&lt;br/&gt;to see detailed information about it&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

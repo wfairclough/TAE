@@ -40,8 +40,9 @@ public:
     void updateTaskListForTaAndCourse(QList<Task*> list);
     void updateCourseListForTa(QList<Course*> list);
 
-public slots:
+private slots:
     void currentCourseComboIndexChanged(int index);
+    void refreshButtonReleased();
     void taskCellClicked(int row, int col);
 
 private:

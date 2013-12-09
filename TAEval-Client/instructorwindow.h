@@ -48,8 +48,9 @@ public:
     void updateCourseListForInstructor(QList<Course*> list);
     void updateTask(Task *task);
 
-public slots:
+private slots:
     void currentCourseComboIndexChanged(int index);
+    void refreshButtonReleased();
     void editRatingComboIndexChanged(int index);
     void taCellClicked(int row, int col);
     void taskCellClicked(int row, int col);

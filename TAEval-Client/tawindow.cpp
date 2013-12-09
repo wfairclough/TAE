@@ -12,6 +12,7 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
+    connect(ui->refreshButton, SIGNAL(released()), this, SLOT(refreshButtonReleased()));
     connect(ui->taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(taskCellClicked(int, int)));
 
     initManageTaskView();
@@ -28,6 +29,7 @@ void TaWindow::initManageTaskView(){
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_NAME_COL, QHeaderView::Stretch);
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_EVALUATED_COL, QHeaderView::ResizeToContents);
     ui->taskTable->setStyleSheet("color:#333");
+    ui->refreshButton->setIcon(QIcon("Resources/refresh.png"));
 }
 
 TaWindow::~TaWindow()
@@ -42,6 +44,9 @@ void TaWindow::updateCourseListForTa(QList<Course*> list) {
     foreach(Course* course, list) {
         courseMap.insert(index++, course);
         ui->courseComboBox->addItem(course->getFullCourseName());
+    }
+    if (courseMap.isEmpty()) {
+        ui->refreshButton->setEnabled(false);
     }
 }
 
@@ -74,6 +79,7 @@ void TaWindow::selectCourse(Course* course) {
         TaControl tc;
         tc.getTaskListForTaAndCourse(getCurrentTa(), course);
     }
+    ui->refreshButton->setEnabled(true);
 
 }
 
@@ -94,6 +100,10 @@ void TaWindow::selectTask(Task *task) {
 
 void TaWindow::currentCourseComboIndexChanged(int index) {
     selectCourse(courseMap.value(index));
+}
+
+void TaWindow::refreshButtonReleased() {
+    selectCourse(courseMap.value(ui->courseComboBox->currentIndex()));
 }
 
 void TaWindow::taskCellClicked(int row, int col) {

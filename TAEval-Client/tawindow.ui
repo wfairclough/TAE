@@ -119,7 +119,35 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="courseComboBox"/>
+        <widget class="QWidget" name="courseWidget" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="courseComboBox"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="refreshButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>26</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="taskLabel">

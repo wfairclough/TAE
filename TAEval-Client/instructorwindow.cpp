@@ -14,6 +14,7 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->courseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCourseComboIndexChanged(int)));
+    connect(ui->refreshButton, SIGNAL(released()), this, SLOT(refreshButtonReleased()));
     connect(ui->editRating, SIGNAL(currentIndexChanged(int)), this, SLOT(editRatingComboIndexChanged(int)));
     connect(ui->taTable, SIGNAL(cellClicked(int,int)), this, SLOT(taCellClicked(int, int)));
     connect(ui->taskTable, SIGNAL(cellClicked(int,int)), this, SLOT(taskCellClicked(int, int)));
@@ -33,6 +34,7 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     ic.getCoursesForInstructor(user->getUsername());
     setCurrentTa(NULL);
     setCurrentTask(NULL);
+
 
 }
 // Public Functions
@@ -77,6 +79,12 @@ void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
         courseMap.insert(index++, course);
         ui->courseComboBox->addItem(course->getFullCourseName());
     }
+    if (!courseMap.isEmpty()) {
+        setCurrentCourse(courseMap.value(0));
+    } else {
+        setCurrentCourse(NULL);
+        ui->refreshButton->setEnabled(false);
+    }
 }
 
 void InstructorWindow::updateTask(Task* task) {
@@ -86,10 +94,14 @@ void InstructorWindow::updateTask(Task* task) {
     selectTask(getCurrentTask());
 }
 
-// Public Slots
+// Private Slots
 void InstructorWindow::currentCourseComboIndexChanged(int index) {
     selectCourse(courseMap.value(index));
 
+}
+
+void InstructorWindow::refreshButtonReleased() {
+    selectCourse(getCurrentCourse());
 }
 
 void InstructorWindow::editRatingComboIndexChanged(int index) {
@@ -188,7 +200,9 @@ void InstructorWindow::initInstructorView() {
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_COL_NAME, QHeaderView::Stretch);
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_COL_EVALUATED, QHeaderView::ResizeToContents);
     ui->taskTable->setStyleSheet("color:#333");
+
     setupEditRatingText(QString("No Evaluation"));
+    ui->refreshButton->setIcon(QIcon("Resources/refresh.png"));
 }
 
 void InstructorWindow::setupEditRatingText(QString firstItem) {

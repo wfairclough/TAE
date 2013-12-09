@@ -10,7 +10,7 @@ InstructorControl::InstructorControl(QObject *parent) :
 /**
  * Description: Send request for list of Instructor's TAs
  * Paramters: username of the Instructor
- * Returns: None
+ * Returns: Void
  */
 void InstructorControl::getTaForInstructor(QString uname) {
     ConnectionClient::getInstance().sendTaForInstructorMessage(uname);
@@ -19,9 +19,8 @@ void InstructorControl::getTaForInstructor(QString uname) {
 /**
  * Description: Send request for list of Instructor's Courses
  * Paramters: username of the Instructor
- * Returns: None
+ * Returns: Void
  */
-
 void InstructorControl::getCoursesForInstructor(QString uname) {
     ConnectionClient::getInstance().sendCourseForInstructorMessage(uname);
 }
@@ -29,13 +28,17 @@ void InstructorControl::getCoursesForInstructor(QString uname) {
 /**
  * Description: Send request for list of Instructors
  * Paramters:
- * Returns: None
+ * Returns: Void
  */
 void InstructorControl::getInstructors() {
     ConnectionClient::getInstance().sendInstructorListMessage();
 }
 
-
+/**
+ * Description: Send request for list of Teaching Assistants for a given course
+ * Paramters: the course that is assiciated with the list of TAs
+ * Returns: Void
+ */
 void InstructorControl::getTaForCourse(Course* course) {
     ConnectionClient::getInstance().sendGetTaListForCourse(course);
 }

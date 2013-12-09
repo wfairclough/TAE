@@ -4,8 +4,8 @@
 
 /**
  * Description: Constructor for the ConnectionClient
- * Paramters: Partent Widget
- * Returns:
+ * Paramters: None
+ * Returns: ConnectionClient object
  */
 ConnectionClient::ConnectionClient() :
     isConnectedVal(false)
@@ -18,7 +18,7 @@ ConnectionClient::ConnectionClient() :
 
 /**
  * Description: Tries to make a connection to the server
- * Paramters:
+ * Paramters: ip address to connect to, port to communicate through
  * Returns: Void
  */
 void ConnectionClient::connectToServer(QString host, quint16 port)
@@ -42,8 +42,8 @@ void ConnectionClient::recievedNetworkTimeout()
 }
 
 /**
- * Description:
- * Paramters:
+ * Description: lets all subscribes know a successful connection has been made
+ * Paramters: None
  * Returns: Void
  */
 void ConnectionClient::connectedToHost()
@@ -650,7 +650,11 @@ void ConnectionClient::sendUpdateTaskAndEvaluation(Task *task, QString iName, QS
     qDebug() << "Wrote " << UPDATE_TASK_AND_EVALUATION_REQ << " Data to server.";
 }
 
-
+/**
+ * Description: Send a message to the server requesting a list of TAs for a specifiec course
+ * Paramters: the course object that is associated with the TAs
+ * Returns: Void
+ */
 void ConnectionClient::sendGetTaListForCourse(Course* course) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);

@@ -45,15 +45,30 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
 
 }
 
+/**
+ * Description: Unsubscribes window from updates and closes window
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::closeWindow() {
     ConnectionClient::getInstance().unsubscribe(this);
     close();
 }
 
+/**
+ * Description: Handles disconnect from server
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::connectionDisconnected() {
     logout();
 }
 
+/**
+ * Description: Opens a new login windo and closes instructor window
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::logout() {
 
     LoginWindow* loginWindow = new LoginWindow;
@@ -62,13 +77,22 @@ void InstructorWindow::logout() {
     closeWindow();
 }
 
+/**
+ * Description: Quits application
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::quit() {
     QCoreApplication::exit();
 }
 
 
-
 // Public Functions
+/**
+ * Description: Displays tasks for a specific TA and Course that have been returned by the server
+ * Paramters: List of tasks returned from server
+ * Returns: Void
+ */
 void InstructorWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
     taskMap.clear();
     ui->taskTable->setRowCount(0);
@@ -88,6 +112,11 @@ void InstructorWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
     }
 }
 
+/**
+ * Description: Displays TAs for a specific course that have been returned by the server
+ * Paramters: List of TAs
+ * Returns: Void
+ */
 void InstructorWindow::updateTaListForCourse(QList<TeachingAssistant*> list) {
     taMap.clear();
     ui->taTable->setRowCount(0);
@@ -101,6 +130,11 @@ void InstructorWindow::updateTaListForCourse(QList<TeachingAssistant*> list) {
     }
 }
 
+/**
+ * Description: Displays courses for a specific instructor that have been returned by the server
+ * Paramters: List of courses
+ * Returns: Void
+ */
 void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
     courseMap.clear();
     ui->courseComboBox->clear();
@@ -121,6 +155,11 @@ void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
     taskMap.clear();
 }
 
+/**
+ * Description: Displays a task that was updated in the server
+ * Paramters: The task that was updated
+ * Returns: Void
+ */
 void InstructorWindow::updateTask(Task* task) {
     setCurrentTask(task);
     TaControl tc;
@@ -128,16 +167,32 @@ void InstructorWindow::updateTask(Task* task) {
     selectTask(getCurrentTask());
 }
 
+
 // Private Slots
+/**
+ * Description: Loads new list of courses when the course combobox is changed
+ * Paramters: Index of the selected course
+ * Returns: Void
+ */
 void InstructorWindow::currentCourseComboIndexChanged(int index) {
     selectCourse(courseMap.value(index));
 
 }
 
+/**
+ * Description: Asks for the most up to date list of courses from the server when the refresh button is pressed
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::refreshButtonReleased() {
     selectCourse(getCurrentCourse());
 }
 
+/**
+ * Description: Disables or enables the task comment box when the rating combobox is changed
+ * Paramters: Index of the selected rating
+ * Returns: Void
+ */
 void InstructorWindow::editRatingComboIndexChanged(int index) {
     if (index == 0) {
         ui->editComment->setEnabled(false);
@@ -146,14 +201,29 @@ void InstructorWindow::editRatingComboIndexChanged(int index) {
     }
 }
 
+/**
+ * Description: Loads tasks associated with the selected TA
+ * Paramters: Selected row number, selected column number for taTable
+ * Returns: Void
+ */
 void InstructorWindow::taCellClicked(int row, int col) {
     selectTa(taMap.value(row));
 }
 
+/**
+ * Description: Loads task information with the selected task
+ * Paramters: Selected row number, selected column number for taskTable
+ * Returns: RETURN
+ */
 void InstructorWindow::taskCellClicked(int row, int col) {
     selectTask(taskMap.value(row));
 }
 
+/**
+ * Description: Loads the currently selected task into the edit task view
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::switchToEditView() {
     if (getCurrentTask() == NULL) {
         setCurrentTask(new Task());
@@ -179,11 +249,21 @@ void InstructorWindow::switchToEditView() {
     }
 }
 
+/**
+ * Description: Loads up the view for the instructor to create a new task
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::switchToNewView() {
     setCurrentTask(NULL);
     switchToEditView();
 }
 
+/**
+ * Description: Handles when the cancel button on the edit task view is clicked
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::cancelEdit() {
     if (getCurrentTask() == NULL || getCurrentTask()->getId() < 0) {
         selectTa(getCurrentTa());
@@ -192,6 +272,11 @@ void InstructorWindow::cancelEdit() {
     }
 }
 
+/**
+ * Description: Removes the selected task from the database
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::deleteTask() {
     TaControl tc;
     tc.deleteTask(getCurrentTask());
@@ -204,6 +289,11 @@ void InstructorWindow::deleteTask() {
     }
 }
 
+/**
+ * Description: Updates the currently edited task or adds the newly created task to the database
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::saveTask() {
     if (validateFields()) {
         TaControl tc;
@@ -227,7 +317,13 @@ void InstructorWindow::saveTask() {
     }
 }
 
+
 // Private Functions
+/**
+ * Description: Sets all default styling when instructor view is first loaded
+ * Paramters: None
+ * Returns: Void
+ */
 void InstructorWindow::initInstructorView() {
     ui->taTable->horizontalHeader()->setResizeMode(TA_COL_NAME, QHeaderView::Stretch);
     ui->taTable->horizontalHeader()->setResizeMode(TA_COL_RATING, QHeaderView::ResizeToContents);
@@ -243,6 +339,11 @@ void InstructorWindow::initInstructorView() {
     ui->rightWidget->setCurrentIndex(0);
 }
 
+/**
+ * Description: Adds default text to the task rating combobox
+ * Paramters: Text of the first item in the list
+ * Returns: Void
+ */
 void InstructorWindow::setupEditRatingText(QString firstItem) {
     ui->editRating->clear();
     ui->editRating->addItem(firstItem);
@@ -253,6 +354,11 @@ void InstructorWindow::setupEditRatingText(QString firstItem) {
     ui->editRating->addItem("Excellent - 5");
 }
 
+/**
+ * Description: Makes request for the TAs associated with the selected course
+ * Paramters: Selected course from the course combobox
+ * Returns: Void
+ */
 void InstructorWindow::selectCourse(Course *course) {
     if (course != NULL) {
         setCurrentCourse(course);
@@ -261,6 +367,11 @@ void InstructorWindow::selectCourse(Course *course) {
     }
 }
 
+/**
+ * Description: Makes a request for the tasks associated with the selected TA
+ * Paramters: Selected TA from the taTable
+ * Returns: Void
+ */
 void InstructorWindow::selectTa(TeachingAssistant *ta) {
     if (ta != NULL) {
         TaControl tc;
@@ -271,6 +382,11 @@ void InstructorWindow::selectTa(TeachingAssistant *ta) {
     }
 }
 
+/**
+ * Description: Populates the task information view with the information of the selected task
+ * Paramters: Currently selected task
+ * Returns: Void
+ */
 void InstructorWindow::selectTask(Task* task) {
     ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
     ui->name->setText(task->getName());
@@ -294,6 +410,11 @@ void InstructorWindow::selectTask(Task* task) {
     setCurrentTask(task);
 }
 
+/**
+ * Description: Checks the name field of the edit task view to make sure it's not empty
+ * Paramters: None
+ * Returns: true if fields are non empty, otherwise false
+ */
 bool InstructorWindow::validateFields() {
     bool valid = true;
     QString redStyle("background: #FF8584; color: white;");

@@ -92,6 +92,20 @@ INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="ldnel
 --Insert a test instructor user
 INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "David", "Maybury", "dmaybury", 2 );
 INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="dmaybury";
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Dr", "Who", "drwho", 2 );
+INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="drwho";
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Daniel", "Faraday", "dfaraday", 2 );
+INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="dfaraday";
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Thanatos", " ", "thanatos", 2 );
+INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="thanatos";
+--Insert a test instructor user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Zoidberg", " ", "zoidberg", 2 );
+INSERT OR REPLACE INTO INSTRUCTOR (id) SELECT id from USER where username="zoidberg";
+
+
 
 
 --Insert a test TA user
@@ -106,6 +120,27 @@ INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="hsolo";
 --Insert a test TA user
 INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Emilie", "de Ravin", "ederavin", 3 );
 INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="ederavin";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "John", "Snow", "jsnow", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jsnow";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Ned", "Stark", "nstark", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="nstark";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Hodor", " ", "hodor", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="hodor";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Joffrey", "Baratheon", "jbaratheon", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="jbaratheon";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "50", "Cent", "50cent", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="50cent";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Number", "Six", "nsix", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="nsix";
+--Insert a test TA user
+INSERT OR REPLACE INTO USER (firstName, lastName, username, type) VALUES ( "Rose", "Tyler", "rtyler", 3 );
+INSERT OR REPLACE INTO TA (id) SELECT id from USER where username="rtyler";
 
 
 --Insert test Courses
@@ -116,6 +151,10 @@ INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COM
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "COMP2402", 0, 2012, (SELECT id from USER where username='ldnel') );
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1901", 2, 2013, (SELECT id from USER where username='dmaybury') );
 INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1901", 2, 2012, (SELECT id from USER where username='dmaybury') );
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS1002", 2, 2013, (SELECT id from USER where username='drwho') );
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "PHYS7105", 2, 2013, (SELECT id from USER where username='dfaraday') );
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "LIFE4000", 2, 2012, (SELECT id from USER where username='thanatos') );
+INSERT OR REPLACE INTO COURSE (name, semester, year, instructorId) VALUES ( "FOOD1006", 1, 2012, (SELECT id from USER where username='zoidberg') );
 
 
 -- Add a TA to a Couse
@@ -123,6 +162,14 @@ INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER 
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=2 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=2 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='ederavin'), (SELECT id from COURSE where name="COMP3005" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jsnow'), (SELECT id from COURSE where name="PHYS1002" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jsnow'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='rtyler'), (SELECT id from COURSE where name="PHYS1002" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='50cent'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hordor'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='nsix'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='nstark'), (SELECT id from COURSE where name="LIFE4000" and semester=2 and year=2012));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012));
 
 -- Add a Task to a TA
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=2 and year=2013) );
@@ -131,11 +178,30 @@ INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Create
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Create A2", "Work Hard", (SELECT id from USER where username='jbeltramin'), (SELECT id from COURSE where name="COMP3004" and semester=2 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Field Trip", "Organize a Trip to the Observatory", (SELECT id from USER where username='hsolo'), (SELECT id from COURSE where name="PHYS1901" and semester=2 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Projects", "Mark the Projects from your Section", (SELECT id from USER where username='ederavin'), (SELECT id from COURSE where name="COMP3005" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Sword Practice", "Learn to be a better swordsman", (SELECT id from USER where username='jsnow'), (SELECT id from COURSE where name="PHYS1002" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Protect the Wall", "...protect the wall you bastard", (SELECT id from USER where username='jsnow'), (SELECT id from COURSE where name="PHYS1002" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Go beyond the wall", "the white walkers are coming", (SELECT id from USER where username='jsnow'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Get head reattached", "its probably still up on that pike", (SELECT id from USER where username='nstark'), (SELECT id from COURSE where name="LIFE4000" and semester=2 and year=2012) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "hodor", "hodor hodor ... hodor", (SELECT id from USER where username='hodor'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "hodor", "hodor hodor ... hodor", (SELECT id from USER where username='hodor'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "raise death count", "hurt as many people as you can", (SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "whine", "Whine as much as humany possible", (SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "get rich", "or die trying", (SELECT id from USER where username='50cent'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Try to stay emotionless", "act like all other humanoid cylons", (SELECT id from USER where username='nsix'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Stay Calm", "just ignor Gaius", (SELECT id from USER where username='nsix'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Save Earth", "Stop the Daleks", (SELECT id from USER where username='rtyler'), (SELECT id from COURSE where name="PHYS1002" and semester=2 and year=2013) );
+
+
+
+
+
+
 
 -- Add Evaluation to Task
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (5, "You are doing very well", 4);
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (3, "Nicely Done", 2);
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (1, "Please Try HARDER", 5);
+INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (3, "Please Try HARDER", 9);
 
 
 

@@ -118,7 +118,11 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QComboBox" name="courseComboBox"/>
+           <widget class="QComboBox" name="courseComboBox">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#151515;&quot;&gt;These are the courses that the Teaching Assistant has taught.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="refreshButton">
@@ -888,7 +892,7 @@
            <string notr="true">color:#bbb</string>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select a task from the Tasks table&lt;br/&gt;to see detailed information about it&lt;br/&gt;or click the &amp;quot;New&amp;quot; button below to &lt;br/&gt;create a task for the selected TA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select a task from the tasks table&lt;br/&gt;to see detailed information about it&lt;br/&gt;or click the &amp;quot;New&amp;quot; button below to &lt;br/&gt;create a task for the selected TA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -925,7 +929,13 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionLogout">
    <property name="text">

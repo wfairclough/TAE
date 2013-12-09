@@ -38,6 +38,10 @@ InstructorWindow::InstructorWindow(Instructor* user, QWidget *parent) :
     setCurrentTa(NULL);
     setCurrentTask(NULL);
 
+    QAction* whatsThisAction = QWhatsThis::createAction(this);
+
+    ui->menuHelp->addAction(whatsThisAction);
+
 
 }
 
@@ -233,6 +237,8 @@ void InstructorWindow::initInstructorView() {
 
     setupEditRatingText(QString("No Evaluation"));
     ui->refreshButton->setIcon(QIcon("Resources/refresh.png"));
+
+    ui->rightWidget->setCurrentIndex(0);
 }
 
 void InstructorWindow::setupEditRatingText(QString firstItem) {

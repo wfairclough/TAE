@@ -25,6 +25,10 @@ TaWindow::TaWindow(TeachingAssistant* user, QWidget *parent) :
 
     TaControl tc;
     tc.getCoursesForTeachingAssistant(getCurrentTa());
+
+    QAction* whatsThisAction = QWhatsThis::createAction(this);
+
+    ui->menuHelp->addAction(whatsThisAction);
 }
 
 void TaWindow::initManageTaskView(){
@@ -33,6 +37,8 @@ void TaWindow::initManageTaskView(){
     ui->taskTable->horizontalHeader()->setResizeMode(TASK_EVALUATED_COL, QHeaderView::ResizeToContents);
     ui->taskTable->setStyleSheet("color:#333");
     ui->refreshButton->setIcon(QIcon("Resources/refresh.png"));
+
+    ui->rightWidget->setCurrentIndex(0);
 }
 
 TaWindow::~TaWindow()

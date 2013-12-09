@@ -151,8 +151,6 @@ void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
         ui->refreshButton->setEnabled(false);
     }
 
-    ui->taskTable->setRowCount(0); // clear the task list
-    taskMap.clear();
 }
 
 /**
@@ -365,6 +363,10 @@ void InstructorWindow::selectCourse(Course *course) {
         InstructorControl ic;
         ic.getTaForCourse(getCurrentCourse());
     }
+    ui->taskTable->setRowCount(0);
+    taskMap.clear();
+    ui->rightWidget->setCurrentIndex(0);
+    ui->refreshButton->setEnabled(true);
 }
 
 /**

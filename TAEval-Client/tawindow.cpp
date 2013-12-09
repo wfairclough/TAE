@@ -143,6 +143,8 @@ void TaWindow::selectCourse(Course* course) {
         TaControl tc;
         tc.getTaskListForTaAndCourse(getCurrentTa(), course);
     }
+    ui->taskTable->setRowCount(0);
+    ui->rightWidget->setCurrentIndex(0);
     ui->refreshButton->setEnabled(true);
 
 }

@@ -44,7 +44,7 @@ public:
 
     // Subscriber Implementations
     void updateTaskListForTaAndCourse(QList<Task*> list);
-    void updateTaListForInstructor(QList<TeachingAssistant*> list);
+    void updateTaListForCourse(QList<TeachingAssistant*> list);
     void updateCourseListForInstructor(QList<Course*> list);
     void updateTask(Task *task);
     void connectionDisconnected();

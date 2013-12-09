@@ -42,6 +42,8 @@
 #define INSTRUCTOR_LIST_RSP "instructorListRsp"
 #define TA_LIST_REQ "taListReq"
 #define TA_LIST_RSP "taListRsp"
+#define TA_LIST_FOR_COURSE_REQ "taListForCourseReq"
+#define TA_LIST_FOR_COURSE_RSP "taListForCourseRsp"
 #define EVALUATION_LIST_FOR_TASKS_REQ "evaluationListForTasksReq"
 #define EVALUATION_LIST_FOR_TASKS_RSP "evaluationListForTasksRsp"
 #define UPDATE_TASK_AND_EVALUATION_REQ "updateTaskAndEvaluationReq"

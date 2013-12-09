@@ -43,6 +43,35 @@ QList<Instructor *> InstructorManager::fetchAllInstructors() {
     return list;
 }
 
+QList<TeachingAssistant *> InstructorManager::fetchAllTeachingAssistanceForCourse(Course* course) {
+    QList<TeachingAssistant *> list;
+    qDebug() << "Running fetchAllTeachingAssistanceForCourse";
+    QSqlDatabase db = DbCoordinator::getInstance().getDatabase();
+
+    int courseId = idForCourse(course->getName(), course->getSemesterType(), course->getYear());
+
+    QSqlQuery taQuery(db);
+    taQuery.prepare("select id, firstName, lastName, username, type from TA_Courses, user where taid = id and courseId=?");
+    taQuery.addBindValue(courseId);
+    if (taQuery.exec()) {
+        while(taQuery.next()) {
+            int index = 0;
+            TeachingAssistant* ta = new TeachingAssistant();
+            ta->setId(taQuery.value(index++).toInt());
+            ta->setFirstName(taQuery.value(index++).toString());
+            ta->setLastName(taQuery.value(index++).toString());
+            ta->setUsername(taQuery.value(index++).toString());
+            qDebug() << "Adding TA " << ta->getUsername() << " to list.";
+            list << ta;
+        }
+    } else {
+        qDebug() << "Could not find courses";
+    }
+
+    return list;
+}
+
+
 
 /**
  * @brief InstructorManager::fetchAllTeachingAssistanceForInstructor

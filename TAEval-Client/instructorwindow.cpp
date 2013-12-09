@@ -84,7 +84,7 @@ void InstructorWindow::updateTaskListForTaAndCourse(QList<Task*> list) {
     }
 }
 
-void InstructorWindow::updateTaListForInstructor(QList<TeachingAssistant*> list) {
+void InstructorWindow::updateTaListForCourse(QList<TeachingAssistant*> list) {
     taMap.clear();
     ui->taTable->setRowCount(0);
     int row = 0;
@@ -112,6 +112,9 @@ void InstructorWindow::updateCourseListForInstructor(QList<Course*> list) {
         setCurrentCourse(NULL);
         ui->refreshButton->setEnabled(false);
     }
+
+    ui->taskTable->setRowCount(0); // clear the task list
+    taskMap.clear();
 }
 
 void InstructorWindow::updateTask(Task* task) {
@@ -244,9 +247,9 @@ void InstructorWindow::setupEditRatingText(QString firstItem) {
 
 void InstructorWindow::selectCourse(Course *course) {
     if (course != NULL) {
-        InstructorControl ic;
-        ic.getTaForInstructor(getCurrentInstructor()->getUsername());
         setCurrentCourse(course);
+        InstructorControl ic;
+        ic.getTaForCourse(getCurrentCourse());
     }
 }
 

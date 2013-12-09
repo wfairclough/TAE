@@ -14,7 +14,7 @@ public:
     QList<Instructor *> fetchAllInstructors();
     QList<TeachingAssistant *> fetchAllTeachingAssistanceForInstructor(Instructor* instructor);
     QList<Course *> fetchAllCoursesforInstructor(Instructor* Instructor);
-
+    QList<TeachingAssistant *> fetchAllTeachingAssistanceForCourse(Course* course);
 
 signals:
 

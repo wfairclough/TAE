@@ -21,6 +21,7 @@ public:
     virtual void connectionSuccess() {}
     virtual void connectionDisconnected() {}
     virtual void updateTaListForInstructor(QList<TeachingAssistant*> list) {}
+    virtual void updateTaListForCourse(QList<TeachingAssistant*> list) {}
     virtual void updateCourseListForInstructor(QList<Course*> list) {}
     virtual void updateCourseListForTa(QList<Course*> list) {}
     virtual void updateInstructorList(QList<Instructor*> list) {}

@@ -166,7 +166,7 @@ INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER 
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jsnow'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='rtyler'), (SELECT id from COURSE where name="PHYS1002" and semester=2 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='50cent'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
-INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hordor'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='hodor'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='nsix'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='nstark'), (SELECT id from COURSE where name="LIFE4000" and semester=2 and year=2012));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012));

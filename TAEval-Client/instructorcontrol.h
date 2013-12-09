@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <instructor.h>
-
+#include <course.h>
 
 class InstructorControl : public QObject
 {
@@ -13,7 +13,8 @@ public:
     void getTaForInstructor(QString uname);
     void getInstructors();
     void getCoursesForInstructor(QString uname);
-    
+    void getTaForCourse(Course* course);
+
 signals:
     
 public slots:

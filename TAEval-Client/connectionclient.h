@@ -50,7 +50,7 @@ public:
     void sendAddTaskForTa(QString taskName, QString taskDescription, QString username, QString courseName, Semester::semester_t sem, int courseYear);
     void sendEvaluationListForTasks(QList<quint32> taskIds);
     void sendUpdateTaskAndEvaluation(Task* task, QString iName, QString taName);
-
+    void sendGetTaListForCourse(Course* course);
     void logout();
 
 signals:

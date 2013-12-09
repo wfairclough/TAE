@@ -321,6 +321,24 @@ void ConnectionClient::bytesReady()
         foreach (AbstractSubscriber* subscriber , subscriberList) {
             subscriber->updateTask(task);
         }
+    } else if (msgType.compare(QString(TA_LIST_FOR_COURSE_RSP)) == 0) {
+        QList<TeachingAssistant*> list;
+
+        quint16 listSize = 0;
+
+        in >> listSize;
+        for(int i = 0; i < listSize; i++) {
+            // Find proper place to delete pointers later. Possibly in the view.
+            TeachingAssistant *ta = new TeachingAssistant();
+            in >> *ta;
+            list << ta;
+
+            qDebug() << "[" << TA_LIST_FOR_COURSE_RSP << "] Recieved a Task with the ID == " << ta->getId();
+        }
+
+        foreach(AbstractSubscriber* subscriber, subscriberList) {
+            subscriber->updateTaListForCourse(list);
+        }
     }
 
     if (clientSocket.bytesAvailable() > 0) {
@@ -383,7 +401,7 @@ void ConnectionClient::sendTaForInstructorMessage(QString username) {
     qDebug() << "Wrote TA_LIST_FOR_INSTRUCTOR_REQ Data to server.";
 }
 
-/**
+/**TA_LIST_FOR_COURSE_REQ
  * Description: Send a message to the server asking for a list of Course's for a particular Instructor
  * Paramters: the Instructors username
  * Returns: Void
@@ -632,6 +650,23 @@ void ConnectionClient::sendUpdateTaskAndEvaluation(Task *task, QString iName, QS
     qDebug() << "Wrote " << UPDATE_TASK_AND_EVALUATION_REQ << " Data to server.";
 }
 
+
+void ConnectionClient::sendGetTaListForCourse(Course* course) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_8);
+
+    QString msgType(TA_LIST_FOR_COURSE_REQ);
+
+    out << quint16(0) << msgType << *course;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    clientSocket.write(block);
+
+    qDebug() << "Wrote " << TA_LIST_FOR_COURSE_REQ << " Data to server.";
+}
 
 /**
  * Description: SLOT thriggers by the server disconnecting.

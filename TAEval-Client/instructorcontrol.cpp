@@ -34,3 +34,8 @@ void InstructorControl::getCoursesForInstructor(QString uname) {
 void InstructorControl::getInstructors() {
     ConnectionClient::getInstance().sendInstructorListMessage();
 }
+
+
+void InstructorControl::getTaForCourse(Course* course) {
+    ConnectionClient::getInstance().sendGetTaListForCourse(course);
+}

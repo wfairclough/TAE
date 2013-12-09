@@ -47,8 +47,9 @@ public:
     void updateTaListForInstructor(QList<TeachingAssistant*> list);
     void updateCourseListForInstructor(QList<Course*> list);
     void updateTask(Task *task);
+    void connectionDisconnected();
 
-public slots:
+private slots:
     void currentCourseComboIndexChanged(int index);
     void editRatingComboIndexChanged(int index);
     void taCellClicked(int row, int col);
@@ -58,7 +59,10 @@ public slots:
     void cancelEdit();
     void deleteTask();
     void saveTask();
-    
+
+    void logout();
+    void quit();
+
 private:
     Ui::InstructorWindow *ui;
     Instructor* instructor;
@@ -66,6 +70,7 @@ private:
     Task* currentTask;
     Course* currentCourse;
 
+    void closeWindow();
     void initInstructorView();
     void setupEditRatingText(QString firstItem);
     void selectCourse(Course* course);

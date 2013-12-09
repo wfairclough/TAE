@@ -25,11 +25,13 @@ public:
 
     void connectionNetworkTimeout();
     void connectionSuccess();
+    void connectionDisconnected();
 
     void recievedLoginResponse(User* user);
     void recievedFailedLoginResponse(QString error);
 
     void loadSettings();
+
 
 private slots:
     void sendLoginRequest();
@@ -37,6 +39,8 @@ private slots:
     void settingsTriggered();
 
 private:
+    void closeWindow();
+
     Ui::LoginWindow *ui;
     QString host;
     quint16 port;

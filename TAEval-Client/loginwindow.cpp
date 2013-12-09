@@ -19,6 +19,8 @@ LoginWindow::LoginWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ConnectionClient::getInstance().subscribe(this);
+
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(sendLoginRequest()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quitTriggered()));
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(settingsTriggered()));
@@ -78,7 +80,7 @@ void LoginWindow::recievedLoginResponse(User* user) {
         AdminWindow* window = new AdminWindow((Administrator*)user);
 
         window->show();
-        hide();
+        closeWindow();
 
         break;
     }
@@ -89,7 +91,7 @@ void LoginWindow::recievedLoginResponse(User* user) {
         InstructorWindow* window = new InstructorWindow((Instructor*)user);
 
         window->show();
-        hide();
+        closeWindow();
 
         break;
     }
@@ -100,7 +102,7 @@ void LoginWindow::recievedLoginResponse(User* user) {
         TaWindow* window = new TaWindow((TeachingAssistant*)user);
 
         window->show();
-        hide();
+        closeWindow();
 
         break;
     }
@@ -154,7 +156,6 @@ void LoginWindow::connectionSuccess()
  */
 void LoginWindow::loadSettings()
 {
-    ui->loginButton->setEnabled(false);
 
     QString settingFileName;
 
@@ -165,7 +166,7 @@ void LoginWindow::loadSettings()
         host = s.value(CONNECTION_HOST).toString();
         qDebug() << "Using host " << host;
     } else {
-        host = "localhost";
+        host = "127.0.0.1";
         s.setValue(CONNECTION_HOST, host);
         qDebug() << "No host configured using default " << host;
     }
@@ -179,9 +180,23 @@ void LoginWindow::loadSettings()
         qDebug() << "No post configured using default " << port;
     }
 
+    if (ConnectionClient::getInstance().isConnected() == false) {
+        ui->loginButton->setEnabled(false);
+        ConnectionClient::getInstance().connectToServer(host, port);
+    } else {
+        connectionSuccess();
+    }
 
-    ConnectionClient::getInstance().connectToServer(host, port);
+}
 
+
+void LoginWindow::closeWindow() {
+    ConnectionClient::getInstance().unsubscribe(this);
+    close();
+}
+
+void LoginWindow::connectionDisconnected() {
+    loadSettings();
 }
 
 

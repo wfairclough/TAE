@@ -205,24 +205,26 @@ void InstructorWindow::deleteTask() {
 }
 
 void InstructorWindow::saveTask() {
-    TaControl tc;
-    Task *task = getCurrentTask();
-    Evaluation *eval = new Evaluation();
+    if (validateFields()) {
+        TaControl tc;
+        Task *task = getCurrentTask();
+        Evaluation *eval = new Evaluation();
 
-    if (task == NULL) {
-        task = new Task;
+        if (task == NULL) {
+            task = new Task;
+        }
+        task->setName(ui->editName->text());
+        task->setDescription(ui->editDescription->toPlainText());
+        if (ui->editRating->isVisible() && ui->editRating->currentIndex() != 0) {
+            eval->setRating(ui->editRating->currentIndex());
+            eval->setComment(ui->editComment->toPlainText());
+            task->setEvaluation(eval);
+        } else {
+            task->setEvaluation(NULL);
+        }
+        setCurrentTask(task);
+        tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), getCurrentTa()->getUsername());
     }
-    task->setName(ui->editName->text());
-    task->setDescription(ui->editDescription->toPlainText());
-    if (ui->editRating->isVisible() && ui->editRating->currentIndex() != 0) {
-        eval->setRating(ui->editRating->currentIndex());
-        eval->setComment(ui->editComment->toPlainText());
-        task->setEvaluation(eval);
-    } else {
-        task->setEvaluation(NULL);
-    }
-    setCurrentTask(task);
-    tc.updateTaskAndEvaluation(task, getCurrentInstructor()->getUsername(), getCurrentTa()->getUsername());
 }
 
 // Private Functions
@@ -272,15 +274,38 @@ void InstructorWindow::selectTa(TeachingAssistant *ta) {
 void InstructorWindow::selectTask(Task* task) {
     ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
     ui->name->setText(task->getName());
-    ui->description->setText(task->getDescription());
+    if (task->getDescription().trimmed().compare("") == 0) {
+        ui->description->setText("----------");
+    } else {
+        ui->description->setText(task->getDescription());
+    }
     if (task->hasEvaluation()) {
         ui->rating->setText(task->getEvaluation()->getRatingString());
-        ui->comment->setText(task->getEvaluation()->getComment());
+        if (task->getEvaluation()->getComment().trimmed().compare("") == 0) {
+            ui->comment->setText("----------");
+        } else {
+            ui->comment->setText(task->getEvaluation()->getComment());
+        }
+
     } else {
-        ui->rating->setText(QString("None"));
-        ui->comment->setText(QString("None"));
+        ui->rating->setText(QString("----------"));
+        ui->comment->setText(QString("----------"));
     }
     setCurrentTask(task);
+}
+
+bool InstructorWindow::validateFields() {
+    bool valid = true;
+    QString redStyle("background: #FF8584; color: white;");
+
+    if (ui->editName->text().trimmed().compare("") == 0) {
+        valid = false;
+        ui->editName->setStyleSheet(redStyle);
+    } else {
+        ui->editName->setStyleSheet("");
+    }
+
+    return valid;
 }
 
 InstructorWindow::~InstructorWindow()

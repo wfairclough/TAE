@@ -77,6 +77,7 @@ private:
     void selectCourse(Course* course);
     void selectTa(TeachingAssistant* ta);
     void selectTask(Task* task);
+    bool validateFields();
 
     QMap<quint32, Task*> taskMap;
     QMap<quint32, Course*> courseMap;

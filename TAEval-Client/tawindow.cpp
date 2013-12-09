@@ -118,13 +118,22 @@ void TaWindow::selectCourse(Course* course) {
 void TaWindow::selectTask(Task *task) {
     ui->rightWidget->setCurrentIndex(TASK_INFO_VIEW_INDEX);
     ui->name->setText(task->getName());
-    ui->description->setText(task->getDescription());
+    if (task->getDescription().trimmed().compare("") == 0) {
+        ui->description->setText("----------");
+    } else {
+        ui->description->setText(task->getDescription());
+    }
     if (task->hasEvaluation()) {
         ui->rating->setText(task->getEvaluation()->getRatingString());
-        ui->comment->setText(task->getEvaluation()->getComment());
+        if (task->getEvaluation()->getComment().trimmed().compare("") == 0) {
+            ui->comment->setText("----------");
+        } else {
+            ui->comment->setText(task->getEvaluation()->getComment());
+        }
+
     } else {
-        ui->rating->setText(QString("None"));
-        ui->comment->setText(QString("None"));
+        ui->rating->setText(QString("----------"));
+        ui->comment->setText(QString("----------"));
     }
     setCurrentTask(task);
 }

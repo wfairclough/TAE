@@ -208,8 +208,7 @@ INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (5, "You are 
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (3, "Nicely Done", 2);
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (1, "Please Try HARDER", 5);
 INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (3, "Please Try HARDER", 9);
-INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (5, "You got slapped very well, hope there is more to come!", 17);
-INSERT OR REPLACE INTO EVALUATION (rating, comment, taskid) VALUES (2, "That didnt turn out too well for you", 12);
+
 
 
 end transaction;

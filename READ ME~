@@ -59,7 +59,7 @@ SetUp Instructions:
 
 	IF Using multiple host machines:
 		- Select "taeval-client" then click the "play" button to run/ build client
-		- In menu bar  select "file" -> "settings" 
+		- In option bar  select "file" -> "settings" 
 		  (NOTE: you may have to expand the window to see options bar)
 			- In the "Server IP Address:" field enter the IP of the machine hosting the server
 			- click "OK" and the connection should be established 
@@ -89,7 +89,7 @@ Usage/Testing:
 		- From "Select a Task:" -> click to select a task 
 			- Task information will now be displayed on the right
 		- Refresh can be clicked to see if any information has been added or changed by on of the instructor users wile the TA was logged in
-		- At any point log out may be clicked to logout the TA users  ( menu bar -> file -> logout)		
+		- At any point log out may be clicked to logout the TA users
 		- At any point user may select "help" ->"whats this?" from menu bar -> click a window element and view additional information 
 
 	Logged in as Instructor user:
@@ -102,7 +102,7 @@ Usage/Testing:
 			- by selecting "edit" an evalution can be created with a rating and comment
 				- "save" -> to submit
 		
-		- At any point "log out" may be clicked to logout the TA users ( menu bar -> file -> logout)		
+		- At any point "log out" may be clicked to logout the TA users		
 		- At any point user may select "help" -> "whats this?" from menu bar -> click a window element and view additional information
 
 		

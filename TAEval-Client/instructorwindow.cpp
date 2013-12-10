@@ -173,8 +173,18 @@ void InstructorWindow::updateTask(Task* task) {
  * Returns: Void
  */
 void InstructorWindow::currentCourseComboIndexChanged(int index) {
+    if (index != 0) {
+        ui->newButton->setEnabled(false);
+        ui->newButton4->setEnabled(false);
+        ui->deleteButton->setEnabled(false);
+        ui->editButton->setEnabled(false);
+    } else {
+        ui->newButton->setEnabled(true);
+        ui->newButton4->setEnabled(true);
+        ui->deleteButton->setEnabled(true);
+        ui->editButton->setEnabled(true);
+    }
     selectCourse(courseMap.value(index));
-
 }
 
 /**

@@ -174,6 +174,7 @@ INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER 
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='nstark'), (SELECT id from COURSE where name="COMP2402" and semester=0 and year=2012));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012));
 INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='rtyler'), (SELECT id from COURSE where name="COMP2404" and semester=1 and year=2013));
+INSERT OR REPLACE INTO TA_COURSES (taId, courseId) VALUES ((SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="COMP2404" and semester=1 and year=2013));
 
 -- Add a Task to a TA
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Mark Analysis", "Mark Phase 1 Deliverable for section A", (SELECT id from USER where username='shurtado'), (SELECT id from COURSE where name="COMP3004" and semester=2 and year=2013) );
@@ -194,7 +195,7 @@ INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "hodor"
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "hodor", "hodor hodor ... hodor", (SELECT id from USER where username='hodor'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Raise death count", "hurt as many people as you can", (SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Whine", "Whine as much as humany possible", (SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012) );
-INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Get slapped", "Get slapped around by uncle Tyrion", (SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="FOOD1006" and semester=1 and year=2012) );
+INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Get slapped", "Get slapped around by uncle Tyrion", (SELECT id from USER where username='jbaratheon'), (SELECT id from COURSE where name="COMP2404" and semester=1 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Get rich", "or die tryin'", (SELECT id from USER where username='50cent'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Try to stay emotionless", "Act like all other humanoid cylons", (SELECT id from USER where username='nsix'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
 INSERT OR REPLACE INTO TASK (name, description, taid, courseid) VALUES ( "Stay Calm", "Just ignor Gaius", (SELECT id from USER where username='nsix'), (SELECT id from COURSE where name="PHYS7105" and semester=2 and year=2013) );
